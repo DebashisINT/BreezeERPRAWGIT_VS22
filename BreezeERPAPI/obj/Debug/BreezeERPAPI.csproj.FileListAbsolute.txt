@@ -1,0 +1,16 @@
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\obj\Debug\BreezeERPAPI.csproj.AssemblyReference.cache
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\obj\Debug\BreezeERPAPI.csproj.CoreCompileInputs.cache
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\bin\BreezeERPAPI.dll.config
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\bin\BreezeERPAPI.dll
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\bin\BreezeERPAPI.pdb
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\bin\Microsoft.Web.Infrastructure.dll
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\bin\Newtonsoft.Json.dll
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\bin\System.Net.Http.Formatting.dll
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\bin\System.Web.Http.dll
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\bin\System.Web.Http.WebHost.dll
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\bin\System.Web.Http.xml
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\bin\System.Web.Http.WebHost.xml
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\bin\Microsoft.Web.Infrastructure.xml
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\obj\Debug\BreezeERPAPI.csproj.CopyComplete
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\obj\Debug\BreezeERPAPI.dll
+E:\PROJECTS\BreezeERPRAWGIT_VS22\BreezeERPAPI\obj\Debug\BreezeERPAPI.pdb
