@@ -2951,18 +2951,18 @@ function SaveExit_ButtonClick() {
     } else {
         $('#mandetorydchallanNoScheme').attr('style', 'display:none');
     }
-    var amtare = cddl_AmountAre.GetValue();
-    if (amtare == '2') {
-        var taxcodeid = cddlVatGstCst.GetValue();
-        if (taxcodeid == '' || taxcodeid == null) {
-            LoadingPanel.Hide();
-            $('#Mandatorytaxcode').attr('style', 'display:block');
-            flag = false;
-        }
-        else {
-            $('#Mandatorytaxcode').attr('style', 'display:none');
-        }
-    }
+    //var amtare = cddl_AmountAre.GetValue();
+    //if (amtare == '2') {
+    //    var taxcodeid = cddlVatGstCst.GetValue();
+    //    if (taxcodeid == '' || taxcodeid == null) {
+    //        LoadingPanel.Hide();
+    //        $('#Mandatorytaxcode').attr('style', 'display:block');
+    //        flag = false;
+    //    }
+    //    else {
+    //        $('#Mandatorytaxcode').attr('style', 'display:none');
+    //    }
+    //}
 
     //if ($('#AltCrDateMandatoryInSI').val() == "1" || ctxtCreditDays.GetValue() == 0) {
     //        LoadingPanel.Hide();
@@ -4099,9 +4099,9 @@ function OnWarehouseEndCallback(s, e) {
         }
 
         setTimeout(function () {
-            grid.batchEditApi.StartEdit(globalRowIndex, 10);
+            grid.batchEditApi.StartEdit(globalRowIndex, 11);
         }, 200)
-        grid.batchEditApi.StartEdit(globalRowIndex, 10);
+        grid.batchEditApi.StartEdit(globalRowIndex, 11);
         //End of Rev Subhra 26-04-2019
 
     }
@@ -6755,21 +6755,25 @@ function GetSalesRateSchemePrice(CustomerID, ProductID, SalesPrice) {
 
 function UploadGridbindCancel() {
     $("#exampleModalInvChallan").modal("hide");
-    // Mantis Issue 24027 (13/05/2021)
-    if (document.getElementById('chkSendMail').checked == true) {
-        
-        $.ajax({
-            type: "POST",
-            url: "InvoiceDeliveryChallan.aspx/SendMailAfterIRN",
-            data: JSON.stringify({ Output: $("#hdnRDECId").val(), paramCustomerId: $("#hdnCustomerId").val() }),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async:false,
-            success: function (r) {
-                
-            }
+ 
+    if (document.getElementById('chkSendMail')) {  //Mantis 0025534 
 
-        });
+         // Mantis Issue 24027 (13/05/2021)
+        if (document.getElementById('chkSendMail').checked == true) {
+
+            $.ajax({
+                type: "POST",
+                url: "InvoiceDeliveryChallan.aspx/SendMailAfterIRN",
+                data: JSON.stringify({ Output: $("#hdnRDECId").val(), paramCustomerId: $("#hdnCustomerId").val() }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function (r) {
+
+                }
+
+            });
+        }
     }
     //End of Mantis Issue 24027 (13/05/2021)
 

@@ -78,14 +78,14 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 .avtarHolder {
     /*width: 46px;*/
-    height: 42px;
+    /*height: 42px;*/
     border-radius: 50%;
     overflow: hidden;
     float: left;
     margin-right: 8px;
     text-align: center;
     position: relative;
-    left: 20px;
+    left: 10px;
 }
 
     .avtarHolder > img {
@@ -253,7 +253,7 @@ input[type="radio"] {
     border-width: 1px;
     padding: 4px 10px;
     font-size: 14px !important;
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;*/
     margin-right: 6px;
 }
 
@@ -328,11 +328,11 @@ input[type="radio"] {
         color: #fff;
     }
 
-.btn-success {
+/*.btn-success {
     background-color: #34a634 !important;
     border-color: #4cae4c !important;
     color: #fff !important;
-}
+}*/
 
 
     .btn-success:hover {
@@ -360,14 +360,15 @@ input[type="radio"] {
     }
 
 .btn-primary {
-    background-image: -webkit-linear-gradient(top,#688bb7 0,#324763 100%) !important;
+    /*background-image: -webkit-linear-gradient(top,#688bb7 0,#324763 100%) !important;
     background-image: -o-linear-gradient(top,#337ab7 0,#265a88 100%) !important;
     background-image: -webkit-gradient(linear,left top,left bottom,from(#688bb7),to(#324763 )) !important;
     background-image: linear-gradient(to bottom,#7e9fca 0,#54749d 100%) !important;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff337ab7', endColorstr='#ff265a88', GradientType=0) !important;
     filter: progid:DXImageTransform.Microsoft.gradient(enabled=false) !important;
-    background-repeat: repeat-x;
+    background-repeat: repeat-x;*/
     border-color: #446998 !important;
+    background: #195ca0 !important;
 }
 
     .btn-primary:hover {
@@ -455,14 +456,15 @@ p.copyright {
 ************Dashboard styles**********
 ***************************************/
 #header {
-    background: #0176c5 url(../../images/headbg.jpg) no-repeat top left;
+    background: #0176c5 url(../../images/headbg-2.jpg) no-repeat top left;
     background-position: -59px 0;
-    height: 60px;
+    height: 70px;
     position: fixed;
     top: 0;
     left: 0;
     width: calc(100% - 167px);
     z-index: 9;
+    background-size: cover;
 }
 #header 
 .mainWraper {
@@ -471,10 +473,10 @@ p.copyright {
 }
 
 .sidebar {
-    background: #272b3c;
-    width: 167px;
+    background: #063566;
+    width: 180px;
     position: absolute;
-    top: 60px;
+    top: 70px;
     bottom: 0;
     left: 0;
     /*overflow-y: scroll;*/
@@ -487,7 +489,7 @@ p.copyright {
     position: relative !important;
     margin-left: 175px;
     padding: 5px 15px;
-    margin-top:60px;
+    margin-top:75px;
 }
 .tpLbl {
     background: #61d2ac;
@@ -545,7 +547,7 @@ p.copyright {
         display:none;
     }
 .leftLogowrap {
-    width: 167px;
+    width: 180px;
     /*padding: 5px 0;*/
     float: left;
     /*background: rgba(0,0,0,0.2);*/
@@ -567,7 +569,8 @@ p.copyright {
     /*padding: 4px 12px;*/
     font-size: 23px !important;
     float: left;
-    padding: 12px 15px !important;
+    padding: 18px 15px !important;
+    margin-bottom: 0 !important;
 }
 
     .navbar-minimalize:hover {
@@ -611,7 +614,8 @@ p.copyright {
 }
 
     .navbar-top-links.navbar-right.user-dropdown-custom {
-        margin-right: 0;
+        margin-right: 20px;
+        min-height: 65px;
     }
 
     .navbar-top-links > li {
@@ -626,6 +630,9 @@ p.copyright {
 
         .navbar-top-links li a.user {
             /*padding-bottom: 0px;*/
+            border-radius: 50px;
+            background: #f8666f;
+            transition: all .4s;
         }
 
     .navbar-top-links li i.icon {
@@ -668,10 +675,11 @@ p.copyright {
 .navbar-top-links li .label {
     float: left;
     text-align: left;
-    line-height: 32px;
+    line-height: 22px;
     font-size: 14px;
     font-weight: normal;
     color: #fff;
+    padding-top: 3px;
 }
 
 .navbar-top-links li .icon.icon-ios-contact {
@@ -757,7 +765,7 @@ p.copyright {
 }
 
     .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
-        background: transparent !important;
+        background: #df3d47 !important;
     }
 
 .navbar-top-links li .dropdown-menu {
@@ -805,7 +813,7 @@ p.copyright {
 }
 
 .nav > li > a:hover, .nav > li > a:focus {
-    background-color: #0e689d !important;
+    background-color: #df3d47 !important;
 }
 
 
@@ -823,9 +831,11 @@ p.copyright {
 *************SIDEBAR NAVIGATION************
 *******************************************/
 .sidenav {
-    
     padding-top: 0px;
-    min-height: 80%;
+    /*rev Pallab*/
+    /*min-height: 80%;*/
+    min-height: 100%;
+    /*rev end Pallab*/
 }
 
     .sidenav ul {
@@ -864,11 +874,11 @@ p.copyright {
         padding: 12px 10px 6px;
         display: block;
         color: #bec6e4;
-        background: #272b3c;
+        background: #063566;
         line-height: 17px;
         /*font-size: 0.92em;*/
         font-size: 12px;
-        opacity:1;
+        opacity: 1;
         position: relative;
     }
 
@@ -894,11 +904,11 @@ p.copyright {
 
 .sidenav ul > li a:hover, .sidenav ul > li a.active:hover {
     text-decoration: none;
-    background: #363c53;
+    background: #021b36;
 }
 
 .sidenav > ul > li:hover > a {
-    background-color: #575d77;
+    background-color: #021b36;
 }
 .sidenav > ul > li > a > i
 {
@@ -956,7 +966,7 @@ p.copyright {
 }		
 .sidenav > ul > li:nth-child(17) > a > i {		
     color: #ff6075;		
-}		
+}
 
 
 
@@ -966,6 +976,7 @@ p.copyright {
 .sidenav ul > li a i {
     margin-right: 8px;
     float: left;
+    margin-left: 3px;
 }
 .sidenav ul > li a.active, .sidenav ul > li a.active:hover {
     background: #bfe7f9;
@@ -982,7 +993,7 @@ p.copyright {
 }
 
 .sidenav ul > li .dropdown-menu {
-    background: #3f455d;
+    background: #032548;
     left: 100%;
     top: 0;
     bottom: 0;
@@ -995,16 +1006,16 @@ p.copyright {
 }
 
     .sidenav ul > li .dropdown-menu.thrdlevel {
-        background: #575d77;
+        background: #224b78;
         box-shadow: none;
     }
 
         .sidenav ul > li .dropdown-menu.thrdlevel ul li a:hover {
-            background: #656C88;
+            background: #0781ff;
         }
 
 .sidenav ul .seclevel {
-    background: #3f455d;
+    background: #032548;
 }
 
     .sidenav ul .seclevel li {
@@ -1016,8 +1027,8 @@ p.copyright {
             padding: 8px 20px 8px 20px;
         }
 
-        .sidenav ul .seclevel li:hover > a, .sidenav ul .seclevel li.active a  {
-            background: #575d77;
+        .sidenav ul .seclevel li:hover > a, .sidenav ul .seclevel li.active a {
+            background: #224b78;
         }
 
 .sidenav ul .thrdlevel > li, .sidenav ul>li>ul>li {
@@ -1105,8 +1116,8 @@ p.copyright {
 
 .mini-navbar .sidenav > ul > li > a {
     margin-bottom: 1px;
-    border-bottom: 1px solid #1d202f;
-    box-shadow: 0px 1px 1px #3a415d;
+    border-bottom: 1px solid #062546;
+    box-shadow: 0px 1px 1px #0e4b8b;
     padding-bottom: 8px;
 }
 
@@ -1699,6 +1710,8 @@ h4.dbhead {
 
 .panel-heading {
     padding: 0px 5px !important;
+    /*background: #f1f1f1;
+    border-radius: 10px;*/
 }
 
 .headerclose {
@@ -2301,6 +2314,8 @@ i[data-toggle="tooltip"] + .tooltip {
 
 .navbar-header {
     float: left;
+    display: flex;
+    align-items: center;
 }
 
 .user-dropdown-custom {
@@ -2317,8 +2332,8 @@ i[data-toggle="tooltip"] + .tooltip {
     border: 1px solid #ccc;
     overflow: hidden;
     padding: 20px;*/
-    border-top: 1px solid #ccc;
-    padding: 5px 0 0 0;
+    /*border-top: 1px solid #ccc;*/
+    padding: 10px 0 0 0;
 }
 
 .form-control {
@@ -2669,8 +2684,9 @@ li.dxtc-rightIndent {
 .pad {
     padding-right: 4px !important;
 }
-.aaadv{
-    background:#076fa9;
+.aaadv {
+    background: #ffffff33;
+    box-shadow: 1px 1px 10px #04315e73;
 }
 .aaadv:hover {
     background:#076fa9;
@@ -3027,8 +3043,10 @@ body {
 
 }
 .dxeButtonEditSys.dxeButtonEdit_PlasticBlue {
-        margin-bottom: 0px !important;
-        height:23px; 
+    margin-bottom: 0px !important;
+    /*height:23px;*/
+    height: 24px;
+    /*border-radius: 4px;*/
 }
 .dxeTextBoxSys td.dxic {
     padding: 0px 3px 0px 3px;
@@ -3210,8 +3228,9 @@ hr.tfour {
 }
 .dxeButtonEditButton_PlasticBlue {
     padding: 0 2px;
-    background:  #54749D !important;
-    border: 1px Solid #3e597b;
+    background: #195ca0 !important;
+    border: 1px Solid #195ca0;
+    /*border-radius: 3px;*/
 }
 .dxeCalendarHeader_PlasticBlue {
     background: #54749D !important;
@@ -3225,7 +3244,7 @@ hr.tfour {
     border-left: 1px solid #3e597b;
 }
 .dxtcLite_PlasticBlue > .dxtc-stripContainer .dxtc-activeTab, .dxgvFooter_PlasticBlue {
-    background: #54749D !important;
+    background: #195ca0 !important;
 }
 /*calender */
 .dxpLite_PlasticBlue .dxp-dropDownButton {
@@ -3636,9 +3655,11 @@ textarea.form-control.input-sm {
 }
 
 .btn.btn-success .btn-icon {
-   -webkit-box-shadow: 0px 0px 3px rgba(35, 31, 31, 0.42);
-   -moz-box-shadow: 0px 0px 3px rgba(35, 31, 31, 0.42);
-   box-shadow: 0px 0px 3px rgba(35, 31, 31, 0.42);
+    -webkit-box-shadow: 0px 0px 3px rgba(35, 31, 31, 0.42);
+    -moz-box-shadow: 0px 0px 3px rgba(35, 31, 31, 0.42);
+    box-shadow: 0px 0px 3px rgba(35, 31, 31, 0.42);
+    background: #0d4d91;
+    padding-top: 1px;
 }
 .btn.btn-danger .btn-icon{
         background: #843634;
@@ -3944,11 +3965,14 @@ button:focus
 .mainAlertTable>tbody>tr:nth-child(even) {background-color: #f2f2f2;}
 
 .GridViewArea  {
-    margin-top: 5px;
+    margin-top: 10px;
 }
 .dxgvControl_PlasticBlue, .dxgvDisabled_PlasticBlue {
-    font:12px 'Roboto', sans-serif !important;
-    text-transform: capitalize !important
+    font: 12px 'Roboto', sans-serif !important;
+    text-transform: capitalize !important;
+    /*box-shadow: 1px 1px 15px #04386c40;
+    border-radius: 10px;
+    overflow: hidden;*/
 }
 
 
@@ -3994,3 +4018,32 @@ button:focus
 .dxgvSearchPanel_PlasticBlue {
         background: #f7f7f7 !important;
 }
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.dropdown.usr {
+    margin-top: 11px;
+}
+
+.btn-primary {
+    background-color: #195ca0 !important;
+}
+    .btn-primary:hover {
+        background-color: #05488d !important;
+        border-color: #05488d !important;
+    }
+
+.btn-success {
+    background-color: #f8666f !important;
+    border-color: #f8666f !important;
+    color: #fff !important;
+    background-image: none !important;
+}
+
+    .btn-success:hover {
+        background-color: #dd444d !important;
+        border-color: #dd444d !important;
+    }

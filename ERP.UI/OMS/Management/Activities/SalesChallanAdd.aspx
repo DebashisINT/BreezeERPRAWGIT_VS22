@@ -39,6 +39,11 @@
         #DivCost {
             min-width: 100px;
         }
+
+        .dxgvTable_PlasticBlue
+        {
+                width: 90% !important;
+        }
     </style>
     <script>
         var taxSchemeUpdatedDate = '<%=Convert.ToString(Cache["SchemeMaxDate"])%>';
@@ -4406,6 +4411,11 @@
                     cbnrLblTaxAmtval.SetText(TaxAmount);
                     cbnrlblAmountWithTaxValue.SetText(AmountWithTaxValue);
                     cbnrLblInvValue.SetText(TotalAmt);
+
+                    var type = ($("[id$='rdl_SaleInvoice']").find(":checked").val() != null) ? $("[id$='rdl_SaleInvoice']").find(":checked").val() : "";
+                    if (key != null && key != '') {
+                        grid.GetEditor("Quantity").SetEnabled(false);
+                    }
                 }
             }
             //End Rev Rajdip For Running Total
@@ -5679,6 +5689,7 @@
 
                         $("#ADelete").css("display", "block");//Subhabrata
                         SelectedWarehouseID = "0";
+                        cCmbBatch.SetValue("0");
                         cPopup_Warehouse.Show();
                     }
                     else if (Ptype == "WS") {
@@ -8924,7 +8935,7 @@ function ProjectValueChange(s, e) {
                                             Settings-VerticalScrollBarMode="auto" Settings-VerticalScrollableHeight="200" SettingsPager-Mode="ShowAllRecords" Settings-HorizontalScrollBarMode="Visible">
                                             <SettingsPager Visible="false"></SettingsPager>
                                             <Columns>
-                                                <dxe:GridViewCommandColumn ShowDeleteButton="false" ShowNewButtonInHeader="false" Width="30px" VisibleIndex="0" Caption=" ">
+                                                <dxe:GridViewCommandColumn ShowDeleteButton="false" ShowNewButtonInHeader="false" Width="40px" VisibleIndex="0" Caption=" ">
                                                     <CustomButtons>
                                                         <dxe:GridViewCommandColumnCustomButton Text=" " ID="CustomDelete" Image-Url="/assests/images/crs.png">
                                                         </dxe:GridViewCommandColumnCustomButton>
@@ -8935,16 +8946,16 @@ function ProjectValueChange(s, e) {
                                                         </dxe:ASPxHyperLink>
                                                     </HeaderCaptionTemplate>
                                                 </dxe:GridViewCommandColumn>
-                                                <dxe:GridViewDataTextColumn FieldName="SrlNo" Caption="Sl" ReadOnly="true" VisibleIndex="1" Width="20px">
+                                                <dxe:GridViewDataTextColumn FieldName="SrlNo" Caption="Sl" ReadOnly="true" VisibleIndex="1" Width="30px">
                                                     <PropertiesTextEdit>
                                                     </PropertiesTextEdit>
                                                 </dxe:GridViewDataTextColumn>
 
 
-                                                <dxe:GridViewDataTextColumn Caption="Document No." FieldName="Order_Num" ReadOnly="True" Width="120px" VisibleIndex="2">
+                                                <dxe:GridViewDataTextColumn Caption="Document No." FieldName="Order_Num" ReadOnly="True" Width="150px" VisibleIndex="2">
                                                 </dxe:GridViewDataTextColumn>
 
-                                                <dxe:GridViewDataButtonEditColumn FieldName="ProductName" Caption="Product" VisibleIndex="3" Width="120">
+                                                <dxe:GridViewDataButtonEditColumn FieldName="ProductName" Caption="Product" VisibleIndex="3" Width="120px">
 
 
                                                     <PropertiesButtonEdit>
@@ -8961,13 +8972,13 @@ function ProjectValueChange(s, e) {
 
                                                 <%--Batch Product Popup End--%>
 
-                                                <dxe:GridViewDataTextColumn FieldName="Description" Caption="Description" VisibleIndex="4" ReadOnly="True" Width="210px">
+                                                <dxe:GridViewDataTextColumn FieldName="Description" Caption="Description" VisibleIndex="4" ReadOnly="True" Width="220px">
                                                     <PropertiesTextEdit>
                                                     </PropertiesTextEdit>
                                                 </dxe:GridViewDataTextColumn>
 
 
-                                                <dxe:GridViewCommandColumn VisibleIndex="5" Caption="Addl. Desc." Width="210px">
+                                                <dxe:GridViewCommandColumn VisibleIndex="5" Caption="Addl. Desc." Width="110px">
                                                     <CustomButtons>
                                                         <dxe:GridViewCommandColumnCustomButton Text=" " ID="addlDesc" Image-Url="/assests/images/more.png" Image-ToolTip="Warehouse">
                                                             <Image ToolTip="Warehouse" Url="/assests/images/more.png">
@@ -8977,7 +8988,7 @@ function ProjectValueChange(s, e) {
                                                 </dxe:GridViewCommandColumn>
 
 
-                                                <dxe:GridViewDataTextColumn FieldName="Quantity" Caption="Quantity" VisibleIndex="6" Width="70px" PropertiesTextEdit-MaxLength="14" ReadOnly="true">
+                                                <dxe:GridViewDataTextColumn FieldName="Quantity" Caption="Quantity" VisibleIndex="6" Width="90px" PropertiesTextEdit-MaxLength="14" ReadOnly="true">
                                                     <PropertiesTextEdit DisplayFormatString="0.0000"></PropertiesTextEdit>
                                                     <PropertiesTextEdit>
                                                         <MaskSettings Mask="&lt;0..999999999&gt;.&lt;00..9999&gt;" AllowMouseWheel="false" />
@@ -9020,7 +9031,7 @@ function ProjectValueChange(s, e) {
 
 
                                                 <%--Caption="Warehouse"--%>
-                                                <dxe:GridViewCommandColumn Width="80px" VisibleIndex="11" Caption="Stk Details">
+                                                <dxe:GridViewCommandColumn Width="100px" VisibleIndex="11" Caption="Stk Details">
                                                     <CustomButtons>
                                                         <dxe:GridViewCommandColumnCustomButton Text=" " ID="CustomWarehouse" Image-Url="/assests/images/warehouse.png" Image-ToolTip="Warehouse">
                                                         </dxe:GridViewCommandColumnCustomButton>
@@ -9036,7 +9047,7 @@ function ProjectValueChange(s, e) {
                                                 </dxe:GridViewDataTextColumn>
 
 
-                                                <dxe:GridViewDataTextColumn FieldName="Discount" Caption="Disc(%)" VisibleIndex="13" Width="80px" HeaderStyle-HorizontalAlign="Right">
+                                                <dxe:GridViewDataTextColumn FieldName="Discount" Caption="Disc(%)" VisibleIndex="13" Width="120px" HeaderStyle-HorizontalAlign="Right">
                                                     <PropertiesTextEdit DisplayFormatString="0.00" Style-HorizontalAlign="Right">
                                                         <MaskSettings AllowMouseWheel="False" Mask="&lt;-999999999..999999999&gt;.&lt;00..99&gt;" />
                                                         <ClientSideEvents LostFocus="DiscountTextChange" GotFocus="DiscountGotFocus" />
@@ -9046,7 +9057,7 @@ function ProjectValueChange(s, e) {
                                                     <HeaderStyle HorizontalAlign="Right" />
                                                     <CellStyle HorizontalAlign="Right"></CellStyle>
                                                 </dxe:GridViewDataTextColumn>
-                                                <dxe:GridViewDataTextColumn FieldName="Amount" Caption="Amount" VisibleIndex="14" Width="70px" ReadOnly="true">
+                                                <dxe:GridViewDataTextColumn FieldName="Amount" Caption="Amount" VisibleIndex="14" Width="80px" ReadOnly="true">
                                                     <PropertiesTextEdit DisplayFormatString="0.00"></PropertiesTextEdit>
                                                     <PropertiesTextEdit>
                                                         <MaskSettings Mask="&lt;0..999999999&gt;.&lt;00..99&gt;" AllowMouseWheel="false" />
@@ -9063,7 +9074,7 @@ function ProjectValueChange(s, e) {
                                                     </PropertiesButtonEdit>
                                                 </dxe:GridViewDataButtonEditColumn>--%>
 
-                                                <dxe:GridViewDataButtonEditColumn FieldName="TaxAmount" Caption="Charges" VisibleIndex="15" Width="75px" HeaderStyle-HorizontalAlign="Right">
+                                                <dxe:GridViewDataButtonEditColumn FieldName="TaxAmount" Caption="Charges" VisibleIndex="15" Width="90px" HeaderStyle-HorizontalAlign="Right">
                                                     <PropertiesButtonEdit>
                                                         <ClientSideEvents ButtonClick="taxAmtButnClick" GotFocus="taxAmtButnClick1" KeyDown="TaxAmountKeyDown" LostFocus="Taxlostfocus" />
                                                         <Buttons>
@@ -9075,7 +9086,7 @@ function ProjectValueChange(s, e) {
                                                     <CellStyle HorizontalAlign="Right"></CellStyle>
                                                 </dxe:GridViewDataButtonEditColumn>
 
-                                                <dxe:GridViewDataTextColumn FieldName="TotalAmount" Caption="Net Amount" VisibleIndex="16" Width="80px" ReadOnly="true">
+                                                <dxe:GridViewDataTextColumn FieldName="TotalAmount" Caption="Net Amount" VisibleIndex="16" Width="100px" ReadOnly="true">
                                                     <PropertiesTextEdit DisplayFormatString="0.00"></PropertiesTextEdit>
                                                     <PropertiesTextEdit>
                                                         <%-- Rev Rajdip For Running Total --%>
@@ -9087,7 +9098,7 @@ function ProjectValueChange(s, e) {
                                                 </dxe:GridViewDataTextColumn>
 
 
-                                                <dxe:GridViewDataTextColumn FieldName="Remarks" Caption="Remarks" VisibleIndex="17" Width="100px" ReadOnly="false">
+                                                <dxe:GridViewDataTextColumn FieldName="Remarks" Caption="Remarks" VisibleIndex="17" Width="110px" ReadOnly="false">
                                                     <PropertiesTextEdit Style-HorizontalAlign="Left">
 
                                                         <Style HorizontalAlign="Left">
@@ -9096,7 +9107,7 @@ function ProjectValueChange(s, e) {
                                                 </dxe:GridViewDataTextColumn>
 
 
-                                                <dxe:GridViewCommandColumn ShowDeleteButton="false" ShowNewButtonInHeader="false" Width="40px" VisibleIndex="18" Caption=" ">
+                                                <dxe:GridViewCommandColumn ShowDeleteButton="false" ShowNewButtonInHeader="false" Width="60px" VisibleIndex="18" Caption=" ">
                                                     <CustomButtons>
                                                         <dxe:GridViewCommandColumnCustomButton Text=" " ID="AddNew" Image-Url="/assests/images/add.png">
                                                         </dxe:GridViewCommandColumnCustomButton>
