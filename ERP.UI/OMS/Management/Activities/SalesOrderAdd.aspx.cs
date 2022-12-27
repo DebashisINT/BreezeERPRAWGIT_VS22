@@ -333,7 +333,22 @@ namespace ERP.OMS.Management.Activities
                     }
                 }
 
-
+                string DeliveryScheduleRequired = ComBL.GetSystemSettingsResult("DeliveryScheduleRequired");
+                if (!String.IsNullOrEmpty(DeliveryScheduleRequired))
+                {
+                    if (DeliveryScheduleRequired == "Yes")
+                    {
+                        hdnShowDeliverySchedule.Value = "1";
+                    }
+                    else if (DeliveryScheduleRequired.ToUpper().Trim() == "NO")
+                    {
+                        hdnShowDeliverySchedule.Value = "0";
+                    }
+                }
+                else
+                {
+                    hdnShowDeliverySchedule.Value = "0";
+                }
                 string SalesRateBuyRateChecking = cbl.GetSystemSettingsResult("SalesRateBuyRateChecking");
                 if (!String.IsNullOrEmpty(SalesRateBuyRateChecking))
                 {
@@ -4240,67 +4255,71 @@ namespace ERP.OMS.Management.Activities
 
                     CommonBL ComBL = new CommonBL();                   
                     string GSTRateTaxMasterMandatory = ComBL.GetSystemSettingsResult("GSTRateTaxMasterMandatory");
-                    if (hdnTransCategory.Value != "SEZWOP" || hdnTransCategory.Value != "EXWOP")
+
+                    if (hdnTransCategory.Value != "EXWOP")
                     {
-                        if (!String.IsNullOrEmpty(GSTRateTaxMasterMandatory))
+                        if (hdnTransCategory.Value != "SEZWOP")
                         {
-                            if (GSTRateTaxMasterMandatory == "Yes")
+                            if (!String.IsNullOrEmpty(GSTRateTaxMasterMandatory))
                             {
-                                // Rev 24425, 24428
-                                DataTable temp_SalesOrderdt = tempSalesOrderdt.Copy();
-                                if (temp_SalesOrderdt.Columns.Contains("Order_AltQuantity"))
+                                if (GSTRateTaxMasterMandatory == "Yes")
                                 {
-                                    temp_SalesOrderdt.Columns.Remove("Order_AltQuantity");
-                                }
-                                if (temp_SalesOrderdt.Columns.Contains("Order_AltUOM"))
-                                {
-                                    temp_SalesOrderdt.Columns.Remove("Order_AltUOM");
-                                }
-                                // End of Rev 24425, 24428
-
-                                DataTable dtTaxDetails = new DataTable();
-                                ProcedureExecute procT = new ProcedureExecute("PRC_SALESORDER_DETAILS");
-                                procT.AddVarcharPara("@Action", 500, "GetTaxDetailsByProductID");
-                                // Mantis Issue 24425, 25528
-                                //procT.AddPara("@SalesOrderDetails", tempSalesOrderdt);
-                                procT.AddPara("@SalesOrderDetails", temp_SalesOrderdt);
-                                // End of Mantis Issue 24425, 25528
-                                procT.AddVarcharPara("@TaxOption", 10, Convert.ToString(strTaxType));
-                                procT.AddVarcharPara("@SupplyState", 15, Convert.ToString(sstateCode));
-                                procT.AddVarcharPara("@BRANCHID", 10, Convert.ToString(strBranch));
-                                procT.AddVarcharPara("@COMPANYID", 500, Convert.ToString(Session["LastCompany"]));
-                                procT.AddVarcharPara("@ENTITY_ID", 100, Convert.ToString(strCustomer));
-                                procT.AddVarcharPara("@DATE", 100, Convert.ToString(dt_PLSales.Date.ToString("yyyy-MM-dd")));
-
-                                dtTaxDetails = procT.GetTable();
-
-                                if (dtTaxDetails != null && dtTaxDetails.Rows.Count > 0)
-                                {
-
-                                    foreach (DataRow dr in dtTaxDetails.Rows)
+                                    // Rev 24425, 24428
+                                    DataTable temp_SalesOrderdt = tempSalesOrderdt.Copy();
+                                    if (temp_SalesOrderdt.Columns.Contains("Order_AltQuantity"))
                                     {
-                                        string SerialID = Convert.ToString(dr["SrlNo"]);
-                                        string TaxID = Convert.ToString(dr["TaxCode"]);
-                                        decimal _TaxAmount = Math.Round(Convert.ToDecimal(dr["TaxAmount"]), 2);
-                                        string ProductName = Convert.ToString(dr["ProductName"]);
-                                        DataRow[] rows = TaxDetailTable.Select("SlNo = '" + SerialID + "' and TaxCode='" + TaxID + "'");
+                                        temp_SalesOrderdt.Columns.Remove("Order_AltQuantity");
+                                    }
+                                    if (temp_SalesOrderdt.Columns.Contains("Order_AltUOM"))
+                                    {
+                                        temp_SalesOrderdt.Columns.Remove("Order_AltUOM");
+                                    }
+                                    // End of Rev 24425, 24428
 
-                                        if (rows != null && rows.Length > 0)
+                                    DataTable dtTaxDetails = new DataTable();
+                                    ProcedureExecute procT = new ProcedureExecute("PRC_SALESORDER_DETAILS");
+                                    procT.AddVarcharPara("@Action", 500, "GetTaxDetailsByProductID");
+                                    // Mantis Issue 24425, 25528
+                                    //procT.AddPara("@SalesOrderDetails", tempSalesOrderdt);
+                                    procT.AddPara("@SalesOrderDetails", temp_SalesOrderdt);
+                                    // End of Mantis Issue 24425, 25528
+                                    procT.AddVarcharPara("@TaxOption", 10, Convert.ToString(strTaxType));
+                                    procT.AddVarcharPara("@SupplyState", 15, Convert.ToString(sstateCode));
+                                    procT.AddVarcharPara("@BRANCHID", 10, Convert.ToString(strBranch));
+                                    procT.AddVarcharPara("@COMPANYID", 500, Convert.ToString(Session["LastCompany"]));
+                                    procT.AddVarcharPara("@ENTITY_ID", 100, Convert.ToString(strCustomer));
+                                    procT.AddVarcharPara("@DATE", 100, Convert.ToString(dt_PLSales.Date.ToString("yyyy-MM-dd")));
+
+                                    dtTaxDetails = procT.GetTable();
+
+                                    if (dtTaxDetails != null && dtTaxDetails.Rows.Count > 0)
+                                    {
+
+                                        foreach (DataRow dr in dtTaxDetails.Rows)
                                         {
-                                            //decimal EntryTaxAmount = Math.Round(Convert.ToDecimal(rows[0]["Amount"]), 2);
-                                            decimal EntryTaxAmount = Math.Round(Convert.ToDecimal(rows[0]["Amount"]), 2);
+                                            string SerialID = Convert.ToString(dr["SrlNo"]);
+                                            string TaxID = Convert.ToString(dr["TaxCode"]);
+                                            decimal _TaxAmount = Math.Round(Convert.ToDecimal(dr["TaxAmount"]), 2);
+                                            string ProductName = Convert.ToString(dr["ProductName"]);
+                                            DataRow[] rows = TaxDetailTable.Select("SlNo = '" + SerialID + "' and TaxCode='" + TaxID + "'");
 
-                                            if (EntryTaxAmount != _TaxAmount)
+                                            if (rows != null && rows.Length > 0)
                                             {
-                                                validate = "checkAcurateTaxAmount";
-                                                grid.JSProperties["cpSerialNo"] = SerialID;
-                                                grid.JSProperties["cpProductName"] = ProductName;
-                                                break;
+                                                //decimal EntryTaxAmount = Math.Round(Convert.ToDecimal(rows[0]["Amount"]), 2);
+                                                decimal EntryTaxAmount = Math.Round(Convert.ToDecimal(rows[0]["Amount"]), 2);
+
+                                                if (EntryTaxAmount != _TaxAmount)
+                                                {
+                                                    validate = "checkAcurateTaxAmount";
+                                                    grid.JSProperties["cpSerialNo"] = SerialID;
+                                                    grid.JSProperties["cpProductName"] = ProductName;
+                                                    break;
+                                                }
+
+
                                             }
 
-
                                         }
-
                                     }
                                 }
                             }
@@ -11709,7 +11728,47 @@ namespace ERP.OMS.Management.Activities
         }
         //Tanmoy Hierarchy End
 
+        [WebMethod]
+        public static string CheckDeliveryScheduleProductWise(string SODetails_ID,string ProductID,string OrderId)
+        {
+            string IsExist = "";
+            ProcedureExecute proc = new ProcedureExecute("prc_SalesOrder_Details");
+            proc.AddVarcharPara("@Action", 500, "CheckDeliverySchedule");            
+            proc.AddVarcharPara("@ORDER_ID", 100, Convert.ToString(OrderId));
+            proc.AddVarcharPara("@Details_Id", 100, Convert.ToString(SODetails_ID));
+            proc.AddVarcharPara("@ProductID", 100, Convert.ToString(ProductID));
+            DataTable dt = proc.GetTable();
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                IsExist = Convert.ToString(dt.Rows[0]["IsExist"]);
+            }
+
+            return Convert.ToString(IsExist);
+        }
+        [WebMethod]
+        public static string CheckDeliveryScheduleProductQtyWise(string QuantityValue, string ProductID, string OrderId)
+        {
+            string IsExist = "";
+            ProcedureExecute proc = new ProcedureExecute("prc_SalesOrder_Details");
+            proc.AddVarcharPara("@Action", 500, "CheckDeliveryScheduleQTY");
+            proc.AddVarcharPara("@ORDER_ID", 100, Convert.ToString(OrderId));
+            proc.AddVarcharPara("@QTY", 100, Convert.ToString(QuantityValue));
+            proc.AddVarcharPara("@ProductID", 100, Convert.ToString(ProductID));
+            DataTable dt = proc.GetTable();
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                IsExist = Convert.ToString(dt.Rows[0]["IsExist"]);
+            }
+
+            return Convert.ToString(IsExist);
+        }
+        
+
     }
+
+
 
     public class ContactPerson
     {

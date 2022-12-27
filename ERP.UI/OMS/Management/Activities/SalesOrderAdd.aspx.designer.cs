@@ -2607,6 +2607,15 @@ namespace ERP.OMS.Management.Activities
         protected global::DevExpress.Web.ASPxButton ASPxButton7;
 
         /// <summary>
+        /// lblUOMmsg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUOMmsg;
+
+        /// <summary>
         /// UomSelect control.
         /// </summary>
         /// <remarks>
@@ -2875,6 +2884,15 @@ namespace ERP.OMS.Management.Activities
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnSegment5;
+
+        /// <summary>
+        /// hdnShowDeliverySchedule control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnShowDeliverySchedule;
 
         /// <summary>
         /// hdnValueSegment1 control.

@@ -1347,6 +1347,20 @@ function CancelEwayBillSI(ewaybill) {
     $("#EwayBillcancelModal").modal('show')
 }
 
+function CancelEwayBillTSI(ewaybill) {
+
+    $("#hdnEwayBillType").val("TSI");
+    $("#hdnEwayBillNo").val(ewaybill);
+
+    $("#EwayBillcancelModal").modal('show')
+}
+function CancelEwayBillSR(ewaybill) {
+
+    $("#hdnEwayBillType").val("SR");
+    $("#hdnEwayBillNo").val(ewaybill);
+
+    $("#EwayBillcancelModal").modal('show')
+}
 function UpdateEwayBillSI(ewaybill) {
 
     $("#hdnEwayBillType").val("UPDATESI");
@@ -1502,23 +1516,15 @@ function grdEndcallbackewaybillTSI(s, e) {
         })
     }
     else if (s.cpJson == "DownloadEwaybill") {
-        //var billNumber = s.cpeWaybillNumber;        
-        //var downloadAnchorNode = document.createElement('a');      
-        //downloadAnchorNode.setAttribute("download", billNumber + ".pdf");
-        //document.body.appendChild(downloadAnchorNode); // required for firefox
-        //downloadAnchorNode.click();
-        //downloadAnchorNode.remove();
+       
         s.cpJson = null;
         var pathbillNumber = s.cpeWaybillNumber;
-
         var link = document.createElement('a');
         link.href = pathbillNumber;
-        link.download = pathbillNumber;
-        console.log(pathbillNumber);
-        //link.trigger("click");
+        link.download = pathbillNumber;    
+        
         window.open(pathbillNumber);
         link.dispatchEvent(new MouseEvent('click'));
-
         s.cpeWaybillNumber = null;
     }
 }
@@ -1577,7 +1583,15 @@ function grdEndcallbackewaybillSR(s, e) {
         })
     }
     else if (s.cpJson == "DownloadEwaybill") {
+        s.cpJson = null;
+        var pathbillNumber = s.cpeWaybillNumber;
+        var link = document.createElement('a');
+        link.href = pathbillNumber;
+        link.download = pathbillNumber;
 
+        window.open(pathbillNumber);
+        link.dispatchEvent(new MouseEvent('click'));
+        s.cpeWaybillNumber = null;
     }
 }
 
