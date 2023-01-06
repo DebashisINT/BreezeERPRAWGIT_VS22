@@ -1,4 +1,9 @@
-﻿using DevExpress.Web;
+﻿#region =======================Revision History=========================
+//1.0   v2 .0.35    Debashis    06/01/2023  Unable to view Detail Report in Stock Position if the Item name consists Double or single Quotes.
+//                              Now it has been taken care of.Refer: 0025569
+#endregion
+
+using DevExpress.Web;
 using DevExpress.Web.Mvc;
 using EntityLayer.CommonELS;
 using System;
@@ -22,6 +27,7 @@ using DevExpress.Export;
 using System.Drawing;
 using Reports.Model;
 using DataAccessLayer;
+using BusinessLogicLayer.YearEnding;
 
 namespace Reports.Reports.GridReports
 {
@@ -809,8 +815,16 @@ namespace Reports.Reports.GridReports
             string WhichCall = returnPara.Split('~')[0];
             string BranchId = returnPara.Split('~')[1];
             string ProdId = returnPara.Split('~')[2];
-            string BranchDesc = returnPara.Split('~')[3];
-            string ProdDesc = returnPara.Split('~')[4];
+            //Rev 1.0
+            //string BranchDesc = returnPara.Split('~')[3];
+            //string ProdDesc = returnPara.Split('~')[4];
+            DataTable dtBranchSelection = new DataTable();
+            DataTable dtProductSelection = new DataTable();
+            dtBranchSelection = oDBEngine.GetDataTable("Select branch_description from tbl_master_branch Where CONVERT(NVARCHAR(20),branch_id)='" + BranchId + "'");
+            string BranchDesc = dtBranchSelection.Rows[0][0].ToString();
+            dtProductSelection = oDBEngine.GetDataTable("Select sProducts_Name from Master_sProducts Where CONVERT(NVARCHAR(20),sProducts_ID)='" + ProdId + "'");
+            string ProdDesc = dtProductSelection.Rows[0][0].ToString();
+            //End of Rev 1.0
 
             DateTime dtFrom;
             DateTime dtTo;
