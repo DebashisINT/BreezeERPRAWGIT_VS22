@@ -1,4 +1,10 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="StockPosition.aspx.cs" Inherits="Reports.Reports.GridReports.StockPosition" %>
+﻿<%--Revision History--%>
+<%--1.0   v2 .0.35    Debashis    06/01/2023    Unable to view Detail Report in Stock Position if the Item name consists Double or single Quotes.
+                                                Now it has been taken care of.Refer: 0025569--%>
+<%--2.0   v2 .0.35    Debashis    06/01/2023    Switch off the column Sorting feature.Refer: 0025555--%>
+<%--End of Revision History--%>
+
+<%@ Page Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="StockPosition.aspx.cs" Inherits="Reports.Reports.GridReports.StockPosition" %>
 
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
      Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
@@ -500,7 +506,22 @@
             popupdocument.Hide();
         }
 
-        function OpenWHDetails(BranchId, ProdId,BranchDesc,ProdDesc) {
+        /*Rev 1.0*/
+        //function OpenWHDetails(BranchId, ProdId,BranchDesc,ProdDesc) {
+        //    $("#hfIsBranWHWiseDetFilter").val("Y");
+        //    $("#ddldetails").val(0);
+        //    if (ProdId.trim() == "9999999999") {
+        //        jAlert('Details not available for total section.');
+        //        cpopupWHDetails.Hide();
+        //        return false;
+        //    }
+        //    else {
+        //        cCallbackPanelDetail.PerformCallback('BndPopupgrid~' + BranchId + '~' + ProdId + '~' + BranchDesc + '~' + ProdDesc);
+        //        cpopupWHDetails.Show();
+        //        return true;
+        //    }
+        //}
+        function OpenWHDetails(BranchId, ProdId) {
             $("#hfIsBranWHWiseDetFilter").val("Y");
             $("#ddldetails").val(0);
             if (ProdId.trim() == "9999999999") {
@@ -509,11 +530,12 @@
                 return false;
             }
             else {
-                cCallbackPanelDetail.PerformCallback('BndPopupgrid~' + BranchId + '~' + ProdId + '~' + BranchDesc + '~' + ProdDesc);
+                cCallbackPanelDetail.PerformCallback('BndPopupgrid~' + BranchId + '~' + ProdId);
                 cpopupWHDetails.Show();
                 return true;
             }
         }
+        /*End of Rev 1.0*/
         function popupHide(s, e) {
             cpopupWHDetails.Hide();
             $("#ddldetails").val(0);
@@ -838,12 +860,20 @@
                                 <dxe:GridViewDataTextColumn FieldName="WHDESC" Width="120px" Caption="Warehouse Details" VisibleIndex="2" HeaderStyle-CssClass="colDisable">
                                     <CellStyle HorizontalAlign="Center"></CellStyle>
                                     <HeaderStyle HorizontalAlign="Center" />
-                                    <DataItemTemplate>
+                                    <%--Rev 1.0--%>
+                                    <%--<DataItemTemplate>
                                         <a href="javascript:void(0)" onclick="OpenWHDetails('<%#Eval("BRANCH_ID") %>','<%#Eval("PRODID") %>','<%#Eval("BRANCHDESC") %>','<%#Eval("PRODDESC") %>')" class="pad">
                                             <dxe:ASPxLabel ID="ASPxTextBox2" runat="server" Text='Warehouse Details' ToolTip="Warehouse Details">
                                             </dxe:ASPxLabel>
                                         </a>
+                                    </DataItemTemplate>--%>
+                                    <DataItemTemplate>
+                                        <a href="javascript:void(0)" onclick="OpenWHDetails('<%#Eval("BRANCH_ID") %>','<%#Eval("PRODID") %>')" class="pad">
+                                            <dxe:ASPxLabel ID="ASPxTextBox2" runat="server" Text='Warehouse Details' ToolTip="Warehouse Details">
+                                            </dxe:ASPxLabel>
+                                        </a>
                                     </DataItemTemplate>
+                                    <%--End of Rev 1.0--%>
                                     <EditFormSettings Visible="False" />
                                     <Settings AllowAutoFilterTextInputTimer="False" />
                                     <Settings AllowAutoFilter="False" />
@@ -1054,27 +1084,32 @@
                                     <Settings AutoFilterCondition="Contains" />
                                 </dxe:GridViewDataTextColumn>
 
-                                <dxe:GridViewDataTextColumn FieldName="TRANS_TYPE" Width="130px" Caption="Document Type" VisibleIndex="11">
+                                <%--Rev 2.0 && Added HeaderStyle-CssClass="colDisable"--%>
+                                <dxe:GridViewDataTextColumn FieldName="TRANS_TYPE" Width="130px" Caption="Document Type" VisibleIndex="11" HeaderStyle-CssClass="colDisable">
                                     <CellStyle CssClass="gridcellleft" Wrap="true"></CellStyle>
                                     <Settings AutoFilterCondition="Contains" />
                                 </dxe:GridViewDataTextColumn>
 
-                                <dxe:GridViewDataTextColumn FieldName="PARTY" Width="200px" Caption="Party Name" VisibleIndex="12">
+                                <%--Rev 2.0 && Added HeaderStyle-CssClass="colDisable"--%>
+                                <dxe:GridViewDataTextColumn FieldName="PARTY" Width="200px" Caption="Party Name" VisibleIndex="12" HeaderStyle-CssClass="colDisable">
                                     <CellStyle CssClass="gridcellleft" Wrap="true"></CellStyle>
                                     <Settings AutoFilterCondition="Contains" />
                                 </dxe:GridViewDataTextColumn>
 
-                                <dxe:GridViewDataTextColumn FieldName="PARTYINVNO" Width="130px" Caption="Party Inv. No." VisibleIndex="13">
+                                <%--Rev 2.0 && Added HeaderStyle-CssClass="colDisable"--%>
+                                <dxe:GridViewDataTextColumn FieldName="PARTYINVNO" Width="130px" Caption="Party Inv. No." VisibleIndex="13" HeaderStyle-CssClass="colDisable">
                                     <CellStyle CssClass="gridcellleft" Wrap="true"></CellStyle>
                                     <Settings AutoFilterCondition="Contains" />
                                 </dxe:GridViewDataTextColumn>
 
-                                <dxe:GridViewDataTextColumn FieldName="PARTYINVDT" Width="90px" Caption="Party Inv. Date" VisibleIndex="14">
+                                <%--Rev 2.0 && Added HeaderStyle-CssClass="colDisable"--%>
+                                <dxe:GridViewDataTextColumn FieldName="PARTYINVDT" Width="90px" Caption="Party Inv. Date" VisibleIndex="14" HeaderStyle-CssClass="colDisable">
                                     <CellStyle CssClass="gridcellleft" Wrap="true"></CellStyle>
                                     <Settings AutoFilterCondition="Contains" />
                                 </dxe:GridViewDataTextColumn>
 
-                                <dxe:GridViewDataTextColumn FieldName="SERIALNO" Width="130px" Caption="Serial No." VisibleIndex="15">
+                                <%--Rev 2.0 && Added HeaderStyle-CssClass="colDisable"--%>
+                                <dxe:GridViewDataTextColumn FieldName="SERIALNO" Width="130px" Caption="Serial No." VisibleIndex="15" HeaderStyle-CssClass="colDisable">
                                     <CellStyle CssClass="gridcellleft" Wrap="true"></CellStyle>
                                     <Settings AutoFilterCondition="Contains" />
                                 </dxe:GridViewDataTextColumn>
@@ -1103,7 +1138,8 @@
                                 </dxe:GridViewDataTextColumn>
                             </Columns>
 
-                            <SettingsBehavior AllowFocusedRow="true" AllowGroup="true" />
+                            <%--Rev 2.0 && Added AllowSort="false"--%>
+                            <SettingsBehavior AllowFocusedRow="true" AllowGroup="true" AllowSort="false" />
 
                             <SettingsEditing Mode="Inline">
                             </SettingsEditing>
