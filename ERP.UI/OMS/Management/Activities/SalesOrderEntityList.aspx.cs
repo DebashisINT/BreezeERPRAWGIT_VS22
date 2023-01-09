@@ -1391,6 +1391,68 @@ namespace ERP.OMS.Management.Activities
 
             return cls;
         }
+
+        protected void EntityServerModeDataSalesOrder_Selecting(object sender, DevExpress.Data.Linq.LinqServerModeDataSourceSelectEventArgs e)
+        {
+            e.KeyExpression = "ID";
+
+            string IsFilter = Convert.ToString(hdnIsFilter.Value);
+            string connectionString = Convert.ToString(System.Web.HttpContext.Current.Session["ErpConnection"]);
+            ERPDataClassesDataContext dc = new ERPDataClassesDataContext(connectionString);
+            string User_id = Convert.ToString(Session["userid"]);
+            string Userid = Convert.ToString(HttpContext.Current.Session["userid"]);
+            BusinessLogicLayer.DBEngine BEngine = new BusinessLogicLayer.DBEngine();
+
+            if (IsFilter == "Y")
+            {
+                var q = from d in dc.v_PendingApprovals
+                        where d.ERPApprover_UserId == Convert.ToInt64(User_id)
+                        orderby d.CreateDate descending
+                        select d;
+
+                e.QueryableSource = q;
+            }
+            else
+            {
+
+                var q = from d in dc.v_PendingApprovals
+                        where d.ERPApprover_UserId == 0
+                        select d;
+                e.QueryableSource = q;
+            }
+        }
+
+        protected void EntityServerModeDataSalesOrderUserWise_Selecting(object sender, DevExpress.Data.Linq.LinqServerModeDataSourceSelectEventArgs e)
+        {
+            e.KeyExpression = "ID";
+
+            string IsFilter = Convert.ToString(hdnIsFilter.Value);
+            string connectionString = Convert.ToString(System.Web.HttpContext.Current.Session["ErpConnection"]);
+            ERPDataClassesDataContext dc = new ERPDataClassesDataContext(connectionString);
+            string User_id = Convert.ToString(Session["userid"]);
+            string Userid = Convert.ToString(HttpContext.Current.Session["userid"]);
+            BusinessLogicLayer.DBEngine BEngine = new BusinessLogicLayer.DBEngine();
+
+
+            if (IsFilter == "Y")
+            {
+                var q = from d in dc.v_SalesOrderStatus
+                        where d.CreatedBy == Convert.ToInt64(User_id)
+                        orderby d.ID, d.UserLevel descending
+                        select d;
+
+                e.QueryableSource = q;
+            }
+            else
+            {
+
+                var q = from d in dc.v_SalesOrderStatus
+                        where d.CreatedBy == 0
+                        select d;
+                e.QueryableSource = q;
+            }
+
+        }
     }
     public class ApprovalCount
     {

@@ -4723,4 +4723,32 @@
       <Column Name="IsInventory" Type="System.String" DbType="NVarChar(2)" CanBeNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.v_SalesOrderStatus" Member="v_SalesOrderStatus">
+    <Type Name="v_SalesOrderStatus">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Branch" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="number" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="Customer" Type="System.String" DbType="VarChar(252) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderedDate" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="createddate" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="approvedby" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="UserLevel" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="status" Type="System.String" DbType="VarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="ApprovedOn" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.v_PendingApproval" Member="v_PendingApprovals">
+    <Type Name="v_PendingApproval">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="customer" Type="System.String" DbType="VarChar(252) NOT NULL" CanBeNull="false" />
+      <Column Name="Number" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="branch_description" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="craetedby" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Approved" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Rejected" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ERPApprover_UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
 </Database>
