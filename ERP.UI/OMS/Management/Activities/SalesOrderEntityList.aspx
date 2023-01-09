@@ -11,7 +11,7 @@
     <link href="../../../assests/css/custom/jquery.confirm.css" rel="stylesheet" />
     <%--Code Added By Sandip For Approval Detail Section Start--%>
 
-    <script src="JS/SalesOrderEntityList.js?v=1.8"></script>
+    <script src="JS/SalesOrderEntityList.js?v=2.0"></script>
 
     <link href="CSS/SalesOrderEntityList.css" rel="stylesheet" />
     <script>
@@ -1121,6 +1121,9 @@
         <%-- <button class="btn btn-primary" onclick="ApproveAll();">Approve Selection</button>
         <button class="btn btn-primary" onclick="RejectAll();">Reject Selection</button>--%>
 
+         <dx:LinqServerModeDataSource ID="EntityServerModeDataSalesOrder" runat="server" OnSelecting="EntityServerModeDataSalesOrder_Selecting"
+            ContextTypeName="ERPDataClassesDataContext"  />
+
         <dxe:ASPxPopupControl ID="popupApproval" runat="server" ClientInstanceName="cpopupApproval"
             Width="800px" HeaderText="Pending Approvals" PopupHorizontalAlign="WindowCenter" 
             PopupVerticalAlign="WindowCenter" CloseAction="CloseButton"
@@ -1136,9 +1139,10 @@
                                 
                                 Width="100%" ClientInstanceName="cgridPendingApproval" OnCustomCallback="gridPendingApproval_CustomCallback"
                                 SettingsBehavior-ColumnResizeMode="Control" Settings-VerticalScrollBarMode="Auto" Settings-VerticalScrollableHeight="350"
-                                OnDataBinding="gridPendingApproval_DataBinding">
+                                DataSourceID="EntityServerModeDataSalesOrder"
+                                >
                                 <Columns>
-                                    <%-- <dxe:GridViewCommandColumn ShowSelectCheckbox="True" VisibleIndex="0" Width="60" Caption=" " />--%>
+                                    <%--OnDataBinding="gridPendingApproval_DataBinding" <dxe:GridViewCommandColumn ShowSelectCheckbox="True" VisibleIndex="0" Width="60" Caption=" " />--%>
                                     <dxe:GridViewDataTextColumn Caption="Document No." FieldName="Number" Width="200px"
                                         VisibleIndex="0" FixedStyle="Left">
                                         <CellStyle CssClass="gridcellleft" Wrap="true">
@@ -1225,6 +1229,8 @@
                 </dxe:PopupControlContentControl>
             </ContentCollection>
         </dxe:ASPxPopupControl>
+        <dx:LinqServerModeDataSource ID="EntityServerModeDataSalesOrderUserWise" runat="server" OnSelecting="EntityServerModeDataSalesOrderUserWise_Selecting"
+            ContextTypeName="ERPDataClassesDataContext"/>
         <dxe:ASPxPopupControl ID="PopupUserWiseQuotation" runat="server" ClientInstanceName="cPopupUserWiseQuotation"
             Width="900px" HeaderText="User Wise Sales Order Status" PopupHorizontalAlign="WindowCenter" HeaderStyle-CssClass="wht"
             PopupVerticalAlign="WindowCenter" CloseAction="CloseButton"
@@ -1237,9 +1243,9 @@
 
                             <dxe:ASPxGridView ID="gridUserWiseQuotation" runat="server" KeyFieldName="ID" AutoGenerateColumns="False"
                                 Width="100%" ClientInstanceName="cgridUserWiseQuotation" OnCustomCallback="gridUserWiseQuotation_CustomCallback" 
-                                OnDataBinding="gridUserWiseQuotation_DataBinding">
+                                DataSourceID="EntityServerModeDataSalesOrderUserWise">
                                 <Columns>
-                                   <%-- OnPageIndexChanged="gridUserWiseQuotation_PageIndexChanged"--%>
+                                   <%--OnDataBinding="gridUserWiseQuotation_DataBinding" OnPageIndexChanged="gridUserWiseQuotation_PageIndexChanged"--%>
                                     <dxe:GridViewDataTextColumn Caption="Branch" FieldName="Branch"
                                         VisibleIndex="0" FixedStyle="Left">
                                         <CellStyle CssClass="gridcellleft" Wrap="true">
@@ -1565,6 +1571,7 @@ popup.Hide();
         <asp:HiddenField ID="hdnOrderID" runat="server" />
         <asp:HiddenField ID="hFilterType" runat="server" />
         <asp:HiddenField ID="hdnIsMultiuserApprovalRequired" runat="server" />
+         <asp:HiddenField ID="hdnIsFilter" runat="server" />
 
     </div>
     <dxe:ASPxPopupControl ID="PopupProductwiseClose" runat="server" ClientInstanceName="cPopupProductwiseClose"

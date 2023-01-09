@@ -109,14 +109,18 @@ function watingOrdergridEndCallback() {
 }
 
 function OpenPopUPUserWiseQuotaion() {
-    cgridUserWiseQuotation.PerformCallback();
+    //cgridUserWiseQuotation.PerformCallback();
+    $("#hdnIsFilter").val("Y");
+    cgridUserWiseQuotation.Refresh();
     cPopupUserWiseQuotation.Show();
 }
 // function above  End
 
 //This function is called to show all Pending Approval of Sales Order whose Userid has been set LevelWise using Approval Configuration Module 
 function OpenPopUPApprovalStatus() {
-    cgridPendingApproval.PerformCallback();
+   // cgridPendingApproval.PerformCallback();
+    $("#hdnIsFilter").val("Y");
+    cgridPendingApproval.Refresh();
     cpopupApproval.Show();
 }
 // function above  End
