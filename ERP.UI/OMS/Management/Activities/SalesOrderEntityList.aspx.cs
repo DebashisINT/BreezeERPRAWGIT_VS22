@@ -1298,27 +1298,27 @@ namespace ERP.OMS.Management.Activities
             }
         }
 
-        protected void gridPendingApproval_DataBinding(object sender, EventArgs e)
-        {
-            if (Session["PendingApproval"] != null)
-            {
-                DataTable Quotationdt = (DataTable)Session["PendingApproval"];
-                DataView dvData = new DataView(Quotationdt);
-                gridPendingApproval.DataSource = Quotationdt;
-            }
+        //protected void gridPendingApproval_DataBinding(object sender, EventArgs e)
+        //{
+        //    if (Session["PendingApproval"] != null)
+        //    {
+        //        DataTable Quotationdt = (DataTable)Session["PendingApproval"];
+        //        DataView dvData = new DataView(Quotationdt);
+        //        gridPendingApproval.DataSource = Quotationdt;
+        //    }
             
-        }
+        //}
 
-        protected void gridUserWiseQuotation_DataBinding(object sender, EventArgs e)
-        {
-            if (Session["UserWiseERPDocCreation"] != null)
-            {
-                DataTable Quotationdt = (DataTable)Session["UserWiseERPDocCreation"];
-                DataView dvData = new DataView(Quotationdt);
-                gridUserWiseQuotation.DataSource = Quotationdt;
-            }
+        //protected void gridUserWiseQuotation_DataBinding(object sender, EventArgs e)
+        //{
+        //    if (Session["UserWiseERPDocCreation"] != null)
+        //    {
+        //        DataTable Quotationdt = (DataTable)Session["UserWiseERPDocCreation"];
+        //        DataView dvData = new DataView(Quotationdt);
+        //        gridUserWiseQuotation.DataSource = Quotationdt;
+        //    }
             
-        }
+        //}
 
         [WebMethod]
         public static object ButtonCountApprovalWaiting()
