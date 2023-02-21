@@ -1,11 +1,18 @@
-﻿<%@ Page Title="Transit Sales Invoice" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true"
+﻿<%--==========================================================Revision History ============================================================================================   
+   1.0   Priti   V2.0.36     10-01-2023     0025324: Views to be converted to Procedures in the Listing Page of Transaction / Transit Sales/Purchase / Sales Invoice
+   2.0   Priti   V2.0.36     17-02-2023     After Listing view upgradation delete data show in listing issue solved.
+
+========================================== End Revision History =======================================================================================================--%>
+
+
+<%@ Page Title="Transit Sales Invoice" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true"
     CodeBehind="TSalesInvoiceList.aspx.cs" Inherits="ERP.OMS.Management.Activities.TSalesInvoiceList" %>
 
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
     Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <%--Filteration Section Start By Sam--%>
-    <script src="JS/TransitSalesInvoice.js"></script>
+    <script src="JS/TransitSalesInvoice.js?v1.0"></script>
     <script type="text/javascript" src="../../CentralData/JSScript/GenericJScript.js"></script>
     <%-- Filteration Section Start By Sam--%>
     <%--Code Added By Sandip For Approval Detail Section Start--%>
@@ -823,6 +830,15 @@
         </dxe:ASPxGridViewExporter>
     </div>
 
+  <%--  REV 1.0--%>
+     <dxe:ASPxCallbackPanel runat="server" ID="CallbackPanel" ClientInstanceName="cCallbackPanel" OnCallback="CallbackPanel_Callback">
+        <PanelCollection>
+            <dxe:PanelContent runat="server">           
+            </dxe:PanelContent>
+        </PanelCollection>
+        <ClientSideEvents EndCallback="CallbackPanelEndCall" />
+    </dxe:ASPxCallbackPanel>
+    <%--END REV 1.0--%>
     <%--DEBASHIS--%>
     <div class="PopUpArea">
         <dxe:ASPxPopupControl ID="ASPxDocumentsPopup" runat="server" ClientInstanceName="cDocumentsPopup"
@@ -1026,6 +1042,7 @@
         <asp:HiddenField ID="hddnInvoiceID" runat="server" />
         <asp:HiddenField ID="hfIsUserwise" runat="server" />
         <asp:HiddenField runat="server" ID="hdnActiveEInvoice" />
+           <asp:HiddenField ID="hFilterType" runat="server" />
     </div>
 
     <dxe:ASPxPopupControl ID="Popup_EWayBill" runat="server" ClientInstanceName="cPopup_EWayBill"

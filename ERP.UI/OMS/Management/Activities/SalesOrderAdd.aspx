@@ -17,7 +17,7 @@
     <link href="CSS/PosSalesInvoice.css" rel="stylesheet" />
     <link href="CSS/SearchPopup.css" rel="stylesheet" />
     <link href="CSS/salesorderAdd.css" rel="stylesheet" />
-    <script src="JS/SalesOrderAdd.js?v=5.1"></script>
+    <script src="JS/SalesOrderAdd.js?v=6.0"></script>
     <script src="../../Tax%20Details/Js/TaxDetailsItemlevelNew.js?v=2.1" type="text/javascript"></script>
 
     <%--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>    --%>
@@ -470,8 +470,16 @@
                     $('#hdnRefreshType').val('');
                     //#region Sandip Section For Approval Section Start
                     if (grid.cpApproverStatus == "approve") {
+                       // window.parent.PendingApproval();
+                        window.parent.PendingApproval();
                         window.parent.popup.Hide();
-                        window.parent.cgridPendingApproval.PerformCallback();
+                       
+                        //window.onunload = function (e) {
+                        //    /*opener.PendingApproval();*/
+                        //    window.parent.PendingApproval();
+                        //    window.parent.popup.Hide();
+                        //}; 
+                       
                     }
                     else if (grid.cpApproverStatus == "rejected") {
                         window.parent.popup.Hide();

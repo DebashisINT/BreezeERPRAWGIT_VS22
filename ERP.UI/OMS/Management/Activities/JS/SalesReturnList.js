@@ -1,4 +1,8 @@
-﻿
+﻿//==========================================================Revision History ============================================================================================
+//    1.0   Priti   V2.0.36     17-02-2023     Afer Listing view upgradation delete data show in list issue solved.
+//========================================== End Revision History =======================================================================================================
+
+
 var ReturnId = 0;
 var JVid = "";
 var Action = "Add";
@@ -510,10 +514,21 @@ function updateGridByDate() {
         $("#hfToDate").val(ctoDate.GetDate().format('yyyy-MM-dd'));
         $("#hfBranchID").val(ccmbBranchfilter.GetValue());
         $("#hfIsFilter").val("Y");
-        cGrdSalesReturn.Refresh();
+
+
+        //REV 1.0
+        // cGrdSalesReturn.Refresh();
+        $("#hFilterType").val("All");
+        cCallbackPanel.PerformCallback("");
+        //END REV 1.0       
         // cGrdSalesReturn.PerformCallback('FilterGridByDate~' + cFormDate.GetDate().format('yyyy-MM-dd') + '~' + ctoDate.GetDate().format('yyyy-MM-dd') + '~' + ccmbBranchfilter.GetValue())
     }
 }
+//REV 1.0
+function CallbackPanelEndCall(s, e) {
+    cGrdSalesReturn.Refresh();
+}
+        //END REV 1.0
 
 function OnEWayBillClick(id, EWayBillNumber, EWayBillDate, EWayBillValue) {
 
@@ -700,9 +715,11 @@ function OnEndCallback(s, e) {
 
     if (cGrdSalesReturn.cpDelete != null) {
         jAlert(cGrdSalesReturn.cpDelete);
-
         cGrdSalesReturn.cpDelete = null;
-        cGrdSalesReturn.Refresh();
+        /* Rev 1.0*/
+        //cGrdSalesReturn.Refresh();
+        updateGridByDate();
+        /* Rev 1.0 End*/
         // window.location.href = "SalesReturnList.aspx";
     }
 }

@@ -1,4 +1,6 @@
-﻿
+﻿//==========================================================Revision History ============================================================================================
+//    1.0   Priti   V2.0.36     0025577:In the Stock selection window, alternate quantity is not calculating automatically if the main qty has been changed.
+//========================================== End Revision History =======================================================================================================--%>
 function closeWarehouse(s, e) {
     e.cancel = false;
     cGrdWarehouse.PerformCallback('WarehouseDelete');
@@ -5103,6 +5105,19 @@ function QuantityGotFocus(s, e) {
     var sProduct_quantity = SpliteDetails[22];
     var packing_quantity = SpliteDetails[20];
 
+    //---------REV 1.0
+    var prodquantity = sProduct_quantity;
+    var packingqty = packing_quantity;
+    $('#hdnpackingqty').val(packingqty);
+    if (prodquantity != 0 && packingqty != 0) {
+        // uomfactor = parseFloat(packingqty / prodquantity).toFixed(4);
+        $('#hdnuomFactor').val(parseFloat(packingqty / prodquantity));
+    }
+    else {
+        $('#hdnuomFactor').val(0);
+    }
+    //---------END REV 1.0
+
     var slno = (grid.GetEditor('SrlNo').GetText() != null) ? grid.GetEditor('SrlNo').GetText() : "0";
 
     var ComponentNumber = (grid.GetEditor('ComponentNumber').GetText() != null) ? grid.GetEditor('ComponentNumber').GetText() : "0";
@@ -5319,16 +5334,16 @@ function QuantityGotFocus(s, e) {
     //Surojit 25-02-2019
 
 
-    //chinmoy added for  for MultiUOM start
-    if ($("#hddnMultiUOMSelection").val() == "1") {
-        grid.batchEditApi.StartEdit(globalRowIndex, 6);
-        // if ((gridquotationLookup.GetValue() != "") && (gridquotationLookup.GetValue() !=null)) {
-        if (grid.GetEditor('Quantity').GetValue() != "0.0000") {
-            grid.batchEditApi.StartEdit(globalRowIndex, 6);
-            //$("#UOMQuantity").val(grid.GetEditor('Quantity').GetValue());
-        }
-        // }
-    }
+    ////chinmoy added for  for MultiUOM start
+    //if ($("#hddnMultiUOMSelection").val() == "1") {
+    //    grid.batchEditApi.StartEdit(globalRowIndex, 6);
+    //    // if ((gridquotationLookup.GetValue() != "") && (gridquotationLookup.GetValue() !=null)) {
+    //    if (grid.GetEditor('Quantity').GetValue() != "0.0000") {
+    //        grid.batchEditApi.StartEdit(globalRowIndex, 6);
+    //        //$("#UOMQuantity").val(grid.GetEditor('Quantity').GetValue());
+    //    }
+    //    // }
+    //}
 
     //End
 }
@@ -7342,3 +7357,85 @@ function GetMulUOM(Action, srl, productid, ScheduleID, DetailsId, DeliverySchedu
         }
     });
 }
+
+///REV  1.0
+function ChangePackingByQuantityinjs() {
+    if ($("#hdnShowUOMConversionInEntry").val() == "1") {
+        var Quantity = ctxtQuantity.GetValue();
+        var packing = ctxtAltQuantity.GetValue();
+        if (packing == null || packing == '') {
+            $('#txtAltQuantity').val(parseFloat(0).toFixed(4));
+            packing = ctxtAltQuantity.GetValue();
+        }
+        if (Quantity == null || Quantity == '') {
+            $(e).val(parseFloat(0).toFixed(4));
+            Quantity = ctxtQuantity.GetValue();
+        }
+        var packingqty = parseFloat($('#hdnpackingqty').val()).toFixed(4);
+        var uomfac_Qty_to_stock = $('#hdnuomFactor').val();
+        var calcQuantity = parseFloat(Quantity * uomfac_Qty_to_stock).toFixed(4);
+        ctxtAltQuantity.SetText(calcQuantity);
+        ChkDataDigitCount(Quantity);
+    }
+}
+function ChkDataDigitCount(e) {
+    var data = $(e).val();
+    $(e).val(parseFloat(data).toFixed(4));
+}
+
+function ALTQuantityGotFocus(s, e) {
+
+    
+    var ProductID = $('#hdfProductID').val();
+    var Branch = $('#ddl_Branch').val();
+    var WarehouseID = cCmbWarehouse.GetValue();
+
+    var ConvertionOverideVisible = $('#hdnConvertionOverideVisible').val();
+    var ShowUOMConversionInEntry = $('#hdnShowUOMConversionInEntry').val();
+
+    var type = 'add';
+    var actionQry = 'WarehouseOpeningBalanceProduct';
+    var GetserviceURL = "../Activities/Services/Master.asmx/GetMultiUOMDetails";
+
+    $.ajax({
+        type: "POST",
+        url: GetserviceURL,
+        data: JSON.stringify({ orderid: ProductID, action: actionQry, module: 'OpeningBalances', strKey: "" }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+
+            var SpliteDetails = msg.d.split("||@||");
+            var IsInventory = '';
+            if (SpliteDetails[5] == "1") {
+                IsInventory = 'Yes';
+            }
+          
+            var gridprodqty = parseFloat(ctxtQuantity.GetText()).toFixed(4);        
+            var gridPackingQty = '';
+            var slno = WarehouseID;
+            var strProductID = ProductID;
+
+            var isOverideConvertion = SpliteDetails[4];
+            var packing_saleUOM = SpliteDetails[2];
+            var sProduct_SaleUom = SpliteDetails[3];
+            var sProduct_quantity = SpliteDetails[0];
+            var packing_quantity = SpliteDetails[1];
+
+            var uomfactor = 0
+            var prodquantity = sProduct_quantity;
+            var packingqty = packing_quantity;
+            $('#hdnpackingqty').val(packingqty);
+            if (prodquantity != 0 && packingqty != 0) {
+                uomfactor = parseFloat(packingqty / prodquantity).toFixed(4);
+                $('#hdnuomFactor').val(parseFloat(packingqty / prodquantity));
+            }
+            else {
+                $('#hdnuomFactor').val(0);
+            }
+            $('#hdnisOverideConvertion').val(isOverideConvertion);
+        }
+    });
+
+}
+ //Rev 1.0 END
