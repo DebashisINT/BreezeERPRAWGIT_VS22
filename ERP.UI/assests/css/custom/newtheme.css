@@ -2,6 +2,12 @@
    Author's custom styles server copy 02.07.2019  
    ========================================================================== */
 /*checkboxes csss*/
+
+/*====================================================== Revision History ===========================================================
+Rev Number       DATE            VERSION        DEVELOPER            CHANGES
+1.0              08-02-2023      2.0.35         Pallab               inner page grid issue fix and design modification
+====================================================== Revision History ===========================================================*/
+
 *:focus {
     outline: none;
 }
@@ -2502,6 +2508,8 @@ a#notification {
     z-index:5;
 }
 #ShowFilter {
+    /*Rev 1.0 : padding add*/
+    padding-bottom: 10px !important;
 }
 
 .dxeButtonEditSys td.dxic {
@@ -3233,9 +3241,12 @@ hr.tfour {
     /*border-radius: 3px;*/
 }
 .dxeCalendarHeader_PlasticBlue {
-    background: #54749D !important;
+    /*background: #54749D !important;
     border-bottom: 1px solid #3e597b;
-    padding: 4px 12px 3px;
+    padding: 4px 12px 3px;*/
+    background: #094e8c !important;
+    border-bottom: 1px solid #094e8c;
+    padding: 6px 12px 6px;
 }
 .dxtcLite_PlasticBlue > .dxtc-stripContainer .dxtc-activeTab, .dxtcLite_PlasticBlue.dxtc-noSpacing > .dxtc-stripContainer .dxtc-activeTab.dxtc-lead, .dxtcLite_PlasticBlue.dxtc-noSpacing > .dxtc-stripContainer .dxtc-activeTab.dxtc-n {
     border-top: 1px solid #3e597b;
@@ -3254,7 +3265,8 @@ hr.tfour {
 }
 .dxeCalendarSelected_PlasticBlue, .dxgvFooter_PlasticBlue {
     color: White;
-    background-color: #54749d;
+    /*background-color: #54749d;*/
+    background-color: #094e8c;
 }
 
 .inline-block {
@@ -4047,3 +4059,36 @@ button:focus
         background-color: #dd444d !important;
         border-color: #dd444d !important;
     }
+/*Rev 1.0*/
+.dxgvHeader_PlasticBlue {
+    background: #1b5ea4 !important;
+    color: #fff !important;
+}
+    .dxgvHeader_PlasticBlue, .dxgvHeader_PlasticBlue table {
+        color: #fff !important;
+    }
+
+.form_main {
+    /*background: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 10px #11111154;
+    overflow: hidden;*/
+}
+
+.panel-title h3 {
+    font-size: 26px !important;
+    font-weight: 500 !important;
+}
+
+input[type="text"], input[type="password"], textarea, .chosen-container-single .chosen-single {
+    height: 30px;
+    border-radius: 4px;
+}
+
+.rightSide {
+    background: #ededed !important;
+    margin-top: 70px !important;
+}
+
+/*Rev end 1.0*/

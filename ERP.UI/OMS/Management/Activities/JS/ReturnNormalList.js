@@ -1,5 +1,9 @@
-﻿
-        var ReturnId = 0;
+﻿//<% --==========================================================Revision History ============================================================================================
+//    1.0   Priti   V2.0.36   19-01-2023    	0025314: Views to be converted to Procedures in the Listing Page of Transaction / Return-Sales / Return With Invoice
+//    2.0   Priti   V2.0.36   17-02-2023        After Listing view upgradation delete data show in listing issue solved.
+
+//========================================== End Revision History =======================================================================================================--%>
+var ReturnId = 0;
 function onPrintJv(id) {
     // debugger;
     ReturnId = id;
@@ -89,8 +93,11 @@ function OnEndCallback(s, e) {
         jAlert(cGrdSalesReturn.cpDelete);
 
         cGrdSalesReturn.cpDelete = null;
-        cGrdSalesReturn.Refresh();
-        //  window.location.href = "ReturnNormalList.aspx";
+       
+        /* Rev 2.0*/
+        // cGrdSalesReturn.Refresh();
+        updateGridByDate();
+        /* Rev 2.0 End*/
     }
 }
 //function OnClickDelete(keyValue) {
@@ -187,11 +194,22 @@ function updateGridByDate() {
         $("#hfToDate").val(ctoDate.GetDate().format('yyyy-MM-dd'));
         $("#hfBranchID").val(ccmbBranchfilter.GetValue());
         $("#hfIsFilter").val("Y");
-        cGrdSalesReturn.Refresh();
+       
+
+        //REV 1.0
+        //     cGrdSalesReturn.Refresh();
+        $("#hFilterType").val("All");
+        cCallbackPanel.PerformCallback("");
+                //END REV 1.0
+
         //cGrdSalesReturn.PerformCallback('FilterGridByDate~' + cFormDate.GetDate().format('yyyy-MM-dd') + '~' + ctoDate.GetDate().format('yyyy-MM-dd') + '~' + ccmbBranchfilter.GetValue())
     }
 }
-
+//REV 1.0
+function CallbackPanelEndCall(s, e) {
+    cGrdSalesReturn.Refresh();
+}
+//END REV 1.0
     $(document).ready(function () {
         if ($('body').hasClass('mini-navbar')) {
             var windowWidth = $(window).width();

@@ -1,4 +1,10 @@
-﻿
+﻿//==========================================================Revision History ============================================================================================
+//    1.0   Priti   V2.0.36   10-01-2023     0025372: Listing view upgradation required of Branch Transfer Out of Inventory
+//    2.0   Priti   V2.0.36   17-02-2023     After Listing view upgradation delete data show in listing issue solved.
+
+//========================================== End Revision History =======================================================================================================--%>
+
+
 var StockId = 0;
 function onPrintJv(id) { 
     
@@ -94,8 +100,12 @@ function updateGridByDate() {
         $("#hfToDate").val(ctoDate.GetDate().format('yyyy-MM-dd'));
         $("#hfBranchID").val(ccmbBranchfilter.GetValue());
         $("#hfIsFilter").val("Y");
-        cGrdOrder.Refresh();
 
+        //REV 1.0
+        //cGrdOrder.Refresh();
+        $("#hFilterType").val("All");
+        cCallbackPanel.PerformCallback("");
+        //END REV 1.0
         //cGrdOrder.PerformCallback('FilterGridByDate~' + cFormDate.GetDate().format('yyyy-MM-dd') + '~' + ctoDate.GetDate().format('yyyy-MM-dd') + '~' + ccmbBranchfilter.GetValue());
 
     }
@@ -103,6 +113,11 @@ function updateGridByDate() {
 //End
 
 
+ //REV 1.0
+function CallbackPanelEndCall(s, e) {
+    cGrdOrder.Refresh();
+}
+ //END REV 1.0
 
 document.onkeydown = function (e) {
     if (event.keyCode == 18) isCtrl = true;
@@ -165,7 +180,7 @@ function OnClickStatus(keyValue) {
     cGrdOrder.PerformCallback('Edit~' + keyValue);
 }
 function grid_EndCallBack() {
-    debugger;
+    //debugger;
 
     if (cGrdOrder.cpEdit != null) {
         GetObjectID('hiddenedit').value = cGrdOrder.cpEdit.split('~')[0];
@@ -184,7 +199,11 @@ function grid_EndCallBack() {
     if (cGrdOrder.cpDelete != null) {
         jAlert(cGrdOrder.cpDelete);
         cGrdOrder.cpDelete = null;
-        cGrdOrder.Refresh();
+       
+        /* Rev 2.0*/
+        // cGrdOrder.Refresh();
+        updateGridByDate();
+            //end rev 2.0
     }
     if (cGrdOrder.cpCancelUpdate == 'Reason saved successfully') {
         cGrdOrder.cpCancelUpdate = null;

@@ -1,4 +1,10 @@
-﻿var isFirstTime = true;
+﻿//==========================================================Revision History ============================================================================================
+//    1.0   Priti   V2.0.36     10-01-2023     0025324: Views to be converted to Procedures in the Listing Page of Transaction / Transit Sales/Purchase / Sales Invoice
+//    2.0   Priti   V2.0.36     17-02-2023     After Listing view upgradation delete data show in listing issue solved.
+
+//========================================== End Revision History =======================================================================================================--%>
+
+var isFirstTime = true;
 
 // Purchase Invoice Section Start
 updateTSIGridByDate = function () {
@@ -30,12 +36,19 @@ updateTSIGridByDate = function () {
         $("#hfToDate").val(ctoDate.GetDate().format('yyyy-MM-dd'));
         $("#hfBranchID").val(ccmbBranchfilter.GetValue());
         $("#hfIsFilter").val("Y");
-
-        cgrid.Refresh();
-
+        //rev 1.0
+        //cgrid.Refresh();
+        $("#hFilterType").val("All");
+        cCallbackPanel.PerformCallback("");
+        //end rev 1.0
         $("#drdExport").val(0);
     }
 }
+  //rev 1.0
+function CallbackPanelEndCall(s, e) {
+    cgrid.Refresh();
+}
+ //end rev 1.0
 updateGridAfterDelete = function () {
     var sdate = cFormDate.GetValue();
     var edate = ctoDate.GetValue();
@@ -63,7 +76,11 @@ updateGridAfterDelete = function () {
         $("#hfBranchID").val(ccmbBranchfilter.GetValue());
         $("#hfIsFilter").val("Y");
 
-        cgrid.Refresh();
+        //rev 2.0
+        //cgrid.Refresh();
+        $("#hFilterType").val("All");
+        cCallbackPanel.PerformCallback("");
+        //end rev 2.0
 
         $("#drdExport").val(0);
 

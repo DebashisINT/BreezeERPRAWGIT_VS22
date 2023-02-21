@@ -1,4 +1,9 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="CashBankBookRegister_Details.aspx.cs" Inherits="Reports.Reports.GridReports.CashBankBookRegister_Details" %>
+﻿<%--====================================================== Revision History ==========================================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                10-02-2023        2.0.36           Pallab              25575 : Report pages modification
+====================================================== Revision History ==========================================================--%>
+
+<%@ Page Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="CashBankBookRegister_Details.aspx.cs" Inherits="Reports.Reports.GridReports.CashBankBookRegister_Details" %>
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
     Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
 <asp:content id="Content1" contentplaceholderid="head" runat="server">
@@ -284,15 +289,15 @@
             position:relative;
             width:100%;
             display:block;
-            padding:9px 10px 5px 10px;
+            padding:8px 10px 5px 10px;
         }
         .plhead a>i {
             position:absolute;
-            top:11px;
+            top:7px;
             right:15px;
         }
         #accordion {
-            margin-bottom:10px;
+            margin-bottom:20px;
         }
         .companyName {
             font-size:16px;
@@ -303,6 +308,138 @@
         .plhead a.collapsed .fa-minus-circle{
             display:none;
         }
+
+        /*Rev 1.0*/
+        .outer-div-main {
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 1px 1px 10px #11111154;
+        }
+
+        .form_main {
+            overflow: hidden;
+        }
+
+        label
+        {
+            color: #141414 !important;
+            font-size: 14px;
+        }
+
+        select
+        {
+            height: 30px !important;
+            border-radius: 4px;
+            -webkit-appearance: none;
+            position: relative;
+            z-index: 1;
+            background-color: transparent;
+            padding-left: 10px !important;
+        }
+
+        .dxeButtonEditSys.dxeButtonEdit_PlasticBlue
+        {
+            height: 30px;
+            border-radius: 4px;
+        }
+
+        .dxeButtonEditButton_PlasticBlue
+        {
+            background: #094e8c !important;
+            border-radius: 4px !important;
+            padding: 0 4px !important;
+        }
+
+        .calendar-icon {
+            position: absolute;
+            bottom: 6px;
+            right: 20px;
+            z-index: 0;
+            cursor: pointer;
+        }
+
+        #ASPxFromDate , #ASPxToDate
+        {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        #ASPxFromDate_B-1 , #ASPxToDate_B-1
+        {
+            background: transparent !important;
+            border: none;
+            width: 30px;
+            padding: 10px !important;
+        }
+
+        #ASPxFromDate_B-1 #ASPxFromDate_B-1Img , #ASPxToDate_B-1 #ASPxToDate_B-1Img
+        {
+            display: none;
+        }
+
+        .dxtcLite_PlasticBlue > .dxtc-stripContainer .dxtc-activeTab, .dxgvFooter_PlasticBlue
+        {
+            background: #1b5ea4 !important;
+        }
+
+        .simple-select::after {
+            /*content: '<';*/
+            content: url(../../../assests/images/left-arw.png);
+            position: absolute;
+            top: 31px;
+            right: 13px;
+            font-size: 16px;
+            transform: rotate(269deg);
+            font-weight: 500;
+            background: #094e8c;
+            color: #fff;
+            height: 18px;
+            display: block;
+            width: 26px;
+            /* padding: 10px 0; */
+            border-radius: 4px;
+            text-align: center;
+            line-height: 19px;
+            z-index: 0;
+        }
+        .simple-select {
+            position: relative;
+        }
+        select.btn
+        {
+            padding-right: 10px !important;
+        }
+
+        .panel-group .panel
+        {
+            box-shadow: 1px 1px 8px #1111113b;
+            border-radius: 8px;
+        }
+
+        .dxpLite_PlasticBlue .dxp-current
+        {
+            background-color: #1b5ea4;
+            padding: 3px 5px;
+            border-radius: 2px;
+        }
+
+        #accordion {
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        .dxgvHeader_PlasticBlue {
+    background: #1b5ea4 !important;
+    color: #fff !important;
+}
+
+        .dxgvEditFormDisplayRow_PlasticBlue td.dxgv, .dxgvDataRow_PlasticBlue td.dxgv, .dxgvDataRowAlt_PlasticBlue td.dxgv, .dxgvSelectedRow_PlasticBlue td.dxgv, .dxgvFocusedRow_PlasticBlue td.dxgv
+        {
+            padding: 6px 6px 6px !important;
+        }
+        /*Rev end 1.0*/
     </style>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -382,11 +519,16 @@
           </div>
         </div>
     </div>
+    <%--Rev 1.0 : "outer-div-main" class add--%>
+    <div class="outer-div-main">
     <div class="form_main">
         <asp:HiddenField runat="server" ID="hdndaily" />
         <asp:HiddenField runat="server" ID="hdtid" />
         <div class="row">
-            <div class="col-md-2">
+            <%--Rev 1.0--%>
+            <%--<div class="col-md-2">--%>
+            <div class="col-md-2 simple-select">
+                <%--Rev end 1.0--%>
                 <label style="color: #b5285f; font-weight: bold;" class="clsTo">Head Branch</label>
                 <div>
                     <asp:DropDownList ID="ddlbranchHO" runat="server" Width="100%"></asp:DropDownList>
@@ -517,6 +659,9 @@
                     <ButtonStyle Width="13px">
                     </ButtonStyle>
                 </dxe:ASPxDateEdit>
+                <%--Rev 1.0--%>
+                <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                <%--Rev end 1.0--%>
             </div>
             <div class="col-md-2">
                 <label style="color: #b5285f; font-weight: bold;" class="clsTo">
@@ -528,9 +673,12 @@
                     <ButtonStyle Width="13px">
                     </ButtonStyle>
                 </dxe:ASPxDateEdit>
+                <%--Rev 1.0--%>
+                <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                <%--Rev end 1.0--%>
             </div>
            
-            <div class="col-md-2" style="padding-top: 20px;">
+            <div class="col-md-2" style="padding-top: 24px;">
             <table>
                 <tr>
                     <td>
@@ -729,6 +877,8 @@
         </div>--%>
 
     </div>
+        </div>
+    <%--Rev end 1.0--%>
     <div>
     </div>
     <dxe:ASPxGridViewExporter ID="exporter" runat="server" Landscape="true" PaperKind="A4" PageHeader-Font-Size="Larger" PageHeader-Font-Bold="true">

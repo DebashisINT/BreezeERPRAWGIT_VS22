@@ -1,4 +1,10 @@
-﻿using System;
+﻿//====================================================Revision History=========================================================================
+// 1.0  Priti   V2.0.36     Change Approval Realted Dev Express Table Bind to HTML table 
+
+//====================================================End Revision History=====================================================================
+
+
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -20,6 +26,11 @@ using ERP.Models;
 using System.Linq;
 using iTextSharp.text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using BusinessLogicLayer.ServiceManagement;
+using Aspose.Pdf.Kit;
+//using DocumentFormat.OpenXml.Drawing.Charts;
+
 namespace ERP.OMS.Management.Activities
 {
     public partial class SalesOrderEntityList : System.Web.UI.Page
@@ -30,10 +41,7 @@ namespace ERP.OMS.Management.Activities
         public string ShowDeliverySchedule { get; set; }
 
       //  BusinessLogicLayer.DBEngine oDBEngine = new BusinessLogicLayer.DBEngine(ConfigurationManager.AppSettings["DBConnectionDefault"]);
-        BusinessLogicLayer.DBEngine oDBEngine = new BusinessLogicLayer.DBEngine();
-
-
-       
+        BusinessLogicLayer.DBEngine oDBEngine = new BusinessLogicLayer.DBEngine();       
         #region Sandip Section For Approval Section Start
         ERPDocPendingApprovalBL objERPDocPendingApproval = new ERPDocPendingApprovalBL();
         int KeyValue = 0;
@@ -560,14 +568,14 @@ namespace ERP.OMS.Management.Activities
                     dtdata = objERPDocPendingApproval.PopulateERPDocApprovalPendingListByUserLevel(userid, "SO");
                     if (dtdata != null && dtdata.Rows.Count > 0)
                     {
-                        gridPendingApproval.DataSource = dtdata;
-                        gridPendingApproval.DataBind();
+                        //gridPendingApproval.DataSource = dtdata;
+                      //  gridPendingApproval.DataBind();
                         Session["PendingApproval"] = dtdata;  // Commented For Temporary Purpose
                     }
                     else
                     {
-                        gridPendingApproval.DataSource = null;
-                        gridPendingApproval.DataBind();
+                        //gridPendingApproval.DataSource = null;
+                       // gridPendingApproval.DataBind();
                     }
                 }
             }
@@ -625,94 +633,101 @@ namespace ERP.OMS.Management.Activities
             if (Session["watingOrder"] != null)
             {
                 DataTable Quotationdt = (DataTable)Session["watingOrder"];               
-                gridPendingApproval.DataSource = Quotationdt;
+                //gridPendingApproval.DataSource = Quotationdt;
             }
         }
-        protected void gridPendingApproval_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e) // Checked and Modified By Sandip
-        {
-            gridPendingApproval.JSProperties["cpinsert"] = null;
-            gridPendingApproval.JSProperties["cpEdit"] = null;
-            gridPendingApproval.JSProperties["cpUpdate"] = null;
-            gridPendingApproval.JSProperties["cpDelete"] = null;
-            gridPendingApproval.JSProperties["cpExists"] = null;
-            gridPendingApproval.JSProperties["cpUpdateValid"] = null;
-            int userid = 0;
-            if (Session["userid"] != null)
-            {
-                //Session.Remove("PendingApproval"); // Temporary Commented To Rebind from database due to Grid approvalval functionality
-                userid = Convert.ToInt32(Session["userid"]);
-                PopulateERPDocApprovalPendingListByUserLevel();
-                gridPendingApproval.JSProperties["cpEdit"] = "F";
-                //Session.Remove("UserWiseERPDocCreation"); // Temporary Commented To Rebind from database due to GridPending approvalval functionality effects this grid
-            }
-            if (Session["KeyValue"] != null)
-            {
-                Session.Remove("KeyValue");
-            }
 
-        }
+        //REV 1.0 Start
+        //protected void gridPendingApproval_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e) // Checked and Modified By Sandip
+        //{
+        //    gridPendingApproval.JSProperties["cpinsert"] = null;
+        //    gridPendingApproval.JSProperties["cpEdit"] = null;
+        //    gridPendingApproval.JSProperties["cpUpdate"] = null;
+        //    gridPendingApproval.JSProperties["cpDelete"] = null;
+        //    gridPendingApproval.JSProperties["cpExists"] = null;
+        //    gridPendingApproval.JSProperties["cpUpdateValid"] = null;
+        //    int userid = 0;
+        //    if (Session["userid"] != null)
+        //    {
+        //        //Session.Remove("PendingApproval"); // Temporary Commented To Rebind from database due to Grid approvalval functionality
+        //        userid = Convert.ToInt32(Session["userid"]);
+        //        PopulateERPDocApprovalPendingListByUserLevel();
+        //        gridPendingApproval.JSProperties["cpEdit"] = "F";
+        //        //Session.Remove("UserWiseERPDocCreation"); // Temporary Commented To Rebind from database due to GridPending approvalval functionality effects this grid
+        //    }
+        //    if (Session["KeyValue"] != null)
+        //    {
+        //        Session.Remove("KeyValue");
+        //    }
 
-        protected void chkapprove_Init(object sender, EventArgs e)  // Checked and Modified By Sandip
-        {
-            ASPxCheckBox Dcheckbox = (ASPxCheckBox)sender;
-            int itemindex = (((ASPxCheckBox)sender).NamingContainer as GridViewDataItemTemplateContainer).ItemIndex;
-            KeyValue = Convert.ToInt32((((ASPxCheckBox)sender).NamingContainer as GridViewDataItemTemplateContainer).KeyValue);
-            Session["KeyValue"] = KeyValue;
-            Dcheckbox.ClientSideEvents.CheckedChanged = String.Format("function(s, e) {{ GetApprovedQuoteId(s, e, {0}) }}", itemindex);
+        //}
+        //protected void chkapprove_Init(object sender, EventArgs e)  // Checked and Modified By Sandip
+        //{
+        //    ASPxCheckBox Dcheckbox = (ASPxCheckBox)sender;
+        //    int itemindex = (((ASPxCheckBox)sender).NamingContainer as GridViewDataItemTemplateContainer).ItemIndex;
+        //    KeyValue = Convert.ToInt32((((ASPxCheckBox)sender).NamingContainer as GridViewDataItemTemplateContainer).KeyValue);
+        //    Session["KeyValue"] = KeyValue;
+        //    Dcheckbox.ClientSideEvents.CheckedChanged = String.Format("function(s, e) {{ GetApprovedQuoteId(s, e, {0}) }}", itemindex);
 
-        }
+        //}
+        //protected void chkreject_Init(object sender, EventArgs e) // Checked and Modified By Sandip
+        //{
+        //    ASPxCheckBox Dcheckbox = (ASPxCheckBox)sender;
+        //    int itemindex = (((ASPxCheckBox)sender).NamingContainer as GridViewDataItemTemplateContainer).ItemIndex;
+        //    KeyValue = Convert.ToInt32((((ASPxCheckBox)sender).NamingContainer as GridViewDataItemTemplateContainer).KeyValue);
+        //    Session["KeyValue"] = KeyValue;
+        //    Dcheckbox.ClientSideEvents.CheckedChanged = String.Format("function(s, e) {{ GetRejectedQuoteId(s, e, {0}) }}", itemindex);
 
+        //}
 
-        protected void chkreject_Init(object sender, EventArgs e) // Checked and Modified By Sandip
-        {
-            ASPxCheckBox Dcheckbox = (ASPxCheckBox)sender;
-            int itemindex = (((ASPxCheckBox)sender).NamingContainer as GridViewDataItemTemplateContainer).ItemIndex;
-            KeyValue = Convert.ToInt32((((ASPxCheckBox)sender).NamingContainer as GridViewDataItemTemplateContainer).KeyValue);
-            Session["KeyValue"] = KeyValue;
-            Dcheckbox.ClientSideEvents.CheckedChanged = String.Format("function(s, e) {{ GetRejectedQuoteId(s, e, {0}) }}", itemindex);
+        //REV 1.0 End
 
-        }
 
         #endregion Approval Waiting or Pending User Level Wise Section End
+
+
         #region Created User Wise List Quotation after Clicking on Status Button Section Start  (call in page load)
 
-        protected void gridUserWiseQuotation_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
-        {
-            PopulateUserWiseERPDocCreation();
-        }
-        public void PopulateUserWiseERPDocCreation()
-        {
-            int userid = 0;
-            if (Session["userid"] != null)
-            {
-                if (Session["userbranchID"] != null)
-                {
-                    userid = Convert.ToInt32(Session["userid"]);
-                }
-            }
-            DataTable dtdata = new DataTable();
-            //if (Session["UserWiseERPDocCreation"] == null)
-            //{
+        //REV 1.0 Start
+        //protected void gridUserWiseQuotation_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
+        //{
+        //    PopulateUserWiseERPDocCreation();
+        //}
+        //public void PopulateUserWiseERPDocCreation()
+        //{
+        //    int userid = 0;
+        //    if (Session["userid"] != null)
+        //    {
+        //        if (Session["userbranchID"] != null)
+        //        {
+        //            userid = Convert.ToInt32(Session["userid"]);
+        //        }
+        //    }
+        //    DataTable dtdata = new DataTable();
+        //    //if (Session["UserWiseERPDocCreation"] == null)
+        //    //{
 
-            dtdata = objERPDocPendingApproval.PopulateUserWiseERPDocCreation(userid, "SO");
-            //}
-            //else
-            //{
-            //    dtdata = (DataTable)Session["UserWiseERPDocCreation"];  // Temporary Commented By Sandip
-            //}
-            if (dtdata != null && dtdata.Rows.Count > 0)
-            {
-                gridUserWiseQuotation.DataSource = dtdata;
-                gridUserWiseQuotation.DataBind();
-                Session["UserWiseERPDocCreation"] = dtdata; // Temporary Commented By Sandip
-            }
-            else
-            {
-                gridUserWiseQuotation.DataSource = null;
-                gridUserWiseQuotation.DataBind();
-            }
+        //    dtdata = objERPDocPendingApproval.PopulateUserWiseERPDocCreation(userid, "SO");
+        //    //}
+        //    //else
+        //    //{
+        //    //    dtdata = (DataTable)Session["UserWiseERPDocCreation"];  // Temporary Commented By Sandip
+        //    //}
+        //    if (dtdata != null && dtdata.Rows.Count > 0)
+        //    {
+        //        gridUserWiseQuotation.DataSource = dtdata;
+        //        gridUserWiseQuotation.DataBind();
+        //        Session["UserWiseERPDocCreation"] = dtdata; // Temporary Commented By Sandip
+        //    }
+        //    else
+        //    {
+        //        gridUserWiseQuotation.DataSource = null;
+        //        gridUserWiseQuotation.DataBind();
+        //    }
 
-        }
+        //}
+
+        //REV 1.0 End
         #endregion #region Created User Wise List Quotation after Clicking on Status Button Section End
 
 
@@ -813,24 +828,19 @@ namespace ERP.OMS.Management.Activities
         }
 
         #endregion After Approval Or rejected Number to reflect of Pending Approval Section  End
-
+        //REV 1.0 Start
         //protected void gridPendingApproval_PageIndexChanged(object sender, EventArgs e)
         //{
         //    PopulateERPDocApprovalPendingListByUserLevel();
         //}
-
-
-
-
-
-
-
+        //REV 1.0 End
         #endregion Sandip Section For Approval Dtl Section End
-
-        protected void gridUserWiseQuotation_PageIndexChanged(object sender, EventArgs e)
-        {
-            PopulateUserWiseERPDocCreation();
-        }
+        //REV 1.0 Start
+        //protected void gridUserWiseQuotation_PageIndexChanged(object sender, EventArgs e)
+        //{
+        //    PopulateUserWiseERPDocCreation();
+        //}
+        //REV 1.0 End
 
         protected void ShowGrid_SummaryDisplayText(object sender, ASPxGridViewSummaryDisplayTextEventArgs e)
         {
@@ -1298,6 +1308,7 @@ namespace ERP.OMS.Management.Activities
             }
         }
 
+        //  REV 1.0 Start
         //protected void gridPendingApproval_DataBinding(object sender, EventArgs e)
         //{
         //    if (Session["PendingApproval"] != null)
@@ -1306,7 +1317,7 @@ namespace ERP.OMS.Management.Activities
         //        DataView dvData = new DataView(Quotationdt);
         //        gridPendingApproval.DataSource = Quotationdt;
         //    }
-            
+
         //}
 
         //protected void gridUserWiseQuotation_DataBinding(object sender, EventArgs e)
@@ -1317,8 +1328,10 @@ namespace ERP.OMS.Management.Activities
         //        DataView dvData = new DataView(Quotationdt);
         //        gridUserWiseQuotation.DataSource = Quotationdt;
         //    }
-            
+
         //}
+        //  REV 1.0 End
+
 
         [WebMethod]
         public static object ButtonCountApprovalWaiting()
@@ -1399,7 +1412,7 @@ namespace ERP.OMS.Management.Activities
             string IsFilter = Convert.ToString(hdnIsFilter.Value);
             string connectionString = Convert.ToString(System.Web.HttpContext.Current.Session["ErpConnection"]);
             ERPDataClassesDataContext dc = new ERPDataClassesDataContext(connectionString);
-            string User_id = Convert.ToString(Session["userid"]);
+            string  User_id = Convert.ToString(Session["userid"]);
             string Userid = Convert.ToString(HttpContext.Current.Session["userid"]);
             BusinessLogicLayer.DBEngine BEngine = new BusinessLogicLayer.DBEngine();
 
@@ -1414,7 +1427,7 @@ namespace ERP.OMS.Management.Activities
             }
             else
             {
-
+                
                 var q = from d in dc.v_PendingApprovals
                         where d.ERPApprover_UserId == 0
                         select d;
@@ -1453,6 +1466,120 @@ namespace ERP.OMS.Management.Activities
             }
 
         }
+
+        public class PendingApprovalData
+        {
+          
+            public List<PendingApprovalDataList> DetailsList { get; set; }
+        }
+
+        public class PendingApprovalDataList
+        {
+            public String DocumentNo { get; set; }
+            public string PartyName { get; set; }
+            public string PostingDate { get; set; }
+            public string Unit { get; set; }
+            public string EnteredBy { get; set; }
+            public string Approved { get; set; }
+            public string Rejected { get; set; }
+            
+        }
+
+        [WebMethod]
+        public static PendingApprovalData PendingApproval_List()
+        {
+            EntityLayer.CommonELS.UserRightsForPage rights = new UserRightsForPage();
+            rights = BusinessLogicLayer.CommonBLS.CommonBL.GetUserRightSession("/Transaction/serviceData/serviceDataList.aspx");
+            PendingApprovalData ret = new PendingApprovalData();
+            List<PendingApprovalDataList> listStatues = new List<PendingApprovalDataList>();
+
+            DataTable dtdata = new DataTable();
+            ERPDocPendingApprovalBL objERPDocPendingApproval = new ERPDocPendingApprovalBL();
+            int userid = 0;
+            userid = Convert.ToInt32(HttpContext.Current.Session["userid"]);
+            dtdata = objERPDocPendingApproval.PopulateERPDocApprovalPendingListByUserLevel(userid, "SO");
+
+            if (dtdata != null && dtdata.Rows.Count > 0)
+            {
+                    foreach (DataRow item in dtdata.Rows) 
+                    { 
+                        string _Approved = "", _Rejected="";
+                    //_Approved = _Approved + " <span class='actionInput text-center' onclick='Edit(" + item["ID"].ToString() + ")'><i class='fa fa-pencil-square-o assig' data-toggle='tooltip' data-placement='bottom' title='Approved' ></i> </span>";
+                    //_Rejected = _Rejected + " <span class='actionInput text-center' onclick='Edit(" + item["ID"].ToString() + ")'><i class='fa fa-pencil-square-o assig' data-toggle='tooltip' data-placement='bottom' title='Rejected' ></i> </span>";
+
+                    _Approved = _Approved + " <input type='checkbox' class='form-check-input' onclick='OnGetApprovedRowValues(" + item["ID"].ToString() + ")'>";
+                    _Rejected = _Rejected + " <input type='checkbox' class='form-check-input' onclick='OnGetRejectedRowValues(" + item["ID"].ToString() + ")'>";
+
+                    listStatues.Add(new PendingApprovalDataList
+                        {
+                            DocumentNo = item["Number"].ToString(),
+                            PartyName = item["customer"].ToString(),
+                            PostingDate = item["CreateDate"].ToString(),
+                            Unit = item["branch_description"].ToString(),
+                            EnteredBy = item["craetedby"].ToString(),
+                            Approved = _Approved,
+                            Rejected = _Rejected,                        
+
+                        });                  
+                }
+                ret.DetailsList = listStatues;
+            }
+            return ret;
+        }
+
+
+        public class UserWiseData
+        {
+
+            public List<UserWiseDataList> DetailsList { get; set; }
+        }
+
+        public class UserWiseDataList
+        {
+            public String Branch { get; set; }
+            public string SaleOrderNo { get; set; }
+            public string Date { get; set; }
+            public string Customer { get; set; }
+            public string ApprovalUser { get; set; }
+            public string UserLevel { get; set; }
+            public string Status { get; set; }
+
+        }
+
+        [WebMethod]
+        public static UserWiseData UserWiseApproval_List()
+        {
+            EntityLayer.CommonELS.UserRightsForPage rights = new UserRightsForPage();
+            // rights = BusinessLogicLayer.CommonBLS.CommonBL.GetUserRightSession("/Transaction/serviceData/serviceDataList.aspx");
+            UserWiseData ret = new UserWiseData();
+            List<UserWiseDataList> listStatues = new List<UserWiseDataList>();
+            DataTable dtdata = new DataTable();
+            ERPDocPendingApprovalBL objERPDocPendingApproval = new ERPDocPendingApprovalBL();
+            int userid = 0;
+            userid = Convert.ToInt32(HttpContext.Current.Session["userid"]);
+            dtdata = objERPDocPendingApproval.PopulateUserWiseERPDocCreation(userid, "SO");
+
+            if (dtdata != null && dtdata.Rows.Count > 0)
+            {
+                foreach (DataRow item in dtdata.Rows)
+                {                   
+                    listStatues.Add(new UserWiseDataList
+                    {
+                        Branch= item["Branch"].ToString(),
+                        SaleOrderNo = item["number"].ToString(),
+                        Date = item["OrderedDate"].ToString(),
+                        Customer = item["Customer"].ToString(),
+                        ApprovalUser = item["approvedby"].ToString(),
+                        UserLevel = item["UserLevel"].ToString(),
+                        Status = item["status"].ToString(),
+                    });
+                }
+                ret.DetailsList = listStatues;
+            }
+            return ret;
+        }
+
+
     }
     public class ApprovalCount
     {

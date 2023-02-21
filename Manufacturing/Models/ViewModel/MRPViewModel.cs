@@ -1,4 +1,11 @@
-﻿using System;
+﻿//==================================================== Revision History =========================================================================
+// 1.0  Priti V2.0.36    23-01-2023  0025610:MRP Close Feature required
+// 2.0  Priti V2.0.36    01-02-2023  0025634:Available Stock to be calculated in MRP product Wise
+
+//====================================================End Revision History=====================================================================
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -75,7 +82,10 @@ namespace Manufacturing.Models.ViewModel
             public String MPS_ID { get; set; }
 
             public String FG_ID { get; set; }
-        }
+            
+            public String Status { get; set; }//REV 1.0
+
+    }
      
         public class MRPProduct
         {
@@ -149,7 +159,8 @@ namespace Manufacturing.Models.ViewModel
             public String AltUOM { get; set; }
             public String AltUOMID { get; set; }
             public String VendorName { get; set; }
-        }
+            public String NewAvlStk { get; set; }//2.0
+    }
         public class udtMRPEntryProducts
         {
             public Int64 ProductID { get; set; }

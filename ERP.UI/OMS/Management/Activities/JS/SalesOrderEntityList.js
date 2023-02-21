@@ -1,4 +1,7 @@
-﻿
+﻿//====================================================Revision History=========================================================================
+// 1.0   Priti   V2.0.36     Change Approval Realted Dev Express Table Bind to HTML table
+// 2.0   Priti   V2.0.36     16-02-2023     Afer Listing view upgradation delete data show in list issue solved. 
+//====================================================End Revision History=====================================================================
 function OnProductWiseClosedClick(keyValue, visibleIndex, PurchaseOrder) {
     $("#hddnKeyValue").val(keyValue);
     cGrdOrder.SetFocusedRowIndex(visibleIndex);
@@ -109,28 +112,182 @@ function watingOrdergridEndCallback() {
 }
 
 function OpenPopUPUserWiseQuotaion() {
-    //cgridUserWiseQuotation.PerformCallback();
-    $("#hdnIsFilter").val("Y");
-    cgridUserWiseQuotation.Refresh();
-    cPopupUserWiseQuotation.Show();
+    ///REV 1.0
+    // cgridUserWiseQuotation.PerformCallback();
+    //$("#hdnIsFilter").val("Y");
+    //cgridUserWiseQuotation.Refresh();
+    //cPopupUserWiseQuotation.Show();
+
+    $('#UserWiseApprovalModel').modal('show');
+    setTimeout(UserWiseSalesOrder, 0);
+    UserWiseSalesOrder();
+    ///REV 1.0 End
 }
 // function above  End
 
+function UserWiseSalesOrder() {
+    LoadingPanel.Show();
+
+    $.ajax({
+        type: "POST",
+        url: "SalesOrderEntityList.aspx/UserWiseApproval_List",
+        /*   data: JSON.stringify({ model: $("#hdnUserType").val(), SearchType: "PendingApproval" }),*/
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+
+            var status = "";
+            status = status + "<table id='UserWisedataTable' class='table table-striped table-bordered display nowrap' style='width: 100%'>";
+            status = status + " <thead><tr>";
+            status = status + " <th>Branch</th><th>Sale Order No.</th><th>Date</th><th>Customer</th>";
+            status = status + " <th>Approval User</th><th>User Level </th><th>Status </th>";
+            status = status + " </tr></thead>";
+            status = status + " </table>";
+            $('#divListUserWiseData').html(status);
+
+            $('#UserWisedataTable').DataTable({
+                scrollX: true,
+                fixedColumns: {
+                    rightColumns: 2
+                },
+                data: msg.d.DetailsList,
+                columns: [
+                    { 'data': 'Branch' },
+                    { 'data': 'SaleOrderNo' },
+                    { 'data': 'Date' },
+                    { 'data': 'Customer' },
+                    { 'data': 'ApprovalUser' },
+                    { 'data': 'UserLevel' },
+                    { 'data': 'Status' },
+
+                ],
+                dom: 'Bfrtip',
+                //buttons: [
+                //    {
+                //        extend: 'excel',
+                //        title: null,
+                //        filename: 'Service Entry',
+                //        text: 'Save as Excel',
+                //        customize: function (xlsx) {
+                //            var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                //            $('row:first c', sheet).attr('s', '42');
+                //        },
+
+                //        exportOptions: {
+                //        }
+                //    }
+                //],
+                error: function (error) {
+                    alert(error);
+                    LoadingPanel.Hide();
+                }
+            });
+            LoadingPanel.Hide();
+        }
+    });
+}
+
 //This function is called to show all Pending Approval of Sales Order whose Userid has been set LevelWise using Approval Configuration Module 
 function OpenPopUPApprovalStatus() {
+
+     ///REV 1.0
    // cgridPendingApproval.PerformCallback();
-    $("#hdnIsFilter").val("Y");
-    cgridPendingApproval.Refresh();
-    cpopupApproval.Show();
+   // clookup_PendingApproval.gridView.Refresh();
+   // $("#hdnIsFilter").val("Y");
+   // cgridPendingApproval.Refresh();
+    //cpopupApproval.Show();
+    //clookup_PendingApproval.ShowDropDown();
+
+
+    $('#popupApprovalModel').modal('show');
+    //Rev Pallab: setTimeout add/
+    setTimeout(PendingApproval, 0);
+    //Rev end Pallab/
+  
+    //PendingApproval();
+
+    ///REV 1.0 End
 }
+
+function PendingApproval() {
+    LoadingPanel.Show();
+
+    $.ajax({
+        type: "POST",
+        url: "SalesOrderEntityList.aspx/PendingApproval_List",
+     /*   data: JSON.stringify({ model: $("#hdnUserType").val(), SearchType: "PendingApproval" }),*/
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {           
+
+            var status = "";
+            status = status + "<table id='dataTable' class='table table-striped table-bordered display nowrap' style='width: 100%'>";
+            status = status + " <thead><tr>";
+            status = status + " <th>Document No.</th><th>Party Name</th><th>Posting Date</th><th>Unit</th>";
+            status = status + " <th>Entered By</th><th>Approved </th><th>Rejected </th>";           
+            status = status + " </tr></thead>";
+
+            status = status + " </table>";
+
+            $('#divListData').html(status);
+
+            $('#dataTable').DataTable({
+                scrollX: true,
+                fixedColumns: {
+                    rightColumns: 2
+                },
+                data: msg.d.DetailsList,
+                columns: [
+                    { 'data': 'DocumentNo' },
+                    { 'data': 'PartyName' },
+                    { 'data': 'PostingDate' },
+                    { 'data': 'Unit' },
+                    { 'data': 'EnteredBy' },
+                    { 'data': 'Approved' },
+                    { 'data': 'Rejected' },
+                   
+                ],
+                dom: 'Bfrtip',
+                //buttons: [
+                //    {
+                //        extend: 'excel',
+                //        title: null,
+                //        filename: 'Service Entry',
+                //        text: 'Save as Excel',
+                //        customize: function (xlsx) {
+                //            var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                //            $('row:first c', sheet).attr('s', '42');
+                //        },
+
+                //        exportOptions: {
+                //        }
+                //    }
+                //],
+                error: function (error) {
+                    alert(error);
+                    LoadingPanel.Hide();
+                }
+            });
+            LoadingPanel.Hide();
+        }
+    });
+}
+function OnGetApprovedRowValues(obj) {
+    uri = "SalesOrderAdd.aspx?key=" + obj + "&status=2" + '&type=SO' + '&isformApprove=YES' + '&UpperApprove=UpApprove';
+    popup.SetContentUrl(uri);
+    popup.Show();
+}
+
+
+
+
 // function above  End
 
 
 // Status 2 is passed If Approved Check box is checked by User Both Below function is called and used to show in POPUP,  the Add Page of Respective Segment(like Page for Adding Quotation ,Sale Order ,Challan)
 function GetApprovedQuoteId(s, e, itemIndex) {
-    var rowvalue = cgridPendingApproval.GetRowValues(itemIndex, 'ID', OnGetApprovedRowValues);
-    //cgridPendingApproval.PerformCallback('Status~' + rowvalue);
-    //cgridPendingApproval.GetRowValues(itemIndex, 'ID', OnGetApprovedRowValues);
+   var rowvalue = cgridPendingApproval.GetRowValues(itemIndex, 'ID', OnGetApprovedRowValues);
+    //var rowvalue = clookup_PendingApproval.gridView.GetRowValues(itemIndex, 'ID', OnGetApprovedRowValues);
 
 }
 function OnGetApprovedRowValues(obj) {
@@ -140,13 +297,16 @@ function OnGetApprovedRowValues(obj) {
 }
 function closeUserApproval() {
     popup.Hide();
+  
+    //clookup_PendingApproval.ShowDropDown();
 }
 // function above  End For Approved
 
 // Status 3 is passed If Approved Check box is checked by User Both Below function is called and used to show in POPUP,  the Add Page of Respective Segment(like Page for Adding Quotation ,Sale Order ,Challan)
 function GetRejectedQuoteId(s, e, itemIndex) {
-    //debugger;
+    
     cgridPendingApproval.GetRowValues(itemIndex, 'ID', OnGetRejectedRowValues);
+    //clookup_PendingApproval.gridView.GetRowValues(itemIndex, 'ID', OnGetRejectedRowValues);
 
 }
 function OnGetRejectedRowValues(obj) {
@@ -167,6 +327,7 @@ function OnApprovalEndCall(s, e) {
             $('#lblWaiting').text(data.d);
         }
     });
+    PendingApproval();
 }
 // function above  End 
 //<%-- Code Added By Sandip For Approval Detail Section End--%>
@@ -435,7 +596,9 @@ function grid_EndCallBack() {
         jAlert(cGrdOrder.cpDelete);
         cGrdOrder.cpDelete = null;
         //cGrdOrder.Refresh();
+       /* Rev 2.0*/
         updateGridByDate();
+        /* Rev 2.0 End*/
     }
 }
 function SavePrpformaStatus() {

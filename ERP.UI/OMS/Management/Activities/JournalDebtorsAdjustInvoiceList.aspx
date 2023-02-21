@@ -1,4 +1,11 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="JournalDebtorsAdjustInvoiceList.aspx.cs" Inherits="ERP.OMS.Management.Activities.JournalDebtorsAdjustInvoiceList" %>
+﻿<%--==========================================================Revision History ============================================================================================   
+   1.0   Priti   V2.0.36      16-01-2023   		0025322: Views to be converted to Procedures in the Listing Page of Transaction / Adjustment of Documents - Cu / Journal With Sales Invoice
+   2.0   Priti   V2.0.36   17-02-2023       After Listing view upgradation delete data show in listing issue solved.
+
+========================================== End Revision History =======================================================================================================--%>
+
+
+<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="JournalDebtorsAdjustInvoiceList.aspx.cs" Inherits="ERP.OMS.Management.Activities.JournalDebtorsAdjustInvoiceList" %>
 
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
     Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
@@ -61,7 +68,12 @@
 
         function GridEndCallBack() {
             if (cgridAdvanceAdj.cpReturnMesg) {
-                jAlert(cgridAdvanceAdj.cpReturnMesg, "Alert", function () { cgridAdvanceAdj.Refresh(); });
+                jAlert(cgridAdvanceAdj.cpReturnMesg, "Alert", function () {                    
+                    /* Rev 2.0*/
+                    //   cgridAdvanceAdj.Refresh();
+                    updateGridByDate();
+                    /* Rev 2.0 End*/
+                });
                 cgridAdvanceAdj.cpReturnMesg = null;
             }
         }
@@ -88,13 +100,22 @@
                 $("#hfToDate").val(ctoDate.GetDate().format('yyyy-MM-dd'));
                 $("#hfBranchID").val(ccmbBranchfilter.GetValue());
                 $("#hfIsFilter").val("Y");
-                cgridAdvanceAdj.Refresh();
+                  //REV 1.0
+                //cgridAdvanceAdj.Refresh();
+
+                $("#hFilterType").val("All");
+                cCallbackPanel.PerformCallback("");
+                  //END REV 1.0
             }
 
 
         }
 
-
+        //REV 1.0
+        function CallbackPanelEndCall(s, e) {
+            cgridAdvanceAdj.Refresh();
+        }
+ //END REV 1.0
 
 
 
@@ -362,7 +383,16 @@
     </div>
 
 
-
+      <%-- REV 1.0--%>
+     <dxe:ASPxCallbackPanel runat="server" ID="CallbackPanel" ClientInstanceName="cCallbackPanel" OnCallback="CallbackPanel_Callback">
+        <PanelCollection>
+            <dxe:PanelContent runat="server">           
+            </dxe:PanelContent>
+        </PanelCollection>
+        <ClientSideEvents EndCallback="CallbackPanelEndCall" />
+    </dxe:ASPxCallbackPanel>
+    <asp:HiddenField ID="hFilterType" runat="server" />
+    <%--END REV 1.0--%>
     
 <asp:HiddenField ID="hdnLockFromDateedit" runat="server" />
 <asp:HiddenField ID="hdnLockToDateedit" runat="server" />

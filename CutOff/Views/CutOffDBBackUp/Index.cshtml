@@ -1,4 +1,9 @@
-﻿@using System.Web.UI.WebControls
+﻿﻿@*====================================================== Revision History ==========================================================*@
+@*Rev Number         DATE              VERSION          DEVELOPER           CHANGES*@
+@*1.0                31-01-2023        2.0.36           Pallab              25639: Data Cutoff page design modification *@
+@*====================================================== Revision History ==========================================================*@
+
+@using System.Web.UI.WebControls
 @using DevExpress.Web.Mvc
 @using DevExpress.Web
 @{
@@ -14,47 +19,85 @@
     }
 
     .itm {
-        width: 550px;
+        /*Rev 1.0*/
+        /*width: 550px;*/
+        width: 630px;
+        /*Rev end 1.0*/
+    }
+    /*Rev 1.0 : ".bordered" removed */
+    /*.itm .bordered*/
+    .itm {
+        border: 1px solid #d0d2c9;
+        border-radius: 20px;
+        min-height: 120px;
+        padding: 15px;
+        background: #f9f7f6;
+        box-shadow: 0 0 5px rgba(0,0,0,0.2);
     }
 
-        .itm .bordered {
-            border: 1px solid #d0d2c9;
-            border-radius: 20px;
-            min-height: 120px;
-            padding: 15px;
-            background: #f9f7f6;
-            box-shadow: 0 0 5px rgba(0,0,0,0.2);
-        }
-
         .itm .hdr {
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 10px !important;
-            font-size: 17px;
+            font-size: 20px;
             -webkit-font-smoothing: antialiased;
         }
 
     .mtop-2 {
         margin-top: 10px;
     }
+    /*Rev 1.0*/
+    #dvBack {
+        font-size: 15px;
+    }
+
+    .dxbButton_PlasticBlue div.dxbf {
+        border: none;
+    }
+
+    .start-btn {
+        background-color: #076fa9;
+        border-color: #076fa9;
+        color: #fff;
+    }
+
+        .start-btn:hover {
+            color: #fff;
+        }
+
+    .ptext {
+        font-size: 14px;
+    }
+    /*Rev end 1.0*/
 </style>
 <script>
     function OnNextButtonClickTwo() {
         debugger;
-        var obj = {};       
+        var obj = {};
         $.ajax({
-            type: "POST",           
+            type: "POST",
             url: "@Url.Action("CutOffBackUp", "CutOffDBBackUp")",
             async: true,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
+            /*Rev 1.0*/
+            beforeSend: function () {
+                $('#loader-img-1').show();
+                document.getElementById("btnNext").style.display = "none";
+            },
+            complete: function () {
+                $('#loader-img-1').hide();
+            },
+            /*Rev end 1.0*/
             success: function (response) {
                 //console.log(response);
                 //jAlert(response);
                 document.getElementById("btnStep3").style.display = "inline-block";
                 document.getElementById("btnNext").style.display = "none";
                 document.getElementById("dvBack").style.display = "inline-block";
+                $('.ptext').hide();
                 $('#dvBack').html(response);
                 //LoadingPanel.Hide();
+                /*$('#loader-img-1').Hide();*/
             },
             error: function (response) {
                 jAlert("Please try again later");
@@ -77,12 +120,17 @@
         var data = {
             "StrData": $("#ddlDataBase option:selected").val()
         };
-        $.ajax({   
+        $.ajax({
             type: "POST",
             dataType: "JSON",
             //data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             url: "@Url.Action("StartDbCreate", "CutOffDBBackUp")",
+            /*Rev 1.0*/
+            beforeSend: function () {
+                $('#loader-img').show();
+            },
+            /*Rev end 1.0*/
             success: function (response) {
                 console.log(response);
                 //jAlert(response);
@@ -111,55 +159,71 @@
 
     <div class="itm">
         <h3 class="hdr">Year Ending CutOff</h3>
-        <div class="bordered">
-            <table width="70%">
-                @*<tr>
-                    <td>
-                        <label>Cut Off Date</label>
-                    </td>
-                    <td>
-                        @Html.DevExpress().DateEdit(
-                     settings =>
-                     {
-                         settings.Name = "CutOffDate_dt";
-                         settings.Properties.DisplayFormatString = "dd-MM-yyyy";
-                         settings.Properties.EditFormatString = "dd-MM-yyyy";
-                         settings.Width = Unit.Percentage(100);
-                         //settings.Date = Convert.ToDateTime(@Model.OrderDate);
-                         settings.Properties.UseMaskBehavior = true;
+        @*Rev 1.0*@
+        <p class="ptext">
+            Financial year data cutoff refers to the date up to which a company's financial information is recorded and processed for a specific financial year. This date is usually set at the end of the accounting period (e.g. March 31st) and determines which transactions and events will be included in the financial statements for that particular year. The financial year data cutoff is an important consideration for companies as it affects the accuracy and completeness of their financial statements.<br /><br />
 
-                     }
-                     ).GetHtml()
-                    </td>
-                </tr>*@
+            This Cut-Off process will enable you to Create a new Database with Masters and configurations being carried forward to the Next Period, so that you may start recording the Opening and the Transactions for the Current Period, while keeping a Backup of Transactions for the Previous period for your future references.
+        </p>
+        @*Rev end 1.0*@
+        <div class="bordered">
+            <div id="loader-img-1" style="display:none;"><img src="~/assests/images/loader.gif" /></div>
+            <table width="80%">
+                @*<tr>
+                        <td>
+                            <label>Cut Off Date</label>
+                        </td>
+                        <td>
+                            @Html.DevExpress().DateEdit(
+                         settings =>
+                         {
+                             settings.Name = "CutOffDate_dt";
+                             settings.Properties.DisplayFormatString = "dd-MM-yyyy";
+                             settings.Properties.EditFormatString = "dd-MM-yyyy";
+                             settings.Width = Unit.Percentage(100);
+                             //settings.Date = Convert.ToDateTime(@Model.OrderDate);
+                             settings.Properties.UseMaskBehavior = true;
+
+                         }
+                         ).GetHtml()
+                        </td>
+                    </tr>*@
                 <tr>
-                    <td>
-                        <label></label>
-                    </td>
+                    @*Rev 1.0*@
+                    @*<td>
+                            <label></label>
+                        </td>*@
+                    @*Rev end 1.0*@
                     <td>
                         @Html.DevExpress().Button(
 
-                        settings =>
-                        {
-                            settings.Name = "btnNext";
-                            settings.ClientSideEvents.Click = "OnNextButtonClickTwo";
-                            settings.Text = "Start CutOFF";
-                            settings.RenderMode = ButtonRenderMode.Button;
-                            settings.ControlStyle.CssClass = "btn btn-warning";
-                            settings.UseSubmitBehavior = false;
-                        }).GetHtml()
+                                            settings =>
+                                            {
+                                                settings.Name = "btnNext";
+                                                settings.ClientSideEvents.Click = "OnNextButtonClickTwo";
+                                                settings.Text = "Start CutOFF";
+                                                settings.RenderMode = ButtonRenderMode.Button;
+                                                settings.ControlStyle.CssClass = "btn start-btn";
+                                                settings.UseSubmitBehavior = false;
+                                            }).GetHtml()
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <label></label>
-                    </td>
+                    @*Rev 1.0*@
+                    @*<td>
+                            <label></label>
+                        </td>*@
+                    @*Rev end 1.0*@
                     <td>
                         <div id="dvBack" style="display:none;"></div>
                     </td>
                 </tr>
             </table>
-            <hr />
+            @*Rev 1.0*@
+            @*<hr />*@
+
+            <div id="loader-img" style="display:none;"><img src="~/assests/images/loader.gif" /></div>
+            @*Rev end 1.0*@
             <div class="text-right mtop-2">
                 @*<button style="display:none;" id="btnStep3" class="btn btn-primary" onclick="RedirectToStepthree();">OK</button>*@
                 <button style="display:none;" id="btnStep3" class="btn btn-primary" onclick="NextProcess();">OK</button>
@@ -169,7 +233,7 @@
 
     </div>
     @*<input type="hidden" id="hdnCutoffDate" value="@ViewData["cutoffDate"]" />
-    <input type="hidden" id="hdnBackup" value="@ViewData["backup"]" />*@
+        <input type="hidden" id="hdnBackup" value="@ViewData["backup"]" />*@
 
 </div>
 
