@@ -1510,6 +1510,7 @@ namespace Manufacturing.Controllers
         {
             if (MPSID > 0)
             {
+                TempData["MRP_ID"] = null;
                 TempData["MPSID"] = MPSID;               
                 TempData["FGQTY"] = FGQTY;
                 TempData.Keep();
