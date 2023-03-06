@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="AccountsData.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="AccountsData.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2006/04/edm/ssdl">
         <!--Errors Found During Generation:
 warning 6002: The table/view 'CUTOFF.dbo.v_YearEnding_CashBank' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_YearEnding_CashBank">
@@ -37,7 +37,7 @@ warning 6002: The table/view 'CUTOFF.dbo.v_YearEnding_Journal' does not have a p
           <Property Name="Amount" Type="numeric" Precision="19" Scale="4" />
         </EntityType>
         <EntityContainer Name="AccountsDataStoreContainer">
-          <EntitySet Name="v_YearEnding_CashBank" EntityType="Self.v_YearEnding_CashBank" store:Type="Views" store:Schema="dbo">
+          <EntitySet Name="v_YearEnding_CashBank" EntityType="Self.v_YearEnding_CashBank" store:Type="Views" store:Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
             <DefiningQuery>SELECT 
     [v_YearEnding_CashBank].[CashBank_ID] AS [CashBank_ID], 
     [v_YearEnding_CashBank].[CashBank_VoucherNumber] AS [CashBank_VoucherNumber], 
@@ -49,7 +49,7 @@ warning 6002: The table/view 'CUTOFF.dbo.v_YearEnding_Journal' does not have a p
     [v_YearEnding_CashBank].[branch_description] AS [branch_description]
     FROM [dbo].[v_YearEnding_CashBank] AS [v_YearEnding_CashBank]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="v_YearEnding_Journal" EntityType="Self.v_YearEnding_Journal" store:Type="Views" store:Schema="dbo">
+          <EntitySet Name="v_YearEnding_Journal" EntityType="Self.v_YearEnding_Journal" store:Type="Views" store:Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
             <DefiningQuery>SELECT 
     [v_YearEnding_Journal].[JournalVoucher_ID] AS [JournalVoucher_ID], 
     [v_YearEnding_Journal].[JournalVoucher_VoucherNumber] AS [JournalVoucher_VoucherNumber], 
@@ -64,7 +64,7 @@ warning 6002: The table/view 'CUTOFF.dbo.v_YearEnding_Journal' does not have a p
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="AccountsData" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+      <Schema Namespace="AccountsData" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2006/04/edm" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
         <EntityContainer Name="AccountsDataContainer" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="v_YearEnding_CashBank" EntityType="AccountsData.v_YearEnding_CashBank" />
           <EntitySet Name="v_YearEnding_Journal" EntityType="AccountsData.v_YearEnding_Journal" />
@@ -100,7 +100,7 @@ warning 6002: The table/view 'CUTOFF.dbo.v_YearEnding_Journal' does not have a p
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
+      <Mapping Space="C-S" xmlns="urn:schemas-microsoft-com:windows:storage:mapping:CS">
         <Alias Key="Model" Value="AccountsData" />
         <Alias Key="Target" Value="AccountsData.Store" />
         <EntityContainerMapping CdmEntityContainer="AccountsDataContainer" StorageEntityContainer="AccountsDataStoreContainer">
@@ -136,14 +136,14 @@ warning 6002: The table/view 'CUTOFF.dbo.v_YearEnding_Journal' does not have a p
     </edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
-  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <edmx:Designer>
     <edmx:Connection>
-      <DesignerInfoPropertySet>
+      <DesignerInfoPropertySet xmlns="http://schemas.microsoft.com/ado/2007/06/edmx">
         <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
       </DesignerInfoPropertySet>
     </edmx:Connection>
     <edmx:Options>
-      <DesignerInfoPropertySet>
+      <DesignerInfoPropertySet xmlns="http://schemas.microsoft.com/ado/2007/06/edmx">
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
