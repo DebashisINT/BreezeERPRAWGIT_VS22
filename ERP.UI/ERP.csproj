@@ -8823,11 +8823,6 @@
     <Compile Include="OMS\Reports\NetPosition_MTMFO.aspx.designer.cs">
       <DependentUpon>NetPosition_MTMFO.aspx</DependentUpon>
     </Compile>
-    <Compile Include="OMS\Reports\NSESPOTRegulatory.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>NSESPOTRegulatory.xsd</DependentUpon>
-    </Compile>
     <Compile Include="OMS\Reports\ObligationStatementFO.aspx.cs">
       <DependentUpon>ObligationStatementFO.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9276,11 +9271,6 @@
       <DependentUpon>TranscationReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="OMS\Reports\transction.cs">
-      <DependentUpon>transction.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="OMS\Reports\transction.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>transction.xsd</DependentUpon>
     </Compile>
     <Compile Include="OMS\Reports\TurnoverReportCM.aspx.cs">

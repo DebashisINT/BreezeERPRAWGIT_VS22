@@ -1,6 +1,8 @@
 ﻿//==================================================== Revision History =========================================================================
-// 1.0  Priti V2.0.36    23-01-2023  0025610:MRP Close Feature required
-// 2.0  Priti V2.0.36    01-02-2023  0025634:Available Stock to be calculated in MRP product Wise
+// 1.0  Priti   V2.0.36    23-01-2023  0025610:MRP Close Feature required
+// 2.0  Priti   V2.0.36    01-02-2023  0025634:Available Stock to be calculated in MRP product Wise
+// 3.0  Priti   V2.0.37    28-02-2023  0025703:Avl Stk, Phy Stk, Indent Qty & Pur Qty to be implemented in Preview Line Items in MRP
+// 4.0  Priti   V2.0.37    13-03-2023  save Avl Stk in table
 //====================================================End Revision History=====================================================================
 
 using BusinessLogicLayer;
@@ -416,8 +418,9 @@ namespace Manufacturing.Controllers
                             obj.AltUOMID = Convert.ToInt64(item.AltUOMID);
                             obj.OLDQty = Convert.ToDecimal(item.OLDQty);
                             obj.OldAltQty = Convert.ToInt64(item.OldAltQty);
-
-                          
+                            //Rev 4.0
+                            obj.NewAvlStk = Convert.ToDecimal(item.NewAvlStk);
+                            //Rev 4.0 End
                             obj.SlNo = (item.SlNO);
 
                             udtlist.Add(obj);
@@ -450,6 +453,9 @@ namespace Manufacturing.Controllers
                                 obj.AltUOMID = Convert.ToInt64(item.AltUOMID);
                                 obj.OLDQty = Convert.ToDecimal(item.OLDQty);
                                 obj.OldAltQty = Convert.ToInt64(item.OldAltQty);
+                                //Rev 4.0
+                                obj.NewAvlStk = Convert.ToDecimal(item.NewAvlStk);
+                                //Rev 4.0 End
                                 udt.Add(obj1);
                             }
                             IsProcess = BOMProductInsertUpdate(udt, options);
@@ -488,6 +494,9 @@ namespace Manufacturing.Controllers
                             obj.AltUOMID = Convert.ToInt64(item.AltUOMID);
                             obj.OLDQty = Convert.ToDecimal(item.OLDQty);
                             obj.OldAltQty = Convert.ToDecimal(item.OldAltQty);
+                            //Rev 4.0
+                            obj.NewAvlStk = Convert.ToDecimal(item.NewAvlStk);
+                            //Rev 4.0 End
                             udtlist.Add(obj);
                         }
                     }
@@ -513,6 +522,9 @@ namespace Manufacturing.Controllers
                             obj.SlNo = (item.SlNO);
                             obj.OLDQty = Convert.ToDecimal(item.OLDQty);
                             obj.OldAltQty = Convert.ToInt64(item.OldAltQty);
+                            //Rev 4.0
+                            obj.NewAvlStk = Convert.ToDecimal(item.NewAvlStk);
+                            //Rev 4.0 End
                             udtlist.Add(obj);
                         }
                     }
@@ -540,6 +552,9 @@ namespace Manufacturing.Controllers
                             obj1.AltUOMID = Convert.ToInt64(item.AltUOMID);
                             obj1.OLDQty = Convert.ToDecimal(item.OLDQty);
                             obj1.OldAltQty = Convert.ToInt64(item.OldAltQty);
+                            //Rev 4.0
+                            obj1.NewAvlStk = Convert.ToDecimal(item.NewAvlStk);
+                            //Rev 4.0 End
                             udt.Add(obj1);
                         }
                         if (Convert.ToUInt64(options.MRP_ID) > 0)
@@ -1064,6 +1079,9 @@ namespace Manufacturing.Controllers
                         bomproductdataobj.OLDQty = Convert.ToString(row["BalQty"]);
                         bomproductdataobj.OldAltQty = Convert.ToString(row["packing_quantity"]);
                         bomproductdataobj.VendorName = Convert.ToString(row["Vendor_Name"]);
+                        //Rev 3.0
+                        bomproductdataobj.NewAvlStk = Convert.ToString(row["NewAvlStock"]);
+                        //Rev 3.0 End
                         bomproductdata.Add(bomproductdataobj);
 
                     }
@@ -1510,7 +1528,6 @@ namespace Manufacturing.Controllers
         {
             if (MPSID > 0)
             {
-                TempData["MRP_ID"] = null;
                 TempData["MPSID"] = MPSID;               
                 TempData["FGQTY"] = FGQTY;
                 TempData.Keep();
@@ -1737,7 +1754,11 @@ namespace Manufacturing.Controllers
                     || datacolumn.ColumnName == "SPRODUCTS_NAME" || datacolumn.ColumnName == "DESIGNNO" || datacolumn.ColumnName == "ITEMREVISIONNO" || datacolumn.ColumnName == "STKQTY"
                     || datacolumn.ColumnName == "STKUOM" || datacolumn.ColumnName == "PRICE" || datacolumn.ColumnName == "Amount" || datacolumn.ColumnName == "IndentQty"
                     || datacolumn.ColumnName == "PkgQty" || datacolumn.ColumnName == "PurchaseQty" || datacolumn.ColumnName == "AltQty"
-                    || datacolumn.ColumnName == "AltUOM" || datacolumn.ColumnName == "Vendor_Name" || datacolumn.ColumnName == "AVLSTK")
+                    || datacolumn.ColumnName == "AltUOM" || datacolumn.ColumnName == "Vendor_Name" || datacolumn.ColumnName == "AVLSTK"
+                    //rev 3.0
+                    || datacolumn.ColumnName == "NewAvlStk"
+                    //rev 3.0 end
+                    )
                 {
                     settings.Columns.Add(column =>
                     {
@@ -1787,40 +1808,48 @@ namespace Manufacturing.Controllers
                             column.Caption = "Amount";
                             column.VisibleIndex = 8;
                         }
+                        //rev 3.0
                         else if (datacolumn.ColumnName == "AvlStk")
                         {
-                            column.Caption = "AvlStk";
+                            column.Caption = "Phy Stk";
                             column.VisibleIndex = 9;
-                        }                            
+
+                        }
+                        else if (datacolumn.ColumnName == "NewAvlStk")
+                        {
+                            column.Caption = "Avl Stk";
+                            column.VisibleIndex = 10;
+                        }
+                        //rev 3.0 end
                         else if (datacolumn.ColumnName == "IndentQty")
                         {
                             column.Caption = "Indent Qty";
-                            column.VisibleIndex = 10;
+                            column.VisibleIndex = 11;
                         }
                         else if (datacolumn.ColumnName == "PkgQty")
                         {
                             column.Caption = "Pkg Qty";
-                            column.VisibleIndex = 11;
+                            column.VisibleIndex = 12;
                         }
                         else if (datacolumn.ColumnName == "PurchaseQty")
                         {
                             column.Caption = "Purchase Qty";
-                            column.VisibleIndex = 12;
+                            column.VisibleIndex = 13;
                         }
                         else if (datacolumn.ColumnName == "AltQty")
                         {
                             column.Caption = "Alt Qty";
-                            column.VisibleIndex = 13;
+                            column.VisibleIndex = 14;
                         }
                         else if (datacolumn.ColumnName == "AltUOM")
                         {
                             column.Caption = "Alt UOM";
-                            column.VisibleIndex = 14;
+                            column.VisibleIndex = 15;
                         }
                         else if (datacolumn.ColumnName == "Vendor_Name")
                         {
                             column.Caption = "Vendor Name";
-                            column.VisibleIndex = 15;
+                            column.VisibleIndex = 16;
                         }
                         //else
                         //{
