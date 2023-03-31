@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using DataAccessLayer;
 using System.Data;
+using System.Configuration;
 
 namespace CutOff.Models
 {
@@ -16,16 +17,20 @@ namespace CutOff.Models
         }
         public DataSet InsertCompany(string dbnm)
         {
+            string MasterDbname = ConfigurationSettings.AppSettings["MasterDBName"];
             DataSet ds = new DataSet();
             ProcedureExecute proc = new ProcedureExecute("USP_CREATECOMPANY");
             proc.AddVarcharPara("@DBNAME", 150, dbnm);
+            proc.AddVarcharPara("@MASTER_DBNAME", 150, MasterDbname);
             ds = proc.GetDataSet();
             return ds;
         }
-        public DataSet DropTBLSchema()
+        public DataSet DropTBLSchema(string user_id, String _NewDBName)
         {
             DataSet ds = new DataSet();
             ProcedureExecute proc = new ProcedureExecute("PRC_DROPDBTABLE");
+            proc.AddVarcharPara("@user_id", 150, user_id);
+            proc.AddVarcharPara("@NewDBName", 150, _NewDBName);
             ds = proc.GetDataSet();
             return ds;
         }
@@ -51,5 +56,15 @@ namespace CutOff.Models
             ds = proc.GetDataSet();
             return ds;
         }
+        // Rev Sanchita
+        public DataTable GetSQLDataLocation()
+        {
+            DataTable dt = new DataTable();
+            ProcedureExecute proc = new ProcedureExecute("Usp_SelectDbType");
+            proc.AddVarcharPara("@Action", 150, "GetSQLDataLocation");
+            dt = proc.GetTable();
+            return dt;
+        }
+        // End of Rev Sanchita
     }
 }
