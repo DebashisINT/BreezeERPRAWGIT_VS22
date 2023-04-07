@@ -1,10 +1,7 @@
-﻿//******************************************************************************************************
-// 2.0   V2.0.38    Sanchita    07-04-2023      Error while trying to save Transactions / Inventory / Warehouse Wise Stock - IN
-//                                              Error will come where the document we try to save the document after giving
-//                                              Multiple UOM Details are given.
-//                                              Error message: "Column 'AltQty' does not belong to underlying table ''.
-//                                              Refer: 25792
-//******************************************************************************************************
+﻿#region//====================================================Revision History=========================================================================
+// 1.0   v4.0.37	Priti	04-03-2023	0025652:Alternate qty is not calculating while making Warehouse wise Stock In entry
+#endregion//====================================================End Revision History=====================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -710,25 +707,26 @@ namespace ERP.OMS.Management.Activities
 
                     string strNewVal = "", strOldVal = "", strProductType = "";
                     tempdt = dt.Copy();
-                    foreach (DataRow drr in tempdt.Rows)
-                    {
-                        strNewVal = Convert.ToString(drr["QuoteWarehouse_Id"]);
-                        strProductType = Convert.ToString(drr["ProductType"]);
+                    //rev 1.0
+                    //foreach (DataRow drr in tempdt.Rows)
+                    //{
+                    //    strNewVal = Convert.ToString(drr["QuoteWarehouse_Id"]);
+                    //    strProductType = Convert.ToString(drr["ProductType"]);
 
-                        if (strNewVal == strOldVal)
-                        {
-                            drr["WarehouseName"] = "";
-                            drr["TotalQuantity"] = "0";
-                            //drr["BatchNo"] = "";
-                            drr["ViewBatch"] = "";
-                            drr["SalesQuantity"] = "";
-                            drr["ViewMfgDate"] = "";
-                            drr["ViewExpiryDate"] = "";
-                        }
+                    //    if (strNewVal == strOldVal)
+                    //    {
+                    //        drr["WarehouseName"] = "";
+                    //        drr["TotalQuantity"] = "0";
+                    //        //drr["BatchNo"] = "";
+                    //        drr["ViewBatch"] = "";
+                    //        drr["SalesQuantity"] = "";
+                    //        drr["ViewMfgDate"] = "";
+                    //        drr["ViewExpiryDate"] = "";
+                    //    }
 
-                        strOldVal = strNewVal;
-                    }
-
+                    //    strOldVal = strNewVal;
+                    //}
+                    //rev 1.0 end
                     tempdt.Columns.Remove("QuoteWarehouse_Id");
                     tempdt.Columns.Remove("ProductType");
 
@@ -2317,10 +2315,7 @@ namespace ERP.OMS.Management.Activities
                 DataTable MultiUOM = (DataTable)Session["MultiUOMData"];
                 // Mantis Issue 24428
                 // MultiUOMDetails = MultiUOM.DefaultView.ToTable(false, "SrlNo", "Quantity", "UOM", "AltUOM", "AltQuantity", "UomId", "AltUomId", "ProductId", "DetailsId");
-                // Rev 2.0 [ "AltQty" has been replaced by "AltQuantity" ]
-                //MultiUOMDetails = MultiUOM.DefaultView.ToTable(false, "SrlNo", "Quantity", "UOM", "AltUOM", "AltQty", "UomId", "AltUomId", "ProductId", "BaseRate", "AltRate", "UpdateRow");
-                MultiUOMDetails = MultiUOM.DefaultView.ToTable(false, "SrlNo", "Quantity", "UOM", "AltUOM", "AltQuantity", "UomId", "AltUomId", "ProductId", "BaseRate", "AltRate", "UpdateRow");
-                // End of Rev 2.0
+                MultiUOMDetails = MultiUOM.DefaultView.ToTable(false, "SrlNo", "Quantity", "UOM", "AltUOM", "AltQty", "UomId", "AltUomId", "ProductId", "BaseRate", "AltRate", "UpdateRow");
                 // End of Mantis Issue 24428
             }
             else
@@ -7088,7 +7083,10 @@ namespace ERP.OMS.Management.Activities
                                LoopID = Convert.ToString(dr["LoopID"]),
                                Status = Convert.ToString(dr["Status"]),
                                AltQty = Convert.ToString(dr["AltQty"]),
-                               AltUOM = Convert.ToString(dr["AltUOM"])
+                               AltUOM = Convert.ToString(dr["AltUOM"]),
+                               //Rev 1.0
+                               AltUOMName = Convert.ToString(dr["AltUOMName"])
+                               //Rev 1.0 End
                            }).ToList();
 
             return ProductList;
@@ -7174,7 +7172,7 @@ namespace ERP.OMS.Management.Activities
         {
             DataTable ds = new DataTable();
             ProcedureExecute proc = new ProcedureExecute("Prc_WarehousewiseStockJournal_details");
-            proc.AddVarcharPara("@Action", 500, "MultiUOMWHTransferOUTDetails");
+            proc.AddVarcharPara("@Action", 500, "MultiUOMWHTransferINDetails");
             proc.AddVarcharPara("@AdjId", 500, Convert.ToString(AdjId));
             ds = proc.GetTable();
             return ds;

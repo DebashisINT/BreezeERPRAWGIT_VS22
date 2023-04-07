@@ -644,10 +644,8 @@ namespace ERP.OMS.Management.DailyTask
 
                 else if (RdCleared.Checked)
                 {
-                    //Rev 2.0
-                    // var docs = grdmanualBRS.GetSelectedFieldValues("cashbank_vouchernumber", "Type", "cashbankdetail_instrumentnumber", "cashbankdetail_instrumentdate", "cashbank_transactionDate");
-                    var docs = grdmanualBRS.GetSelectedFieldValues("CASHBANK_VOUCHERNUMBER", "TYPE", "CASHBANKDETAIL_INSTRUMENTNUMBER", "CASHBANKDETAIL_INSTRUMENTDATE", "CASHBANK_TRANSACTIONDATE");
-                    //Rev 2.0 End
+                    var docs = grdmanualBRS.GetSelectedFieldValues("cashbank_vouchernumber", "Type", "cashbankdetail_instrumentnumber", "cashbankdetail_instrumentdate", "cashbank_transactionDate");
+
                     for (int i = 0; i < docs.Count; i++)
                     {
                         CRMSalesOrderDtlBL objCRMSalesOrderDtlBL = new CRMSalesOrderDtlBL();

@@ -1,4 +1,8 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SalesOrderAdd.aspx.cs" MasterPageFile="~/OMS/MasterPage/ERP.Master"
+﻿<%--/*********************************************************************************************************
+ * Rev 1.0      Sanchita      V2.0.37       Tolerance feature required in Sales Order Module 
+ *                                          Refer: 25223
+ **********************************************************************************************************/--%>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SalesOrderAdd.aspx.cs" MasterPageFile="~/OMS/MasterPage/ERP.Master"
     Inherits="ERP.OMS.Management.Activities.SalesOrderAdd" EnableEventValidation="false" %>
 
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
@@ -17,7 +21,7 @@
     <link href="CSS/PosSalesInvoice.css" rel="stylesheet" />
     <link href="CSS/SearchPopup.css" rel="stylesheet" />
     <link href="CSS/salesorderAdd.css" rel="stylesheet" />
-    <script src="JS/SalesOrderAdd.js?v=6.0"></script>
+    <script src="JS/SalesOrderAdd.js?v=6.1"></script>
     <script src="../../Tax%20Details/Js/TaxDetailsItemlevelNew.js?v=2.1" type="text/javascript"></script>
 
     <%--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>    --%>
@@ -1648,6 +1652,15 @@ function PerformCallToGridBind() {
                                             <asp:DropDownList ID="ddlHierarchy" runat="server" Width="100%" Enabled="false">
                                             </asp:DropDownList>
                                         </div>
+                                        <%--Rev 1.0--%>
+                                        <%--<div class="col-md-2 lblmTop8">
+                                            <dxe:ASPxLabel ID="lblTolerance" runat="server" Text="Quantity Tolerance %">
+                                            </dxe:ASPxLabel>
+                                           <dxe:ASPxTextBox runat="server" ID="txtQtyTolerance" ClientInstanceName="ctxtQtyTolerance" Width="100%" CssClass="pull-left">
+                                                <masksettings mask="<0..999>.<0..99>" includeliterals="DecimalSymbol" />
+                                            </dxe:ASPxTextBox>
+                                        </div>--%>
+                                        <%--End of Rev 1.0--%>
                                         <div style="clear: both;"></div>
                                         <div class="col-md-12">
 
