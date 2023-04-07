@@ -2315,7 +2315,7 @@ namespace ERP.OMS.Management.Activities
                 DataTable MultiUOM = (DataTable)Session["MultiUOMData"];
                 // Mantis Issue 24428
                 // MultiUOMDetails = MultiUOM.DefaultView.ToTable(false, "SrlNo", "Quantity", "UOM", "AltUOM", "AltQuantity", "UomId", "AltUomId", "ProductId", "DetailsId");
-                MultiUOMDetails = MultiUOM.DefaultView.ToTable(false, "SrlNo", "Quantity", "UOM", "AltUOM", "AltQty", "UomId", "AltUomId", "ProductId", "BaseRate", "AltRate", "UpdateRow");
+                MultiUOMDetails = MultiUOM.DefaultView.ToTable(false, "SrlNo", "Quantity", "UOM", "AltUOM", "AltQuantity", "UomId", "AltUomId", "ProductId", "BaseRate", "AltRate", "UpdateRow");
                 // End of Mantis Issue 24428
             }
             else
