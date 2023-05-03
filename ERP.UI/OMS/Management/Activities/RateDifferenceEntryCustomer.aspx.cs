@@ -1,4 +1,7 @@
-﻿using System;
+﻿//================================================== Revision History =============================================
+//1.0    V2.0.39    Priti   28-04-2023  0025930:An error is appearing while making Rate Difference Entry Customer
+//====================================================== Revision History =============================================
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -1401,10 +1404,12 @@ namespace ERP.OMS.Management.Activities
                .Where(gr => gr.Count() > 1)
                .Select(g => g.Key);
 
-                foreach (var d in duplicateRecords)
-                {
-                    validate = "duplicateProduct";
-                }
+                //Rev 1.0
+                //foreach (var d in duplicateRecords)
+                //{
+                //    validate = "duplicateProduct";
+                //}
+                //Rev 1.0 End
 
                 foreach (DataRow dr in tempQuotation.Rows)
                 {
