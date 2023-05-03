@@ -1935,8 +1935,16 @@ namespace ERP.OMS.Management.Activities
                     if (!string.IsNullOrEmpty(IdKey))
                     {
                         if (SelectedSalesInvoiceType == "TSI")
-                        { dt_QuotationDetails = objSalesReturnBL.GetTransitInvoiceforRDEC(QuoComponent1, IdKey, Product_id1, companyId, fin_year); }
-                        else { dt_QuotationDetails = objSalesReturnBL.GetSalesInvoiceforRDEC(QuoComponent1, IdKey, Product_id1, companyId, fin_year); }
+                        { 
+                            dt_QuotationDetails = objSalesReturnBL.GetTransitInvoiceforRDEC(QuoComponent1, IdKey, Product_id1, companyId, fin_year); 
+                        }
+                        else
+                        {
+                            //Rev 1.0
+                            //dt_QuotationDetails = objSalesReturnBL.GetSalesInvoiceforRDEC(QuoComponent1, IdKey, Product_id1, companyId, fin_year);
+                            dt_QuotationDetails = objSalesReturnBL.GetSalesInvoiceforRDECbySIDetailsID(QuoComponent1, IdKey, Product_id1, companyId, fin_year, InvoiceDetails_Id);
+                            //Rev 1.0 End
+                        }
 
                     }
 
