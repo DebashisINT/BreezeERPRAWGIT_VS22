@@ -1,5 +1,6 @@
 ﻿//@*==================================================== Revision History =========================================================================
 //     1.0  Priti V2.0.36    24-01-2023  0025611:MRP tagging feature required for Issue for Production
+//     2.0  Priti V2.0.38    12-05-2023  0026074: Some of the issues found in Issue for Production
 //====================================================End Revision History=====================================================================*@
 using DataAccessLayer;
 using System;
@@ -131,33 +132,37 @@ namespace Manufacturing.Models
                 {
                     string ViewMfgDate = Convert.ToDateTime(_ViewMfgDate).ToString("yyyy-MM-dd");
 
-                    DateTime ViewExpiryDate = Convert.ToDateTime(dr["ViewExpiryDate"]);
+                    //DateTime ViewExpiryDate = Convert.ToDateTime(dr["ViewExpiryDate"]);
 
 
                     //IFormatProvider culture = new CultureInfo("en-US", true);
-
                     //string _ViewMfgDate = Convert.ToString(dr["ViewMfgDate"]);
                     //DateTime dateVal4 = DateTime.ParseExact(_ViewMfgDate, "dd-MM-yyyy", culture);
                     //string ViewMfgDate = dateVal4.ToString("yyyy-MM-dd");
-
-
                     //string _ViewExpiryDate = Convert.ToString(dr["ViewExpiryDate"]);
                     //DateTime dateVal5 = DateTime.ParseExact(_ViewExpiryDate, "dd-MM-yyyy", culture);
                     //string ViewExpiryDate = dateVal5.ToString("yyyy-MM-dd");
-
-
-
                     if (ViewMfgDate != null)
                     {
                         dr["ViewMfgDate"] = ViewMfgDate;
                     }
+                    //if (ViewExpiryDate != null)
+                    //{
+                    //    dr["ViewExpiryDate"] = ViewExpiryDate.ToString("yyyy-MM-dd");
+                    //    //dr["ViewExpiryDate"] = ViewExpiryDate;
+                    //}
+                }
+                //Rev 2.0
+                string _ViewExpiryDate = Convert.ToString(dr["ViewExpiryDate"]);
+                if (_ViewExpiryDate != "")
+                {
+                    string ViewExpiryDate = Convert.ToDateTime(_ViewExpiryDate).ToString("yyyy-MM-dd");
                     if (ViewExpiryDate != null)
                     {
-                        dr["ViewExpiryDate"] = ViewExpiryDate.ToString("yyyy-MM-dd");
-                        //dr["ViewExpiryDate"] = ViewExpiryDate;
+                        dr["ViewExpiryDate"] = ViewExpiryDate;
                     }
                 }
-                
+                //Rev 2.0 End
             }
             dtWarehouse.AcceptChanges();
 
