@@ -1,6 +1,7 @@
 ﻿/*********************************************************************************************************
  * Rev 1.0      Sanchita      V2.0.37       Tolerance feature required in Sales Order Module 
  *                                          Refer: 25223
+ * Rev 2.0      Sanchita      V2.0.38       Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
  **********************************************************************************************************/
 
 $(document).ready(function () {
@@ -118,8 +119,27 @@ $(document).ready(function () {
 //    });
 //});
 
+// Rev 2.0
+$(function () {
+    $(".allownumericwithdecimal").on("keypress keyup blur", function (event) {
+        var patt = new RegExp(/[0-9]*[.]{1}[0-9]{4}/i);
+        var matchedString = $(this).val().match(patt);
+        if (matchedString) {
+            $(this).val(matchedString);
+        }
+        if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+
+    });
+});
+// End of Rev 2.0
 
 function closeMultiUOM(s, e) {
+    // Rev 2.0
+    cbtn_SaveRecords_N.SetVisible(true);
+    cbtn_SaveRecords_p.SetVisible(true);
+    // End of Rev 2.0
     e.cancel = false;
     // cPopup_MultiUOM.Hide();
 }
@@ -275,6 +295,11 @@ function CalcBaseQty() {
     //var PackingQty = Productdetails.split("||@||")[22];  // Alternate UOM selected from Product Master (tbl_master_product_packingDetails.sProduct_quantity)
     //var PackingSaleUOM = Productdetails.split("||@||")[25];  // Alternate UOM selected from Product Master (tbl_master_product_packingDetails.packing_saleUOM)
 
+    // Rev 2.0
+    LoadingPanelMultiUOM.Show();
+    document.getElementById('lblInfoMsg').innerHTML = "";
+    // End of Rev 2.0
+
     var Productdetails = (grid.GetEditor('ProductID').GetText() != null) ? grid.GetEditor('ProductID').GetText() : "0";
     var PackingQtyAlt = 0;
     var PackingQty = 0;
@@ -288,6 +313,9 @@ function CalcBaseQty() {
         data: JSON.stringify({ ProductID: ProductID }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
+        // Rev 2.0
+        async: false,
+        // End of Rev 2.0
         success: function (msg) {
 
             if (msg.d.length != 0) {
@@ -322,14 +350,23 @@ function CalcBaseQty() {
                 if (ConvFact > 0) {
                     var BaseQty = (altQty * ConvFact).toFixed(4);
                     $("#UOMQuantity").val(BaseQty);
+                    // Rev 2.0
+                    CalcBaseRate();
+                    // End of Rev 2.0
                 }
             }
             else {
                 $("#UOMQuantity").val("0.0000");
+                // Rev 2.0
+                document.getElementById('lblInfoMsg').innerHTML = "Base Quantity will not get auto calculated since no UOM Conversion details given for the selected Alt. UOM for Product : " + grid.GetEditor('Description').GetText();
+                // End of Rev 2.0
             }
         }
     });
 
+    // End of Rev 2.0
+    LoadingPanelMultiUOM.Hide();
+    // End of Rev 2.0
    
 }
 
@@ -350,6 +387,18 @@ function SaveMultiUOM() {
 
 
     //grid.GetEditor('ProductID').GetText().split("||@||")[3];
+
+    // Rev 2.0
+    document.getElementById('lblInfoMsg').innerHTML = "";
+
+    if ($("#UOMQuantity").val() != 0 || cAltUOMQuantity.GetValue() != 0) {
+        LoadingPanelMultiUOM.Show();
+        setTimeout(() => {
+            LoadingPanelMultiUOM.Hide();
+
+        }, 1000)
+    }
+    // End of Rev 2.0
 
     var qnty = $("#UOMQuantity").val();
 
@@ -3030,7 +3079,10 @@ function OnMultiUOMEndCallback(s, e) {
 
         SalePriceTextChange(null, null);
         
-        
+        // Rev 2.0
+        cbtn_SaveRecords_N.SetVisible(true);
+        cbtn_SaveRecords_p.SetVisible(true);
+        // End of Rev 2.0
     }
 
     if (cgrid_MultiUOM.cpAllDetails == "EditData") {
@@ -4091,6 +4143,11 @@ function OnCustomButtonClick(s, e) {
                     ccmbAltRate.SetValue(0)
                     ccmbSecondUOM.SetValue("")
                     // End of Mantis Issue 24425, 24428
+                    // Rev 2.0
+                    document.getElementById('lblInfoMsg').innerHTML = "";
+                    cbtn_SaveRecords_N.SetVisible(false);
+                    cbtn_SaveRecords_p.SetVisible(false);
+                    // End of Rev 2.0
                     cPopup_MultiUOM.Show();
                     cgrid_MultiUOM.cpDuplicateAltUOM = "";
                     AutoPopulateMultiUOM();

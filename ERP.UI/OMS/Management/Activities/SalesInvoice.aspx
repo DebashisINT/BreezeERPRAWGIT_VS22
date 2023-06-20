@@ -1,5 +1,7 @@
 ﻿<%--==========================================================Revision History ============================================================================================   
    1.0   Priti   V2.0.36     10-02-2023     0025664:Transaction Category is not updated if the customer is B2C Type
+   4.0   Sanchita   V2.0.38     13-06-2023     Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
+   5.0   Pallab     V2.0.38     16-06-2023     "Multi UOM Details" popup parameter alignment issue fix . Mantis : 26331
 ========================================== End Revision History =======================================================================================================--%>
 
 <%@ Page Title="Sales Invoice" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" EnableEventValidation="false" CodeBehind="SalesInvoice.aspx.cs" Inherits="ERP.OMS.Management.Activities.SalesInvoice" %>
@@ -544,6 +546,26 @@
                 jAlert(msg);
                 grid.cpSaveSuccessOrFail = '';
             }
+            // Rev 4.0
+            else if (grid.cpSaveSuccessOrFail == "checkMultiUOMData_QtyMismatch") {
+                OnAddNewClick();
+                grid.cpSaveSuccessOrFail = null;
+                var SrlNo = grid.cpcheckMultiUOMData;
+                var msg = "Please check Multi UOM details for SL No. not matching with outer grid " + SrlNo;
+                grid.cpcheckMultiUOMData = null;
+                jAlert(msg);
+                grid.cpSaveSuccessOrFail = '';
+            }
+            else if (grid.cpSaveSuccessOrFail == "checkMultiUOMData_NotFound") {
+                OnAddNewClick();
+                grid.cpSaveSuccessOrFail = null;
+                var SrlNo = grid.cpcheckMultiUOMData;
+                var msg = "Multi UOM details not given for SL No. " + SrlNo;
+                grid.cpcheckMultiUOMData = null;
+                jAlert(msg);
+                grid.cpSaveSuccessOrFail = '';
+            }
+            // End of Rev 4.0
             else {
                 var Quote_Number = grid.cpQuotationNo;
                 var Quote_ID = grid.cpQuotationID;
@@ -927,6 +949,116 @@ $(document).ready(function () {
 })
 //End Rev Bapi
     </script>
+
+    <%--Rev 3.0--%>
+    <%--<link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />--%>
+    
+
+        <style>
+            /*#FormDate , #toDate , #dtTDate , #dt_PLQuote , #dt_PLSales , #dt_SaleInvoiceDue , #dt_OADate
+        {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+            #FormDate_B-1 , #toDate_B-1 , #dtTDate_B-1 , #dt_PLQuote_B-1 , #dt_PLSales_B-1 , #dt_SaleInvoiceDue_B-1 , #dt_OADate_B-1
+        {
+            background: transparent !important;
+            border: none;
+            width: 30px;
+            padding: 10px !important;
+        }
+
+        #FormDate_B-1 #FormDate_B-1Img , #toDate_B-1 #toDate_B-1Img , #dtTDate_B-1 #dtTDate_B-1Img , #dt_PLQuote_B-1 #dt_PLQuote_B-1Img ,
+        #dt_PLSales_B-1 #dt_PLSales_B-1Img , #dt_SaleInvoiceDue_B-1 #dt_SaleInvoiceDue_B-1Img , #dt_OADate_B-1 #dt_OADate_B-1Img
+        {
+            display: none;
+        }
+
+        .calendar-icon
+        {
+                right: 18px !important;
+        }*/
+
+        /*Rev 5.0*/
+
+        .dxeButtonEditSys.dxeButtonEdit_PlasticBlue, .dxeTextBox_PlasticBlue {
+            height: 30px;
+            border-radius: 4px;
+            width: 100% !important;
+        }
+        /*Rev end 5.0*/
+
+        select#ddlInventory
+        {
+            -webkit-appearance: auto;
+                background: #42b39e !important;
+        }
+
+        .simple-select::after
+        {
+            top: 26px !important;
+            right: 13px !important;
+        }
+
+        .col-sm-3 , .col-md-3 , .col-md-2{
+            margin-bottom: 5px;
+        }
+
+        #rdl_Salesquotation
+        {
+            margin-top: 10px;
+        }
+        .col-md-3>label, .col-md-3>span
+        {
+            margin-top: 0 !important;
+        }
+
+        /*#CustomerTableTbl.dynamicPopupTbl>tbody>tr>td
+        {
+            width: 33.33%;
+        }*/
+
+        .lblmTop8>span, .lblmTop8>label
+        {
+            margin-top: 0 !important;
+        }
+
+            @media only screen and (max-width: 1380px) and (min-width: 1300px)
+            {
+
+                .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+                    padding-right: 10px;
+                    padding-left: 10px;
+                }
+
+                .simple-select::after
+                {
+                    right: 8px !important;
+                }
+                .calendar-icon {
+                    right: 13px !important;
+                }
+
+                input[type="radio"], input[type="checkbox"] {
+                    margin-right: 0px;
+                }
+            }
+            /*Rev 5.0: for parameter alignment issue fix*/
+            .mlableWh
+            {
+                width: 120px !important;
+                padding-top: 25px !important;
+            }
+
+            .mlableWh .dxeBase_PlasticBlue , .mlableWh label
+            {
+                line-height: 13px !important;
+            }
+            /*Rev end 5.0*/
+        </style>
+    <%--Rev end 3.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="panel-title clearfix">
@@ -1107,7 +1239,8 @@ $(document).ready(function () {
         <div id="divcross" runat="server" class="crossBtn"><a href="SalesInvoiceList.aspx"><i class="fa fa-times"></i></a></div>
 
     </div>
-    <div class="form_main">
+    <%--Rev 4.0 [id="divPageGeneral"] --%>
+    <div class="form_main" id="divPageGeneral">
         <asp:Panel ID="pnl_quotation" runat="server">
             <div class="">
                 <dxe:ASPxPageControl ID="ASPxPageControl1" runat="server" ClientInstanceName="page" Width="100%">
@@ -3665,6 +3798,12 @@ $(document).ready(function () {
         Modal="True">
     </dxe:ASPxLoadingPanel>
 
+    <%--Rev 4.0--%>
+    <dxe:ASPxLoadingPanel ID="LoadingPanelMultiUOM" runat="server" ClientInstanceName="LoadingPanelMultiUOM" ContainerElementID="divMultiUOM"
+        Modal="True">
+    </dxe:ASPxLoadingPanel>
+    <%--End of Rev 4.0--%>
+
     <!--Customer Modal -->
     <div class="modal fade" id="CustModel" role="dialog">
         <div class="modal-dialog">
@@ -3798,7 +3937,8 @@ $(document).ready(function () {
         </ContentStyle>
         <ContentCollection>
             <dxe:PopupControlContentControl runat="server">
-                <div class="Top clearfix">
+                <%--Rev 4.0 [ id="divMultiUOM" added ] --%>
+                <div class="Top clearfix" id="divMultiUOM">
 
 
 
@@ -3820,7 +3960,10 @@ $(document).ready(function () {
                                             <div>
                                                 <%--Rev Sanchita--%>
                                                 <%--<input type="text" id="UOMQuantity" style="text-align: right;" maxlength="18"  class="allownumericwithdecimal" />--%>
-                                                <input type="text" id="UOMQuantity" style="text-align: right;" maxlength="18" class="allownumericwithdecimal" onchange="CalcBaseRate()" />
+                                                <%--Rev 4.0 --%>
+                                                <%--<input type="text" id="UOMQuantity" style="text-align: right;" maxlength="18" class="allownumericwithdecimal" onchange="CalcBaseRate()" />--%>
+                                                <input type="text" id="UOMQuantity" style="text-align: right;" maxlength="18" class="allownumericwithdecimal" onfocusout="CalcBaseRate()" />
+                                                <%--End of Rev 4.0--%>
                                                 <%--End of Rev Sanchita--%>
                                             </div>
                                         </div>
@@ -3845,13 +3988,16 @@ $(document).ready(function () {
                                             <label>Base Rate </label>
                                         </div>
                                         <div>
-                                            <dxe:ASPxTextBox ID="cmbBaseRate" runat="server" Width="80px" ClientInstanceName="ccmbBaseRate" DisplayFormatString="0.000" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..999&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right" ReadOnly="true"></dxe:ASPxTextBox>
+                                            <%--Rev 4.0--%>
+                                            <%--<dxe:ASPxTextBox ID="cmbBaseRate" runat="server" Width="80px" ClientInstanceName="ccmbBaseRate" DisplayFormatString="0.000" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..999&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right" ReadOnly="true"></dxe:ASPxTextBox>--%>
+                                            <dxe:ASPxTextBox ID="cmbBaseRate" runat="server" Width="80px" ClientInstanceName="ccmbBaseRate" DisplayFormatString="0.00" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..99&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right" ReadOnly="true"></dxe:ASPxTextBox>
+                                            <%--End of Rev 4.0--%>
                                         </div>
                                     </div>
                                 </td>
                                 <%--End of Mantis Issue 24425, 24428--%>
                                 <td>
-                                    <span style="font-size: 22px; padding-top: 15px; display: inline-block;">=</span>
+                                    <span style="font-size: 22px; padding-top: 20px; display: inline-block;">=</span>
                                 </td>
                                 <td>
                                     <div>
@@ -3875,7 +4021,10 @@ $(document).ready(function () {
                                             <%--  <input type="text" id="AltUOMQuantity" style="text-align:right;"  maxlength="18" class="allownumericwithdecimal"/> --%>
                                             <dxe:ASPxTextBox ID="AltUOMQuantity" Width="80px" runat="server" ClientInstanceName="cAltUOMQuantity" DisplayFormatString="0.0000" MaskSettings-Mask="&lt;0..999999999&gt;.&lt;00..9999&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right">
                                                 <%--Mantis Issue 24425, 24428--%>
-                                                <ClientSideEvents TextChanged="function(s,e) { CalcBaseQty();}" />
+                                                <%--Rev 4.0--%>
+                                                <%--<ClientSideEvents TextChanged="function(s,e) { CalcBaseQty();}" />--%>
+                                                <ClientSideEvents LostFocus="function(s,e) { CalcBaseQty();}" />
+                                                <%--End of Rev 4.0--%>
                                                 <%--End of Mantis Issue 24425, 24428--%>
                                             </dxe:ASPxTextBox>
                                         </div>
@@ -3888,8 +4037,12 @@ $(document).ready(function () {
                                             <label>Alt Rate </label>
                                         </div>
                                         <div>
-                                            <dxe:ASPxTextBox ID="cmbAltRate" Width="80px" runat="server" ClientInstanceName="ccmbAltRate" DisplayFormatString="0.000" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..999&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right">
-                                                <ClientSideEvents TextChanged="function(s,e) { CalcBaseRate();}" />
+                                            <%--Rev 4.0--%>
+                                            <%--<dxe:ASPxTextBox ID="cmbAltRate" Width="80px" runat="server" ClientInstanceName="ccmbAltRate" DisplayFormatString="0.000" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..999&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right">--%>
+                                            <dxe:ASPxTextBox ID="cmbAltRate" Width="80px" runat="server" ClientInstanceName="ccmbAltRate" DisplayFormatString="0.00" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..99&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right">
+                                                <%--<ClientSideEvents TextChanged="function(s,e) { CalcBaseRate();}" />--%>
+                                                <ClientSideEvents LostFocus="function(s,e) { CalcBaseRate();}" />
+                                                 <%--End of Rev 4.0--%>
                                             </dxe:ASPxTextBox>
                                         </div>
                                     </div>
@@ -3898,7 +4051,8 @@ $(document).ready(function () {
                                     <div style="margin-bottom: 5px;">
                                         <div>
                                         </div>
-                                        <div>
+                                        <%--Rev 4.0 [ class="mlableWh" added --%>
+                                        <div class="mlableWh" >
                                             <%--<label class="checkbox-inline mlableWh">
                                                 <asp:CheckBox ID="chkUpdateRow" Checked="false" runat="server" ></asp:CheckBox>
                                                 <span style="margin: 0px 0; display: block">
@@ -3906,7 +4060,8 @@ $(document).ready(function () {
                                                     </dxe:ASPxLabel>
                                                 </span>
                                             </label>--%>
-                                            <label class="checkbox-inline mlableWh">
+                                            <%--Rev 4.0 [ class="mlableWh" removed --%>
+                                            <label class="checkbox-inline">
                                                 <input type="checkbox" id="chkUpdateRow" />
                                                 <span style="margin: 0px 0; display: block">
                                                     <dxe:ASPxLabel ID="ASPxLabel19" runat="server" Text="Update Row">
@@ -3919,11 +4074,16 @@ $(document).ready(function () {
 
                                 </td>
                                 <%--End of Mantis Issue 24425, 24428--%>
-                                <td style="padding-top: 14px;">
-                                    <dxe:ASPxButton ID="btnMUltiUOM" UseSubmitBehavior="false" ClientInstanceName="cbtnMUltiUOM" Width="50px" runat="server" AutoPostBack="False" Text="Add" CssClass="btn btn-primary">
-                                        <ClientSideEvents Click="function(s, e) { if(!document.getElementById('myCheck').checked)  {SaveMultiUOM();}}" />
-                                    </dxe:ASPxButton>
-                                </td>
+                                <%--Rev 5.0: For "Add" button in separate table row(tr)--%>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top: 14px;">
+                                        <dxe:ASPxButton ID="btnMUltiUOM" UseSubmitBehavior="false" ClientInstanceName="cbtnMUltiUOM" Width="50px" runat="server" AutoPostBack="False" Text="Add" CssClass="btn btn-primary">
+                                            <ClientSideEvents Click="function(s, e) { if(!document.getElementById('myCheck').checked)  {SaveMultiUOM();}}" />
+                                        </dxe:ASPxButton>
+                                    </td>
+                                </tr>
+                                <%--Rev end 5.0--%>
                             </tr>
                         </table>
 
@@ -4000,6 +4160,10 @@ $(document).ready(function () {
                             <dxe:ASPxButton ID="ASPxButton7" UseSubmitBehavior="false" ClientInstanceName="cbtnfinalUomSave" Width="50px" runat="server" AutoPostBack="False" Text="Save" CssClass="btn btn-primary">
                                 <ClientSideEvents Click="function(s, e) {FinalMultiUOM();}" />
                             </dxe:ASPxButton>
+
+                             <%--Rev 4.0--%>
+                            <label id="lblInfoMsg" style="font-weight:bold; color:red; " > </label>
+                            <%--End of Rev 4.0--%>
                         </div>
                     </div>
                 </div>
