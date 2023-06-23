@@ -1,4 +1,7 @@
-﻿using System;
+﻿/***************************************************************************************************************************************
+ * Rev 2.0      Sanchita      V2.0.38       Tax amount is not calculating automatically while modifying PI/Quotation. Mantis : 26411
+ ***************************************************************************************************************************************/
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -8942,6 +8945,29 @@ namespace ERP.OMS.Management.Activities
 
         }
 
+        // Rev 2.0
+        [WebMethod]
+        public static string DeleteTaxForRateChange(string UniqueVal, string SrlNo)
+        {
+            DataTable dt = new DataTable();
+            if (HttpContext.Current.Session["FinalTaxRecord" + Convert.ToString(UniqueVal)] != null)
+            {
+                dt = (DataTable)HttpContext.Current.Session["FinalTaxRecord" + Convert.ToString(UniqueVal)];
+
+                DataRow[] MultiUoMresult = dt.Select("SlNo='" + SrlNo + "'");
+
+                foreach (DataRow dr in MultiUoMresult)
+                {
+                    dt.Rows.Remove(dr);
+                }
+                HttpContext.Current.Session["FinalTaxRecord" + Convert.ToString(UniqueVal)] = dt;
+            }
+
+
+            return null;
+
+        }
+        // End of 2.0
 
     }
 

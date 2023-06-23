@@ -1,4 +1,7 @@
-﻿(function (global) {
+﻿/*********************************************************************************************************
+ * Rev 2.0      Sanchita      V2.0.38       Tax amount is not calculating automatically while modifying PI/Quotation. Mantis : 26411   
+**********************************************************************************************************/
+(function (global) {
     if (typeof (global) === "undefined") {
         throw new Error("window is undefined");
     }
@@ -2689,7 +2692,14 @@ function RecalCulateTaxTotalAmountInline() {
 
 /// Code Above Added By Sam on 23022017 after make editable of sale price field End
 
+// Rev 2.0
+var Pre_TotalAmt = "0";
 
+function DiscountGotFocus(s, e) {
+    var _Amount = (grid.GetEditor('Amount').GetText() != null) ? grid.GetEditor('Amount').GetText() : "0";
+    Pre_TotalAmt = _Amount;
+}
+// End of Rev 2.0
 
 
 function DiscountTextChange(s, e) {
@@ -2757,6 +2767,23 @@ function DiscountTextChange(s, e) {
         grid.GetEditor('Discount').SetValue('0');
         grid.GetEditor('ProductID').Focus();
     }
+
+    // Rev 2.0
+    var SrlNo = grid.GetEditor("SrlNo").GetValue();
+    var UniqueVal = $("#uniqueId").val();
+    $.ajax({
+        type: "POST",
+        url: "SalesQuotation.aspx/DeleteTaxForRateChange",
+        data: JSON.stringify({ UniqueVal: UniqueVal, SrlNo: SrlNo }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+            // RequiredShipToPartyValue = msg.d;
+        }
+    });
+
+    //}
+    // End of Rev 2.0
 }
 var _GetAmountValue = "0";
 function AmountTextFocus(s, e) {
@@ -4468,6 +4495,11 @@ function ProductsGotFocus(s, e) {
     $('#lblStkUOM').text(strStkUOM);
     $('#lblProduct').text(strProductName);
     $('#lblbranchName').text(strBranch);
+
+    // Rev 2.0
+    var _Amount = (grid.GetEditor('Amount').GetText() != null) ? grid.GetEditor('Amount').GetText() : "0";
+    Pre_TotalAmt = _Amount;
+    // End of Rev 2.0
 
     //if (ProductID != "0") {
     //   cacpAvailableStock.PerformCallback(strProductID);
