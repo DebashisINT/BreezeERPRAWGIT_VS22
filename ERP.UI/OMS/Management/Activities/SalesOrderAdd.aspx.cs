@@ -1,6 +1,6 @@
 ﻿/*********************************************************************************************************
- * Rev 1.0      Sanchita      V2.0.37       Tolerance feature required in Sales Order Module 
- *                                          Refer: 25223
+ * Rev 1.0      Sanchita      V2.0.37       Tolerance feature required in Sales Order Module
+ *                                          Refer: 25223  -- WORK REVERTED
  **********************************************************************************************************/
 using System;
 using System.Configuration;
@@ -64,6 +64,10 @@ namespace ERP.OMS.Management.Activities
         string PartyTotalBalAmt = "";
         string PartyTotalBalDesc = "";
         DataTable Remarks = null;
+        // Rev 1.0
+        //public string IsToleranceInSalesOrder = null;
+        // End of Rev 1.0
+
         protected void Page_PreInit(object sender, EventArgs e) // lead add
         {
             #region Sandip Section For Approval Section Start
@@ -285,6 +289,21 @@ namespace ERP.OMS.Management.Activities
                     lookup_Project.Columns[3].Visible = false;
                 }
             }
+
+            // Rev Sanchita
+            //IsToleranceInSalesOrder = ComBL.GetSystemSettingsResult("IsToleranceInSalesOrder");
+            //if (!String.IsNullOrEmpty(IsToleranceInSalesOrder))
+            //{
+            //    if (IsToleranceInSalesOrder.ToUpper().Trim() == "YES")
+            //    {
+            //        divQtyTolerance.Visible = true;
+            //    }
+            //    else if (IsToleranceInSalesOrder.ToUpper().Trim() == "NO")
+            //    {
+            //        divQtyTolerance.Visible = false;
+            //    }
+            //}
+            // End of Rev Sanchita
 
             if (!IsPostBack)
             {
@@ -4452,6 +4471,10 @@ namespace ERP.OMS.Management.Activities
                             int ApproveRejectstatus = Convert.ToInt32(hdnApproveStatus.Value);
 
                             // Rev 1.0 [strQtyTolerance added ] -- , strQtyTolerance REMOVED
+                            //int id = (ModifySalesOrder(MainOrderID, strSchemeType, UniqueQuotation, strQuoteDate, strQuoteExpiry, strCustomer, strContactName, ProjId,
+                            //                  Reference, strBranch, strAgents, strCurrency, strRate, strTaxType, strTaxCode, tempSalesOrderdt, addrDesc, TaxDetailTable, ActionType, OANumber, OADate, "0", QuotationDate, QuoComponent, tempWarehousedt, tempBillAddress, tempTaxDetailsdt, approveStatus
+                            //                  , creditdays, strDueDate, IsInvenotry, IsFromCRM, PosForGst, SchemeList[0], duplicatedt2, ddlInventory.SelectedValue, MultiUOMDetails, Doctype, projectValidFrom, projectValidUpto, ApproveRejectstatus, AppRejRemarks, RevisionDate, RevisionNo
+                            //                  , Segment1, Segment2, Segment3, Segment4, Segment5, strQtyTolerance));
                             int id = (ModifySalesOrder(MainOrderID, strSchemeType, UniqueQuotation, strQuoteDate, strQuoteExpiry, strCustomer, strContactName, ProjId,
                                               Reference, strBranch, strAgents, strCurrency, strRate, strTaxType, strTaxCode, tempSalesOrderdt, addrDesc, TaxDetailTable, ActionType, OANumber, OADate, "0", QuotationDate, QuoComponent, tempWarehousedt, tempBillAddress, tempTaxDetailsdt, approveStatus
                                               , creditdays, strDueDate, IsInvenotry, IsFromCRM, PosForGst, SchemeList[0], duplicatedt2, ddlInventory.SelectedValue, MultiUOMDetails, Doctype, projectValidFrom, projectValidUpto, ApproveRejectstatus, AppRejRemarks, RevisionDate, RevisionNo
@@ -4848,6 +4871,11 @@ namespace ERP.OMS.Management.Activities
         }
 
         // Rev 1.0 [strQtyTolerance added] -- , string strQtyTolerance REMOVED
+        //public int ModifySalesOrder(string OrderID, string strSchemeType, string strOrderNo, string strOrderDate, string strOrderExpiry, string strCustomer, string strContactName, Int64 ProjId,
+        //                            string Reference, string strBranch, string strAgents, string strCurrency, string strRate, string strTaxType, string strTaxCode, DataTable salesOrderdt, DataTable addrDesc,
+        //                            DataTable TaxDetailTable, string ActionType, string OANumber, string OADate, string QuotationNumber, string QuotationDate, string QuotationIdList, DataTable Warehousedt, DataTable BillAddressdt, DataTable QuotationTaxdt, string approveStatus,
+        //                            string CreditDays, string strDueDate, int IsInventory, int IsFromCRM, string PosForGst, string SchemaID, DataTable PackingDetailsdt, string Entry_type, DataTable MultiUOMDetails, string Doctype, string projectValidFrom, string projectValidUpto, int ApproveRejectstatus, string AppRejRemarks, string RevisionDate, string RevisionNo
+        //    , string Segment1, string Segment2, string Segment3, string Segment4, string Segment5, string strQtyTolerance)
         public int ModifySalesOrder(string OrderID, string strSchemeType, string strOrderNo, string strOrderDate, string strOrderExpiry, string strCustomer, string strContactName, Int64 ProjId,
                                     string Reference, string strBranch, string strAgents, string strCurrency, string strRate, string strTaxType, string strTaxCode, DataTable salesOrderdt, DataTable addrDesc,
                                     DataTable TaxDetailTable, string ActionType, string OANumber, string OADate, string QuotationNumber, string QuotationDate, string QuotationIdList, DataTable Warehousedt, DataTable BillAddressdt, DataTable QuotationTaxdt, string approveStatus,
@@ -5007,7 +5035,14 @@ namespace ERP.OMS.Management.Activities
                 cmd.Parameters.AddWithValue("@SegmentID4", Segment4);
                 cmd.Parameters.AddWithValue("@SegmentID5", Segment5);
                 // Rev 1.0
-                //cmd.Parameters.AddWithValue("@QtyTolerance", Convert.ToDecimal(strQtyTolerance));
+                //if(IsToleranceInSalesOrder.ToUpper().Trim() == "NO")
+                //{
+                //    cmd.Parameters.AddWithValue("@QtyTolerance", 0.00);
+                //}
+                //else
+                //{
+                //    cmd.Parameters.AddWithValue("@QtyTolerance", Convert.ToDecimal(strQtyTolerance));
+                //}
                 // End of Rev 1.0
 
                 cmd.Parameters.Add("@ReturnValue", SqlDbType.VarChar, 50);

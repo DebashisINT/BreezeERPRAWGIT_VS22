@@ -1,7 +1,11 @@
 ﻿@*====================================================Revision History=========================================================================
-           1.0  Priti   V2.0.36    24-01-2023  0025611:MRP tagging feature required for Issue for Production
-           2.0  Priti   V2.0.37    29-03-2023  0025765:The Item Selection is slow and also not working properly in Issue for Production
-           4.0  Priti   V2.0.38    11-05-2023  0026074: Some of the issues found in Issue for Production
+    1.0  Priti   V2.0.36    24-01-2023  0025611:MRP tagging feature required for Issue for Production
+    2.0  Priti   V2.0.37    29-03-2023  0025765:The Item Selection is slow and also not working properly in Issue for Production
+    3.0  Priti   V2.0.39    25-04-2023  0025852:After selecting all products(pagination wise all products ) in Issue for Production, only few products are coming in the Grid
+    4.0  Priti   V2.0.38    11-05-2023  0026074: Some of the issues found in Issue for Production
+    5.0  Pallab  V2.0.38    31-05-2023  0026266: Issue for Production "Production Order No." dropdown issue fix
+    6.0  Priti   V2.0.38    01-06-2023  0026257: Excess Qty for an Item to be Stock Transferred automatically to a specific Warehouse while making Issue for Prod
+    7.0  Priti   V2.0.38    23-06-2023  0026426: Issue in Issue for Production Module at the time of Edit
 
     ====================================================End Revision History=====================================================================*@
 
@@ -18,6 +22,11 @@
 <link href="~/assests/css/SearchPopup.css" rel="stylesheet" />
 <script src="~/Scripts/SearchPopup.js"></script>
 <style>
+    /*Rev 3.0*/
+    #WorkOrderGridLookup_DDD_gv .dxgvCSD {
+        width: 100% !important;
+    }
+    /*Rev end 3.0*/
     .cdc {
         font-size: 28px;
         cursor: pointer;
@@ -128,17 +137,20 @@
     }
 </style>
 <script>
-
+    //Rev 3.0
+   // var _ProductIds = 0;
+     //Rev 3.0 End
     function SelectionChanged(s, e) {
         //REV 2.0
         //s.GetSelectedFieldValues("DetailsID", GetSelectedFieldValuesCallback);
-
         var DetailsID = POProductGridLookup.GetSelectedKeysOnPage();
+         //REV 2.0 END
         //REV 4.0
-        if (DetailsID.length != 0)
-        {
+        if (DetailsID.length != 0) {
         //REV 4.0 END
+            //Rev 3.0
             var _ProductIds = 0;
+            //Rev 3.0 End
             var hdnProductIDS = [];
             hdnProductIDS = DetailsID;
             for (var i = 0; i < hdnProductIDS.length; i++) {
@@ -147,10 +159,10 @@
                 }
                 else {
                     _ProductIds = hdnProductIDS[i] + ',' + _ProductIds;
+
                 }
                 $("#hdnProductIDS").val(_ProductIds);
             }
-            //REV 2.0 END
         //REV 4.0
         }
         else {
@@ -176,6 +188,7 @@
         }
 
     }
+
     function BindGridForProductSelection() {
         var _ProductIds = $("#hdnProductIDS").val();
 
@@ -528,6 +541,11 @@
 
             var Finished_ProductID = WorkOrderGridLookup.gridView.GetRow(globalindexcheck2).children[23].innerHTML;
             var WarehouseID = WorkOrderGridLookup.gridView.GetRow(globalindexcheck2).children[24].innerHTML;
+
+            //Rev 7.0
+            var BalQty = WorkOrderGridLookup.gridView.GetRow(globalindexcheck2).children[25].innerHTML;
+            $('#hdnFGBalQty').val(BalQty);
+            //Rev 7.0 End
 
             $('#Description').val(Product_Name);
             $('#PartNoName').val(PartNoName);
@@ -1178,6 +1196,23 @@
 
         var newqty = $(e).val();
         var hdnproductqty = $('#hdnProductQty').val();
+        //Rev 7.0
+        var hdnProductionIssueID = $('#hdnProductionIssueID').val();
+        var hdnFGBalQty = $('#hdnFGBalQty').val();
+        var hdnFGBalQtyEdit = $('#hdnFGBalQtyEdit').val();
+
+        //Rev 7.0 End
+
+       /* Rev 7.0*/
+        //var hdnproductqty = 0;
+        //var hdnProductionIssueID = $('#hdnProductionIssueID').val();
+        //if (hdnProductionIssueID != "0") {
+        //    hdnproductqty = $('#hdnProductQtyEdit').val();
+        //}
+        //else {
+        //    hdnproductqty = $('#hdnProductQty').val();
+        //}
+       /* Rev 7.0 End*/
         var visiablerow = gridProductionBOMProductList.GetVisibleRowsOnPage();
         if (visiablerow > 0) {
             for (var i = 500; i > -500; i--) {
@@ -1191,8 +1226,23 @@
                     //else {
                     //    Qty = gridProductionBOMProductList.batchEditApi.GetCellValue(i, 'ProductQty');
                     //}
+                    //Rev 7.0
+                    var ProductQty = gridProductionBOMProductList.batchEditApi.GetCellValue(i, 'ProductQty');
+                    var BalQty = gridProductionBOMProductList.batchEditApi.GetCellValue(i, 'BalQty');
+                     //Rev 7.0 End
                     if (parseFloat(Qty) > 0) {
-                        var calcqty = (parseFloat(Qty) * newqty) / hdnproductqty;
+
+                        var calcqty = 0;
+                        //Rev 7.0
+                        //var calcqty = (parseFloat(Qty) * newqty) / hdnproductqty;
+                        if (hdnProductionIssueID != "0") {
+                            calcqty = ( parseFloat(BalQty) / hdnFGBalQtyEdit) * newqty
+                        }
+                        else {
+                           // (Production Order Bal Qty / Production bal FG) * New FG
+                            calcqty=  (parseFloat(BalQty) / hdnFGBalQty) * newqty
+                        }
+                        //Rev 7.0 End
                         gridProductionBOMProductList.GetEditor('ProductQty').SetText(parseFloat(calcqty).toFixed(4));
                         globalrowindex = i;
                         // BOMGridSetAmount("", "");
@@ -1206,17 +1256,40 @@
                 }
             }
             totalAmountSetLogic();
+            //Rev 7.0
+            DeleteWarehouseData();
+            //Rev 7.o end
         }
 
     }
-
+    //Rev 7.0
+     function DeleteWarehouseData() {
+        if (StockOfProduct.length > 0) {          
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "@Url.Action("DeleteStockWarehouseList", "ProductionIssue")",
+                data: { items: StockOfProduct},
+                success: function (response) {
+                    var data = response;
+                    if (data == "True") {
+                        StockOfProduct = [];                      
+                    }                    
+                    else {
+                        jAlert("Please try again later!");
+                    }
+                }
+            });
+        }
+    }
+    //Rev 7.0 end
     function setUpdateEditVlaueToGrid() {
         var visiablerow = gridProductionBOMProductList.GetVisibleRowsOnPage();
         if (visiablerow > 0) {
             for (var i = 0; i < 1000; i++) {
                 if (gridProductionBOMProductList.GetRow(i)) {
                     if (gridProductionBOMProductList.GetRow(i).style.display != "none") {
-                        gridProductionBOMProductList.batchEditApi.StartEdit(i, 12);
+                        gridProductionBOMProductList.batchEditApi.StartEdit(i, 14);
                         gridProductionBOMProductList.GetEditor("UpdateEdit").SetText(gridProductionBOMProductList.GetEditor("UpdateEdit").GetText() + i);
                     }
                 }
@@ -1225,7 +1298,7 @@
             for (i = -1; i > -1000; i--) {
                 if (gridProductionBOMProductList.GetRow(i)) {
                     if (gridProductionBOMProductList.GetRow(i).style.display != "none") {
-                        gridProductionBOMProductList.batchEditApi.StartEdit(i, 12);
+                        gridProductionBOMProductList.batchEditApi.StartEdit(i, 14);
                         gridProductionBOMProductList.GetEditor("UpdateEdit").SetText(gridProductionBOMProductList.GetEditor("UpdateEdit").GetText() + i);
                     }
                 }
@@ -1261,6 +1334,18 @@
         if (parseInt(ProductionIssueID) > 0) {
             FullnFinalSave();
         }
+        //Rev 6.0
+        var IsMRPMandatoryIssueforProduction = '@ViewBag.IsMRPMandatoryIssueforProduction';
+        if (IsMRPMandatoryIssueforProduction == "Yes") {
+            var MRP_ID = $('#hdnMRP_ID').val();
+            if ($('#hdnMRP_ID').val() == "") {
+                jAlert("Please select MRP.");
+                return false;
+            }
+
+        }
+           //Rev 6.0 End
+
 
         setUpdateEditVlaueToGrid();
         savemode = mode;
@@ -1281,7 +1366,8 @@
         }
 
         var order_schemaid = $('#hdnSchemaId').val();
-        var ActualAdditionalCost = $('#txtActualAdditionalCost').val();
+       // var ActualAdditionalCost = $('#txtActualAdditionalCost').val();
+        var ActualAdditionalCost = '';
         if (ActualAdditionalCost == '') {
             ActualAdditionalCost = parseFloat(0).toFixed(2);
             $('#txtActualAdditionalCost').val(ActualAdditionalCost);
@@ -1307,9 +1393,10 @@
                 if (IsInventory != 'No') {
                     requireddata = 1;
                     //REV 4.0
-                    if (requireddata == 1) {
+                    if (requireddata ==1) {
                         jAlert("Please add warehouse stock details for Sl. No. " + SlNO);
                         return false;
+
                     }
                     //REV 4.0 END
                 }
@@ -1317,10 +1404,10 @@
             }
         }
 
-        if (requireddata == 1) {
-            jAlert("Please enter all stock warehouse details to process.");
-            return false;
-        }
+        //if (requireddata == 1) {
+        //    jAlert("Please enter all stock warehouse details to process.");
+        //    return false;
+        //}
 
         for (var i = 0; i < visiablerow; i++) {
             gridProductionBOMProductList.batchEditApi.EndEdit();
@@ -1383,34 +1470,26 @@
 
         if (visiablerow > 0) {
             if (orderno != '' && OrderDate != '' && Order_Qty != '' && Unit != '' && ActualAdditionalCost != '' && requireddata == 0) {
-                //if (Production_ID > 0) {
-                //    var hdnOrder_Qty = $('#hdnProductQty').val();
-                //    if (hdnOrder_Qty > Order_Qty) {
-                //        jAlert("Order Qty not grater that previous qty value.");
-                //        return false;
-                //    }
-                //    else {
-                //        gridProductionBOMProductList.UpdateEdit();
-                //        gridProductionBOMProductList.UpdateEdit();
-                //    }
-                //}
-                //else {
-
 
                 var msgbalqty = '';
                 var msgbalqtyindex = 0;
-                for (var i = 0; i < visiablerow; i++) {
-                    if (gridProductionBOMProductList.GetRow(i)) {
-                        //gridProductionBOMProductList.batchEditApi.StartEdit(i, 3);
-                        var Qty = gridProductionBOMProductList.batchEditApi.GetCellValue(i, 'ProductQty');
-                        var balQty = gridProductionBOMProductList.batchEditApi.GetCellValue(i, 'BalQty');
-                        if (parseFloat(Qty) > parseFloat(balQty)) {
-                            msgbalqty = 'Qty entered is greater than available quantity. Cannot proceed.';
-                            msgbalqtyindex = i;
+                //Rev 6.0
+                if ('@ViewBag.ConsiderExcessQty' == "No") {
+                //Rev 6.0 End
+                    for (var i = 0; i < visiablerow; i++) {
+                        if (gridProductionBOMProductList.GetRow(i)) {
+                            //gridProductionBOMProductList.batchEditApi.StartEdit(i, 3);
+                            var Qty = gridProductionBOMProductList.batchEditApi.GetCellValue(i, 'ProductQty');
+                            var balQty = gridProductionBOMProductList.batchEditApi.GetCellValue(i, 'BalQty');
+                            if (parseFloat(Qty) > parseFloat(balQty)) {
+                                 msgbalqty = 'Qty entered is greater than available quantity. Cannot proceed.';
+                                msgbalqtyindex = i;
+                            }
                         }
                     }
+                //Rev 6.0
                 }
-
+                //Rev 6.0 End
                 if (msgbalqty == '') {
 
                     gridProductionBOMProductList.UpdateEdit();
@@ -2592,6 +2671,12 @@
 
 <input type="hidden" id="hdnProductionIssueListPage" value="@Url.Action("ProductionIssueList", "ProductionIssue")" />
 @Html.HiddenFor(x => x.Issue_Qty, new { @id = "hdnProductQty" })
+@*Rev 7.0*@
+@Html.HiddenFor(x => x.Finished_Qty, new { @id = "hdnProductQtyEdit" })
+@Html.HiddenFor(x => x.BalQty, new { @id = "hdnFGBalQty" })
+@Html.HiddenFor(x => x.MaxQty, new { @id = "hdnFGBalQtyEdit" })
+@*Rev 7.0 End*@
+
 <input type="hidden" id="hdnIssue_QtyMax" value="@Model.MaxQty" />
 <input type="hidden" id="hdfWarehousetype" />
 <input type="hidden" id="hdfProductSrlNo" />

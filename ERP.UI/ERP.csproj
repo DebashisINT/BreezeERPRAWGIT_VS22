@@ -909,12 +909,26 @@
     <Compile Include="OMS\Management\Activities\SalesInquiryAdd.aspx.designer.cs">
       <DependentUpon>SalesInquiryAdd.aspx</DependentUpon>
     </Compile>
+    <Compile Include="OMS\Management\Activities\SalesOrderAddNew.aspx.cs">
+      <DependentUpon>SalesOrderAddNew.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OMS\Management\Activities\SalesOrderAddNew.aspx.designer.cs">
+      <DependentUpon>SalesOrderAddNew.aspx</DependentUpon>
+    </Compile>
     <Compile Include="OMS\Management\Activities\SalesOrderListHTML.aspx.cs">
       <DependentUpon>SalesOrderListHTML.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="OMS\Management\Activities\SalesOrderListHTML.aspx.designer.cs">
       <DependentUpon>SalesOrderListHTML.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OMS\Management\Activities\SalesOrderNewList.aspx.cs">
+      <DependentUpon>SalesOrderNewList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OMS\Management\Activities\SalesOrderNewList.aspx.designer.cs">
+      <DependentUpon>SalesOrderNewList.aspx</DependentUpon>
     </Compile>
     <Compile Include="OMS\Management\Activities\SalesRateScheme.aspx.cs">
       <DependentUpon>SalesRateScheme.aspx</DependentUpon>
@@ -9721,6 +9735,7 @@
     <Content Include="assests\css\custom\menu-bar.css" />
     <Content Include="assests\css\custom\menu-item.css" />
     <Content Include="assests\css\custom\MultipleSelectionDDLCSS.css" />
+    <Content Include="assests\css\custom\newcustomstyle.css" />
     <Content Include="assests\css\custom\newtheme.css" />
     <Content Include="assests\css\custom\PageStyle.css" />
     <Content Include="assests\css\custom\PMSStyles.css" />
@@ -9750,6 +9765,7 @@
     <Content Include="assests\css\payrollCss\tableFormula.css" />
     <Content Include="assests\css\RES.css" />
     <Content Include="assests\css\SearchPopup.css" />
+    <Content Include="assests\css\sweetalert2.min.css" />
     <Content Include="assests\events\800192.jpg" />
     <Content Include="assests\events\800192B.jpg" />
     <Content Include="assests\events\cMas.gif" />
@@ -10335,6 +10351,7 @@
     <Content Include="assests\js\respond.js" />
     <Content Include="assests\js\respond.min.js" />
     <Content Include="assests\js\slimscroll.js" />
+    <Content Include="assests\js\sweetalert2.all.min.js" />
     <Content Include="assests\js\vendor\jquery-1.11.2.min.js" />
     <Content Include="assests\js\wz_tooltip.js" />
     <None Include="assests\js\_references.js" />
@@ -11559,6 +11576,7 @@
     <Content Include="OMS\Management\Activities\JS\SalesInvoice.js" />
     <Content Include="OMS\Management\Activities\JS\SalesOrderAdd.js" />
     <Content Include="OMS\Management\Activities\JS\SalesOrderEntityList.js" />
+    <Content Include="OMS\Management\Activities\JS\SalesOrderNewList.js" />
     <Content Include="OMS\Management\Activities\JS\SalesQuotation.js" />
     <Content Include="OMS\Management\Activities\JS\SalesQuotationList.js" />
     <Content Include="OMS\Management\Activities\JS\SalesReturn.js" />
@@ -11787,8 +11805,10 @@
     <Content Include="OMS\Management\Activities\SalesInquiry.aspx" />
     <Content Include="OMS\Management\Activities\SalesInquiryAdd.aspx" />
     <Content Include="OMS\Management\Activities\SalesInvoice.aspx" />
+    <Content Include="OMS\Management\Activities\SalesOrderAddNew.aspx" />
     <Content Include="OMS\Management\Activities\SalesOrderEntityList.aspx" />
     <Content Include="OMS\Management\Activities\SalesOrderListHTML.aspx" />
+    <Content Include="OMS\Management\Activities\SalesOrderNewList.aspx" />
     <Content Include="OMS\Management\Activities\SalesOrderSpecialEdit.aspx" />
     <Content Include="OMS\Management\Activities\SalesQuotationList.aspx" />
     <Content Include="OMS\Management\Activities\SalesRateScheme.aspx" />
@@ -13844,7 +13864,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>7665</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:7670/</IISUrl>
+          <IISUrl>http://localhost:7671/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

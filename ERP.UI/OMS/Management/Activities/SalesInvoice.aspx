@@ -1,5 +1,7 @@
 ﻿<%--==========================================================Revision History ============================================================================================   
-   1.0   Priti   V2.0.36     10-02-2023     0025664:Transaction Category is not updated if the customer is B2C Type
+   1.0   Priti      V2.0.36     10-02-2023     0025664:Transaction Category is not updated if the customer is B2C Type
+   2.0   Sanchita   V2.0.38     10-04-2023     Tolerance feature required in Sales Order Module. Refer: 25223  -- WORK REVERTED   
+   3.0   Pallab     V2.0.38     27-04-2023     Add Sales Invoice module design modification. Refer: 25921
    4.0   Sanchita   V2.0.38     13-06-2023     Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
    5.0   Pallab     V2.0.38     16-06-2023     "Multi UOM Details" popup parameter alignment issue fix . Mantis : 26331
 ========================================== End Revision History =======================================================================================================--%>
@@ -271,6 +273,7 @@
             vertical-align: top;
         }
         /*End of Mantis Issue 24428*/
+
     </style>
 
     <script>
@@ -951,11 +954,11 @@ $(document).ready(function () {
     </script>
 
     <%--Rev 3.0--%>
-    <%--<link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
     
 
         <style>
-            /*#FormDate , #toDate , #dtTDate , #dt_PLQuote , #dt_PLSales , #dt_SaleInvoiceDue , #dt_OADate
+            #FormDate , #toDate , #dtTDate , #dt_PLQuote , #dt_PLSales , #dt_SaleInvoiceDue , #dt_OADate
         {
             position: relative;
             z-index: 1;
@@ -979,16 +982,7 @@ $(document).ready(function () {
         .calendar-icon
         {
                 right: 18px !important;
-        }*/
-
-        /*Rev 5.0*/
-
-        .dxeButtonEditSys.dxeButtonEdit_PlasticBlue, .dxeTextBox_PlasticBlue {
-            height: 30px;
-            border-radius: 4px;
-            width: 100% !important;
         }
-        /*Rev end 5.0*/
 
         select#ddlInventory
         {
@@ -1061,7 +1055,9 @@ $(document).ready(function () {
     <%--Rev end 3.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="panel-title clearfix">
+    <%--Rev 3.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-title clearfix">
         <h3 class="pull-left">
             <asp:Label ID="lblHeadTitle" Text="" runat="server"></asp:Label>
             <%--<label>Add Proforma Invoice/ Quotation</label>--%>
@@ -1239,8 +1235,7 @@ $(document).ready(function () {
         <div id="divcross" runat="server" class="crossBtn"><a href="SalesInvoiceList.aspx"><i class="fa fa-times"></i></a></div>
 
     </div>
-    <%--Rev 4.0 [id="divPageGeneral"] --%>
-    <div class="form_main" id="divPageGeneral">
+        <div class="form_main" >
         <asp:Panel ID="pnl_quotation" runat="server">
             <div class="">
                 <dxe:ASPxPageControl ID="ASPxPageControl1" runat="server" ClientInstanceName="page" Width="100%">
@@ -1249,7 +1244,7 @@ $(document).ready(function () {
                             <ContentCollection>
                                 <dxe:ContentControl runat="server">
                                     <div class="">
-                                        <div style="background: #f5f4f3; padding: 8px 0; margin-bottom: 0px; border-radius: 4px; border: 1px solid #ccc;" class="clearfix col-md-12">
+                                        <div style=" padding: 8px 0; margin-bottom: 0px; border-radius: 4px; " class="clearfix col-md-12">
                                             <div class="col-md-2 lblmTop8">
                                                 <dxe:ASPxLabel ID="lbl_Inventory" runat="server" Text="Type">
                                                 </dxe:ASPxLabel>
@@ -1261,7 +1256,8 @@ $(document).ready(function () {
                                                     <asp:ListItem Text="All Item" Value="B" />
                                                 </asp:DropDownList>
                                             </div>
-                                            <div class="col-md-2 lblmTop8" id="divScheme" runat="server">
+                                            <%--Rev 3.0: "simple-select" class add --%>
+                                            <div class="col-md-2 lblmTop8 simple-select" id="divScheme" runat="server">
                                                 <dxe:ASPxLabel ID="lbl_NumberingScheme" runat="server" Text="Numbering Scheme">
                                                 </dxe:ASPxLabel>
                                                 <asp:DropDownList ID="ddl_numberingScheme" runat="server" Width="100%" TabIndex="2">
@@ -1276,9 +1272,9 @@ $(document).ready(function () {
                                                 <span id="MandatorysQuoteno" style="display: none" class="validclass">
                                                     <img id="1gridHistory_DXPEForm_efnew_DXEFL_DXEditor2_EI" class="dxEditors_edtError_PlasticBlue" src="/DXR.axd?r=1_36-tyKfc" title="Mandatory">
                                                 </span>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="duplicateQuoteno" style="display: none" class="validclass"><img id="1gridHistory_DXPEForm_efnew_DXEFL_DXEditor2_EI" class="dxEditors_edtError_PlasticBlue" src="/DXR.axd?r=1_36-tyKfc" title="Duplicate number">
+                                                <span id="duplicateQuoteno" style="display: none" class="validclass"><img id="1gridHistory_DXPEForm_efnew_DXEFL_DXEditor2_EI" class="dxEditors_edtError_PlasticBlue" src="/DXR.axd?r=1_36-tyKfc" title="Duplicate number">
                                                 </span>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                
                                             </div>
                                             <div class="col-md-2 lblmTop8">
                                                 <dxe:ASPxLabel ID="lbl_SaleInvoiceDt" runat="server" Text="Posting Date">
@@ -1288,8 +1284,12 @@ $(document).ready(function () {
                                                     </ButtonStyle>
                                                     <ClientSideEvents DateChanged="function(s, e) {DateCheck();}" GotFocus="function(s,e){tstartdate.ShowDropDown();}" LostFocus="function(s, e) { SetLostFocusonDemand(e)}" />
                                                 </dxe:ASPxDateEdit>
+                                                <%--Rev 3.0--%>
+                                                <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                                <%--Rev end 3.0--%>
                                             </div>
-                                            <div class="col-md-2 lblmTop8">
+                                            <%--Rev 3.0: "simple-select" class add --%>
+                                            <div class="col-md-2 lblmTop8 simple-select">
                                                 <dxe:ASPxLabel ID="lbl_Branch" runat="server" Text="Unit">
                                                 </dxe:ASPxLabel>
                                                 <asp:DropDownList ID="ddl_Branch" runat="server" Width="100%" TabIndex="4" onchange="ddlBranch_ChangeIndex()" Enabled="true">
@@ -1453,7 +1453,7 @@ $(document).ready(function () {
                                             <div class="col-md-2 lblmTop8">
                                                 <dxe:ASPxLabel ID="lbl_InvoiceNO" ClientInstanceName="clbl_InvoiceNO" runat="server" Text="Posting Date">
                                                 </dxe:ASPxLabel>
-                                                <div style="width: 100%; height: 23px; border: 1px solid #e6e6e6;">
+                                                <div style="width: 100%; border: 1px solid #e6e6e6;">
                                                     <dxe:ASPxCallbackPanel runat="server" ID="ComponentDatePanel" ClientInstanceName="cComponentDatePanel" OnCallback="ComponentDatePanel_Callback">
                                                         <PanelCollection>
                                                             <dxe:PanelContent runat="server">
@@ -1462,6 +1462,9 @@ $(document).ready(function () {
                                                             </dxe:PanelContent>
                                                         </PanelCollection>
                                                     </dxe:ASPxCallbackPanel>
+                                                    <%--Rev 3.0--%>
+                                                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                                    <%--Rev end 3.0--%>
                                                 </div>
                                             </div>
                                             <div class="col-md-2 lblmTop8">
@@ -1514,8 +1517,12 @@ $(document).ready(function () {
                                                     </ButtonStyle>
                                                     <ClientSideEvents GotFocus="function(s,e){cdt_SaleInvoiceDue.ShowDropDown();}" />
                                                 </dxe:ASPxDateEdit>
+                                                <%--Rev 3.0--%>
+                                                <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                                <%--Rev end 3.0--%>
                                             </div>
-                                            <div class="col-md-2 lblmTop8">
+                                            <%--Rev 3.0: "simple-select" class add --%>
+                                            <div class="col-md-2 lblmTop8 simple-select">
                                                 <dxe:ASPxLabel ID="lbl_Currency" runat="server" Text="Currency">
                                                 </dxe:ASPxLabel>
                                                 <asp:DropDownList ID="ddl_Currency" runat="server" Width="100%" TabIndex="13">
@@ -2116,10 +2123,10 @@ $(document).ready(function () {
                                         <br />
                                         <div class="col-md-12" id="divSubmitButton" runat="server">
                                             <asp:Label ID="lbl_quotestatusmsg" runat="server" Text="" Font-Bold="true" ForeColor="Red" Font-Size="Medium"></asp:Label>
-                                            <dxe:ASPxButton ID="btn_SaveRecords" ClientInstanceName="cbtn_SaveRecords_N" runat="server" AutoPostBack="False" Text="S&#818;ave & New" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
+                                            <dxe:ASPxButton ID="btn_SaveRecords" ClientInstanceName="cbtn_SaveRecords_N" runat="server" AutoPostBack="False" Text="S&#818;ave & New" CssClass="btn btn-success" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {Save_ButtonClick();}" />
                                             </dxe:ASPxButton>
-                                            <dxe:ASPxButton ID="ASPxButton1" ClientInstanceName="cbtn_SaveRecords_p" runat="server" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
+                                            <dxe:ASPxButton ID="ASPxButton1" ClientInstanceName="cbtn_SaveRecords_p" runat="server" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-success" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {SaveExit_ButtonClick();}" />
                                             </dxe:ASPxButton>
                                             <%--   <asp:Button ID="ASPxButton2" runat="server" Text="UDF" CssClass="btn btn-primary" OnClientClick="if(OpenUdf()){ return false;}" />--%>
@@ -3506,6 +3513,7 @@ $(document).ready(function () {
 
         </asp:Panel>
     </div>
+    </div>
     <div style="display: none">
         <dxe:ASPxDateEdit ID="dt_PlQuoteExpiry" runat="server" Date="" Width="100%" EditFormatString="dd-MM-yyyy" ClientInstanceName="tenddate" TabIndex="4">
             <ClientSideEvents DateChanged="Enddate" />
@@ -3797,12 +3805,12 @@ $(document).ready(function () {
     <dxe:ASPxLoadingPanel ID="LoadingPanel" runat="server" ClientInstanceName="LoadingPanel" ContainerElementID="divSubmitButton"
         Modal="True">
     </dxe:ASPxLoadingPanel>
-
+    
     <%--Rev 4.0--%>
     <dxe:ASPxLoadingPanel ID="LoadingPanelMultiUOM" runat="server" ClientInstanceName="LoadingPanelMultiUOM" ContainerElementID="divMultiUOM"
         Modal="True">
     </dxe:ASPxLoadingPanel>
-    <%--End of Rev 4.0--%>
+     <%--End of Rev 4.0--%>
 
     <!--Customer Modal -->
     <div class="modal fade" id="CustModel" role="dialog">
@@ -3872,7 +3880,7 @@ $(document).ready(function () {
                 <div class="modal-footer">
                     <% if (rightsProd.CanAdd)
                        { %>
-                    <button type="button" class="btn btn-success btn-radius" onclick="fn_PopOpen();">
+                    <button type="button" class="btn btn-success" onclick="fn_PopOpen();">
                         <span class="btn-icon"><i class="fa fa-plus"></i></span>
                         Add New
                     </button>
@@ -3944,7 +3952,7 @@ $(document).ready(function () {
 
                     <div class="clearfix col-md-12" style="background: #f5f4f3; padding: 8px 0; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc;">
 
-                        <table class="eqTble">
+                        <table class="eqTble" >
                             <tr>
                                 <%--Mantis Issue 24425, 24428--%>
                                 <dxe:GridViewDataTextColumn Caption="MultiUOMSR No"
@@ -3960,7 +3968,7 @@ $(document).ready(function () {
                                             <div>
                                                 <%--Rev Sanchita--%>
                                                 <%--<input type="text" id="UOMQuantity" style="text-align: right;" maxlength="18"  class="allownumericwithdecimal" />--%>
-                                                <%--Rev 4.0 --%>
+                                               <%--Rev 4.0 --%>
                                                 <%--<input type="text" id="UOMQuantity" style="text-align: right;" maxlength="18" class="allownumericwithdecimal" onchange="CalcBaseRate()" />--%>
                                                 <input type="text" id="UOMQuantity" style="text-align: right;" maxlength="18" class="allownumericwithdecimal" onfocusout="CalcBaseRate()" />
                                                 <%--End of Rev 4.0--%>
@@ -4042,7 +4050,7 @@ $(document).ready(function () {
                                             <dxe:ASPxTextBox ID="cmbAltRate" Width="80px" runat="server" ClientInstanceName="ccmbAltRate" DisplayFormatString="0.00" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..99&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right">
                                                 <%--<ClientSideEvents TextChanged="function(s,e) { CalcBaseRate();}" />--%>
                                                 <ClientSideEvents LostFocus="function(s,e) { CalcBaseRate();}" />
-                                                 <%--End of Rev 4.0--%>
+                                            <%--End of Rev 4.0--%>
                                             </dxe:ASPxTextBox>
                                         </div>
                                     </div>
@@ -4061,7 +4069,7 @@ $(document).ready(function () {
                                                 </span>
                                             </label>--%>
                                             <%--Rev 4.0 [ class="mlableWh" removed --%>
-                                            <label class="checkbox-inline">
+                                            <label class="checkbox-inline ">
                                                 <input type="checkbox" id="chkUpdateRow" />
                                                 <span style="margin: 0px 0; display: block">
                                                     <dxe:ASPxLabel ID="ASPxLabel19" runat="server" Text="Update Row">
@@ -4077,14 +4085,13 @@ $(document).ready(function () {
                                 <%--Rev 5.0: For "Add" button in separate table row(tr)--%>
                                 </tr>
                                 <tr>
-                                    <td style="padding-top: 14px;">
+                                    <td style="padding-top: 10px;">
                                         <dxe:ASPxButton ID="btnMUltiUOM" UseSubmitBehavior="false" ClientInstanceName="cbtnMUltiUOM" Width="50px" runat="server" AutoPostBack="False" Text="Add" CssClass="btn btn-primary">
                                             <ClientSideEvents Click="function(s, e) { if(!document.getElementById('myCheck').checked)  {SaveMultiUOM();}}" />
                                         </dxe:ASPxButton>
                                     </td>
                                 </tr>
                                 <%--Rev end 5.0--%>
-                            </tr>
                         </table>
 
                     </div>
@@ -4561,8 +4568,9 @@ $(document).ready(function () {
     <%--Rev work start 24.06.2022 mantise no:0024987--%>
     <asp:HiddenField runat="server" ID="hdnCoordinate" />
     <%--Rev work start 24.06.2022 mantise no:0024987--%>
-
-
+    <%--Rev 2.0--%>
+   <%-- <asp:HiddenField runat="server" ID="hdnIsToleranceInSalesOrder" />--%>
+    <%--End of Rev 2.0--%>
 
      <!--Schedule Modal -->
     <div class="modal fade" id="ScheduleModel" role="dialog">

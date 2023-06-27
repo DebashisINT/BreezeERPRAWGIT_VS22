@@ -1,5 +1,6 @@
 ﻿<%--==========================================================Revision History ============================================================================================   
-   1.0   Priti   V2.0.36     16-02-2023     Afer Listing view upgradation delete data show in list issue solved. 
+   1.0   Priti    V2.0.36     16-02-2023     Afer Listing view upgradation delete data show in list issue solved. 
+   2.0   Pallab   V2.0.37     07-04-2023     25844: Sales Invoice Cum Challan module design modification
 ========================================== End Revision History =======================================================================================================--%>
 
 <%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="InvoiceDeliveryChallanList.aspx.cs" Inherits="ERP.OMS.Management.Activities.InvoiceDeliveryChallanList" 
@@ -896,8 +897,8 @@
                 jAlert(message);
 
                 /* Rev 1.0*/
-                // cGrdQuotation.Refresh();
-                updateGridByDate();
+                 cGrdQuotation.Refresh();
+                //updateGridByDate();
                 /* Rev 1.0 End*/
                 
             }
@@ -981,9 +982,113 @@
              });
          }
     </script>
+
+    
+
+    <%--Rev 2.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+
+        <style>
+            #FormDate , #toDate , #dtTDate , #dt_PLQuote , #dt_PLSales , #dt_SaleInvoiceDue , #dtPostingDate
+            {
+                position: relative;
+                z-index: 1;
+                background: transparent;
+            }
+
+            #FormDate_B-1 , #toDate_B-1 , #dtTDate_B-1 , #dt_PLQuote_B-1 , #dt_PLSales_B-1 , #dt_SaleInvoiceDue_B-1 , #dtPostingDate_B-1
+            {
+                background: transparent !important;
+                border: none;
+                width: 30px;
+                padding: 10px !important;
+            }
+
+            #FormDate_B-1 #FormDate_B-1Img , #toDate_B-1 #toDate_B-1Img , #dtTDate_B-1 #dtTDate_B-1Img , #dt_PLQuote_B-1 #dt_PLQuote_B-1Img ,
+            #dt_PLSales_B-1 #dt_PLSales_B-1Img , #dt_SaleInvoiceDue_B-1 #dt_SaleInvoiceDue_B-1Img , #dtPostingDate_B-1 #dtPostingDate_B-1Img
+            {
+                display: none;
+            }
+
+            #GrdQuotation
+        {
+            max-width: 99% !important;
+        }
+
+        .calendar-icon
+        {
+                right: 18px !important;
+        }
+
+        select#ddlInventory
+        {
+            -webkit-appearance: auto;
+        }
+
+        .simple-select::after
+        {
+            top: 26px !important;
+            right: 13px !important;
+        }
+
+        .col-sm-3 , .col-md-3 , .col-md-2{
+            margin-bottom: 5px;
+        }
+
+        #rdl_Salesquotation
+        {
+            margin-top: 10px;
+        }
+        .col-md-3>label, .col-md-3>span
+        {
+            margin-top: 0 !important;
+        }
+
+        .lblmTop8>span, .lblmTop8>label
+        {
+            margin-top: 0 !important;
+        }
+        #OFDBankSelect
+        {
+            height: 30px;
+            border-radius: 4px;
+        }
+
+        select.btn
+        {
+           position: relative;
+           z-index: 0;
+        }
+
+
+            @media only screen and (max-width: 1380px) and (min-width: 1300px)
+            {
+
+                /*.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+                    padding-right: 10px;
+                    padding-left: 10px;
+                }
+
+                .simple-select::after
+                {
+                    right: 8px !important;
+                }
+                .calendar-icon {
+                    right: 13px !important;
+                }*/
+
+                input[type="radio"], input[type="checkbox"] {
+                    margin-right: 0px;
+                }
+            }
+        </style>
+    <%--Rev end 2.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="panel-heading">
+    <%--Rev 2.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading">
         <div class="panel-title clearfix">
             <h3 class="pull-left">Sales Invoice Cum Challan</h3>
             <div id="pageheaderContent" class="scrollHorizontal pull-right wrapHolder content horizontal-images" style="display: none;">
@@ -1012,20 +1117,28 @@
             <tr>
                 <td>
                     <label>From Date</label></td>
-                <td>
+                <%--Rev 2.0: "for-cust-icon" class add --%>
+                <td class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%" UseMaskBehavior="True">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 2.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 2.0--%>
                 </td>
                 <td>
                     <label>To Date</label>
                 </td>
-                <td>
+                <%--Rev 2.0: "for-cust-icon" class add --%>
+                <td class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%" UseMaskBehavior="True">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 2.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 2.0--%>
                 </td>
                 <td>Unit</td>
                 <td>
@@ -1033,29 +1146,29 @@
                     </dxe:ASPxComboBox>
                 </td>
                 <td>
-                    <input type="button" value="Show" class="btn btn-primary btn-radius" onclick="updateGridByDate()" />
+                    <input type="button" value="Show" class="btn btn-primary" onclick="updateGridByDate()" />
                 </td>
 
             </tr>
 
         </table>
     </div>
-    <div class="form_main">
+        <div class="form_main">
         <div class="clearfix">
             <% if (rights.CanAdd)
                { %>
             <%--<a href="javascript:void(0);" onclick="OnAddButtonClick()" class="btn btn-primary"><span><u>A</u>dd New</span> </a><%} %>--%>
-            <a href="javascript:void(0);" onclick="OnAddInventoryButtonClick()" class="btn btn-success btn-radius "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>I</u>nventory</span> </a>
-            <a href="javascript:void(0);" onclick="OnAddNonInventoryButtonClick()" class="btn btn-success btn-radius "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>N</u>on Inventory</span> </a>
-            <a href="javascript:void(0);" onclick="OnAddSeriviceButtonClick()" style="display:none" class="btn btn-success btn-radius "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>S</u>ervice</span> </a>
-            <a href="javascript:void(0);" onclick="OnAddCapitalButtonClick()" class="btn btn-success btn-radius "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>C</u>apital Goods</span> </a>
-            <a href="javascript:void(0);" onclick="OnAddBothButtonClick()" class="btn btn-success btn-radius "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>A</u>ll Items</span> </a>
+            <a href="javascript:void(0);" onclick="OnAddInventoryButtonClick()" class="btn btn-success "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>I</u>nventory</span> </a>
+            <a href="javascript:void(0);" onclick="OnAddNonInventoryButtonClick()" class="btn btn-success  "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>N</u>on Inventory</span> </a>
+            <a href="javascript:void(0);" onclick="OnAddSeriviceButtonClick()" style="display:none" class="btn btn-success "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>S</u>ervice</span> </a>
+            <a href="javascript:void(0);" onclick="OnAddCapitalButtonClick()" class="btn btn-success "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>C</u>apital Goods</span> </a>
+            <a href="javascript:void(0);" onclick="OnAddBothButtonClick()" class="btn btn-success "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>A</u>ll Items</span> </a>
 
             <%} %>
 
             <% if (rights.CanExport)
                { %>
-            <asp:DropDownList ID="drdExport" runat="server" CssClass="btn btn-primary btn-radius " OnSelectedIndexChanged="cmbExport_SelectedIndexChanged" AutoPostBack="true" OnChange="if(!AvailableExportOption()){return false;}">
+            <asp:DropDownList ID="drdExport" runat="server" CssClass="btn btn-primary " OnSelectedIndexChanged="cmbExport_SelectedIndexChanged" AutoPostBack="true" OnChange="if(!AvailableExportOption()){return false;}">
                 <asp:ListItem Value="0">Export to</asp:ListItem>
                 <asp:ListItem Value="1">PDF</asp:ListItem>
                 <asp:ListItem Value="2">XLS</asp:ListItem>
@@ -1066,13 +1179,13 @@
             <%--Sandip Section for Approval Section in Design Start --%>
 
             <span id="spanStatus" runat="server">
-                <a href="javascript:void(0);" onclick="OpenPopUPUserWiseQuotaion()" class="btn btn-info btn-radius">
+                <a href="javascript:void(0);" onclick="OpenPopUPUserWiseQuotaion()" class="btn btn-info">
                     <span>My Sales Invoice Cum Challan Status</span>
                     <%--<asp:Label ID="Label1" runat="server" Text=""></asp:Label>--%>                   
                 </a>
             </span>
             <span id="divPendingWaiting" runat="server">
-                <a href="javascript:void(0);" onclick="OpenPopUPApprovalStatus()" class="btn btn-warning btn-radius ">
+                <a href="javascript:void(0);" onclick="OpenPopUPApprovalStatus()" class="btn btn-warning ">
                     <span>Approval Waiting</span>
 
                     <asp:Label ID="lblWaiting" runat="server" Text=""></asp:Label>
@@ -1080,7 +1193,7 @@
                 <i class="fa fa-reply blink" style="font-size: 20px; margin-right: 10px;" aria-hidden="true"></i>
             </span>
             <span id="span1" runat="server">
-                <a href="javascript:void(0);" onclick="OpenPopUPApproveSO()" class="btn btn-primary btn-radius">
+                <a href="javascript:void(0);" onclick="OpenPopUPApproveSO()" class="btn btn-primary">
                     <span>Approved Sales Order</span>
                 </a>
             </span>
@@ -1088,8 +1201,9 @@
             <%--Sandip Section for Approval Section in Design End --%>
         </div>
     </div>
-    <div id="spnEditLock" runat="server" style="display: none; color: red; text-align: center"></div>
-    <div id="spnDeleteLock" runat="server" style="display: none; color: red; text-align: center"></div>
+    
+        <div id="spnEditLock" runat="server" style="display: none; color: red; text-align: center"></div>
+        <div id="spnDeleteLock" runat="server" style="display: none; color: red; text-align: center"></div>
     <%--<dxe:ASPxCallbackPanel runat="server" id="ComponentPanel" ClientInstanceName="cComponentPanel" OnCallback="Component_Callback">
 
          <PanelCollection>
@@ -1099,7 +1213,7 @@
              </dxe:PanelContent>
          </PanelCollection>
      </dxe:ASPxCallbackPanel>--%>
-    <div class="GridViewArea relative">
+        <div class="GridViewArea relative">
         <dxe:ASPxGridView ID="GrdQuotation" runat="server" KeyFieldName="INVOICE_ID" AutoGenerateColumns="False" SettingsBehavior-AllowFocusedRow="true"
             Width="100%" ClientInstanceName="cGrdQuotation" OnCustomCallback="GrdQuotation_CustomCallback"
             Settings-HorizontalScrollBarMode="Auto" DataSourceID="EntityServerModeDataSource" SettingsDataSecurity-AllowEdit="false"
@@ -1347,6 +1461,8 @@
         <asp:HiddenField ID="hiddenedit" runat="server" />
 
          <uc1:VehicleDetailsControl runat="server" ID="VehicleDetailsControl" />
+    </div>
+
     </div>
     <div style="display: none">
         <dxe:ASPxGridViewExporter ID="exporter" GridViewID="GrdQuotation" runat="server" Landscape="false" PaperKind="A4" PageHeader-Font-Size="Larger" PageHeader-Font-Bold="true">

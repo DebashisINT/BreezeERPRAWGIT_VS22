@@ -1,5 +1,6 @@
 ﻿<%--==========================================================Revision History ============================================================================================   
- 1.0   Priti   V2.0.36   19-01-2023    	0025314: Views to be converted to Procedures in the Listing Page of Transaction / Return-Sales / Return With Invoice
+ 1.0   Priti     V2.0.36    19-01-2023    	0025314: Views to be converted to Procedures in the Listing Page of Transaction / Return-Sales / Return With Invoice
+ 2.0   Pallab    V2.0.37    13-04-2023     	0025824: Sale Return Normal page design modification
 ========================================== End Revision History =======================================================================================================--%>
 
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ReturnNormalList.aspx.cs" MasterPageFile="~/OMS/MasterPage/ERP.Master"  Inherits="ERP.OMS.Management.Activities.ReturnNormalList" %>
@@ -40,10 +41,43 @@
             }
         }
     </script>
-    <script src="JS/ReturnNormalList.js?v1.0.001"></script>
+    <script src="JS/ReturnNormalList.js?v2.0"></script>
+    
+
+    <%--Rev 2.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        select
+        {
+            z-index: 0;
+        }
+
+        #GrdSalesReturn {
+            max-width: 98% !important;
+        }
+        #FormDate, #toDate, #dtTDate, #dt_PLQuote, #dt_PlQuoteExpiry {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        select
+        {
+            -webkit-appearance: auto;
+        }
+
+        .calendar-icon
+        {
+                right: 10px;
+        }
+    </style>
+    <%--Rev end 2.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="panel-heading clearfix">
+    <%--Rev 2.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading clearfix">
         <div class="panel-title pull-left">
             <h3>Sale Return Normal</h3>
         </div>
@@ -51,20 +85,28 @@
                         <tr>
                             <td>
                                 <label>From Date</label></td>
-                            <td>
+                            <%--Rev 2.0: "for-cust-icon" class add --%>
+                            <td class="for-cust-icon">
                                 <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%">
                                     <buttonstyle width="13px">
                         </buttonstyle>
                                 </dxe:ASPxDateEdit>
+                                <%--Rev 2.0--%>
+                                <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                <%--Rev end 2.0--%>
                             </td>
                             <td>
                                 <label>To Date</label>
                             </td>
-                            <td>
+                            <%--Rev 2.0: "for-cust-icon" class add --%>
+                            <td class="for-cust-icon">
                                 <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%">
                                     <buttonstyle width="13px">
                         </buttonstyle>
                                 </dxe:ASPxDateEdit>
+                                <%--Rev 2.0--%>
+                                <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                <%--Rev end 2.0--%>
                             </td>
                             <td>Unit</td>
                             <td>
@@ -79,11 +121,11 @@
 
                     </table>
     </div>
-    <div class="form_main">
+        <div class="form_main">
         <div class="clearfix">
              <% if (rights.CanAdd)
                                    { %>
-            <a href="javascript:void(0);" onclick="OnAddButtonClick()" class="btn btn-primary"><span><u>A</u>dd New</span> </a><%} %>
+            <a href="javascript:void(0);" onclick="OnAddButtonClick()" class="btn btn-success"><span><u>A</u>dd New</span> </a><%} %>
 
             <% if (rights.CanExport)
                                                { %>
@@ -99,7 +141,7 @@
               
         </div>
     </div>
-     <div class="GridViewArea">
+        <div class="GridViewArea">
         <dxe:ASPxGridView ID="GrdSalesReturn" runat="server" KeyFieldName="SrlNo" AutoGenerateColumns="False"  
             Width="100%" ClientInstanceName="cGrdSalesReturn" OnCustomCallback="GrdSalesReturn_CustomCallback" SettingsBehavior-AllowFocusedRow="true" 
             
@@ -273,6 +315,7 @@
           <dx:LinqServerModeDataSource ID="EntityServerModeDataSource" runat="server" OnSelecting="EntityServerModeDataSource_Selecting"
             ContextTypeName="ERPDataClassesDataContext" TableName="v_SalesReturnNormalList" />
         <asp:HiddenField ID="hiddenedit" runat="server" />
+    </div>
     </div>
     <div style="display: none">
         <dxe:ASPxGridViewExporter ID="exporter" GridViewID="GrdSalesReturn" runat="server" Landscape="false" PaperKind="A4" PageHeader-Font-Size="Larger" PageHeader-Font-Bold="true">

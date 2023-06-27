@@ -1,4 +1,9 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="CustomerDeliveryPendingListEntity.aspx.cs" Inherits="ERP.OMS.Management.Activities.CustomerDeliveryPendingListEntity"
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                11-04-2023        2.0.37           Pallab              25985: Customer Delivery - OD module design modification & check in small device
+====================================================== Revision History =============================================--%>
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="CustomerDeliveryPendingListEntity.aspx.cs" Inherits="ERP.OMS.Management.Activities.CustomerDeliveryPendingListEntity"
     MasterPageFile="~/OMS/MasterPage/ERP.Master" %>
 
 
@@ -368,6 +373,32 @@
         });
     </script>
     <link href="CSS/CustomerDeliveryPendingListEntity.css" rel="stylesheet" />
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        .TableMain100 #ShowGrid, .TableMain100 #ShowGridList, .TableMain100 #ShowGridRet, .TableMain100 #ShowGridLocationwiseStockStatus, 
+        #downpaygrid {
+            max-width: 98% !important;
+        }
+        #FormDate, #toDate, #dtTDate, #dt_PLQuote, #dt_PlQuoteExpiry {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        select
+        {
+            -webkit-appearance: auto;
+        }
+
+        /*.calendar-icon
+        {
+                right: 10px;
+        }*/
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <dxe:ASPxPopupControl ID="Popup_OrderStatus" runat="server" ClientInstanceName="cOrderStatus"
@@ -461,7 +492,9 @@
                         </dxe:PopupControlContentControl>
             </contentcollection>
     </dxe:ASPxPopupControl>
-    <div class="panel-heading clearfix">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading clearfix">
         <div class="panel-title pull-left">
             <h3>
                 <asp:Label ID="lblHeadertext" runat="server"></asp:Label></h3>
@@ -470,20 +503,28 @@
             <tr>
                 <td>
                     <label>From Date</label></td>
-                <td>
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" UseMaskBehavior="True"   EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%">
                         <buttonstyle width="13px">
                         </buttonstyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>
                     <label>To Date</label>
                 </td>
-                <td>
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" UseMaskBehavior="True" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%">
                         <buttonstyle width="13px">
                         </buttonstyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>Unit</td>
                 <td>
@@ -511,7 +552,7 @@
 
         </table>
     </div>
-    <div class="form_main">
+        <div class="form_main">
         <div class="clearfix">
             <% if (rights.CanAdd)
                { %>
@@ -522,7 +563,7 @@
 
 
     </div>
-    <div class="GridViewArea relative">
+        <div class="GridViewArea relative">
         <dxe:ASPxGridView ID="GrdOrder" runat="server" KeyFieldName="SlNo" AutoGenerateColumns="False"
             Width="100%" ClientInstanceName="cGrdOrder" DataSourceID="EntityServerModeDataSource" SettingsDataSecurity-AllowEdit="false" SettingsDataSecurity-AllowInsert="false" SettingsDataSecurity-AllowDelete="false"  OnCustomCallback="GrdOrder_CustomCallback" OnHtmlRowPrepared="AvailableStockgrid_HtmlRowPrepared"
             SettingsCookies-Enabled="true" SettingsCookies-StorePaging="true" SettingsCookies-StoreFiltering="true" SettingsCookies-StoreGroupingAndSorting="true"
@@ -720,6 +761,7 @@
 
         <dx:LinqServerModeDataSource ID="EntityServerModeDataSource" runat="server" OnSelecting="EntityServerModeDataSource_Selecting"
             ContextTypeName="ERPDataClassesDataContext" TableName="v_CustomerDeliveryPendingList" />
+    </div>
     </div>
     <div style="display: none">
         <dxe:ASPxGridViewExporter ID="exporter" runat="server" Landscape="false" PaperKind="A4" PageHeader-Font-Size="Larger" PageHeader-Font-Bold="true">

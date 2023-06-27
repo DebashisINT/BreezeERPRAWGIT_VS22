@@ -1,4 +1,9 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="CustomerReceiptPaymentList.aspx.cs" Inherits="ERP.OMS.Management.Activities.CustomerReceiptPaymentList" %>
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                10-04-2023        2.0.37           Pallab              25966: Customer Receipt/Payment module design modification & check in small device
+====================================================== Revision History =============================================--%>
+
+<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="CustomerReceiptPaymentList.aspx.cs" Inherits="ERP.OMS.Management.Activities.CustomerReceiptPaymentList" %>
 
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
     Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
@@ -24,9 +29,122 @@
         }
     </style>
     <script src="JS/CustomerReceiptPaymentList.js?v1.0"></script>
+
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+
+        <style>
+            select
+            {
+                -webkit-appearance: auto;
+            }
+            #FormDate , #toDate , #dtTDate , #dt_PLQuote , #dt_PLSales , #dt_SaleInvoiceDue , #dtPostingDate
+            {
+                position: relative;
+                z-index: 1;
+                background: transparent;
+            }
+
+            #FormDate_B-1 , #toDate_B-1 , #dtTDate_B-1 , #dt_PLQuote_B-1 , #dt_PLSales_B-1 , #dt_SaleInvoiceDue_B-1 , #dtPostingDate_B-1
+            {
+                background: transparent !important;
+                border: none;
+                width: 30px;
+                padding: 10px !important;
+            }
+
+            #FormDate_B-1 #FormDate_B-1Img , #toDate_B-1 #toDate_B-1Img , #dtTDate_B-1 #dtTDate_B-1Img , #dt_PLQuote_B-1 #dt_PLQuote_B-1Img ,
+            #dt_PLSales_B-1 #dt_PLSales_B-1Img , #dt_SaleInvoiceDue_B-1 #dt_SaleInvoiceDue_B-1Img , #dtPostingDate_B-1 #dtPostingDate_B-1Img
+            {
+                display: none;
+            }
+
+            .TableMain100 #ShowGrid , .TableMain100 #ShowGridList , .TableMain100 #ShowGridRet , .TableMain100 #ShowGridLocationwiseStockStatus ,
+            #Grid_CustomerReceiptPayment
+            {
+                max-width: 99% !important;
+            }
+
+        /*.calendar-icon
+        {
+                right: 5px !important;
+        }
+
+        select#ddlInventory
+        {
+            -webkit-appearance: auto;
+        }*/
+
+        .simple-select::after
+        {
+            top: 26px !important;
+            right: 13px !important;
+        }
+
+        .col-sm-3 , .col-md-3 , .col-md-2{
+            margin-bottom: 5px;
+        }
+
+        #rdl_Salesquotation
+        {
+            margin-top: 10px;
+        }
+        .col-md-3>label, .col-md-3>span
+        {
+            margin-top: 0 !important;
+        }
+
+        #drdTransCategory.aspNetDisabled {
+    background: #f3f3f3 !important;
+}
+
+       /* #CustomerTableTbl.dynamicPopupTbl>tbody>tr>td
+        {
+            width: 33.33%;
+        }*/
+
+       .lblmTop8>span, .lblmTop8>label
+        {
+                margin-top: 0 !important;
+        }
+
+            @media only screen and (max-width: 1380px) and (min-width: 1300px)
+            {
+
+                /*.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+                    padding-right: 10px;
+                    padding-left: 10px;
+                }
+
+                .simple-select::after
+                {
+                    right: 8px !important;
+                }
+                .calendar-icon {
+                    right: 13px !important;
+                }*/
+
+                input[type="radio"], input[type="checkbox"] {
+                    margin-right: 0px;
+                }
+                
+            #ASPxPopupControl2_PW-1 , #popupApproval_PW-1 , #ASPXPopupControl1_PW-1
+            {
+                position:fixed !important;
+                left: 10px !important;
+                top: 5% !important;
+            }
+        
+            }
+        </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="panel-heading clearfix">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading clearfix">
         <div class="panel-title pull-left" id="td_contact1" runat="server">
             <h3>
                 <asp:Label ID="lblHeadTitle" runat="server" Text="Customer Receipt/Payment"></asp:Label>
@@ -37,22 +155,30 @@
                 <td>
                     <label>From Date</label></td>
 
-                <td style="width: 150px">
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td style="width: 150px" class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%" UseMaskBehavior="True">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>&nbsp;</td>
                 <td>
                     <label>To Date</label>
                 </td>
 
-                <td style="width: 150px">
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td style="width: 150px" class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%" UseMaskBehavior="True">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>&nbsp;</td>
                 <td>Unit</td>
@@ -70,12 +196,12 @@
         </table>
     </div>
 
-    <div class="form_main clearfix" id="btnAddNew">
-        <div style="float: left; padding-right: 5px;">
+        <div class="form_main clearfix" id="btnAddNew">
+        <div style="float: left; padding-right: 5px;" class="mb-10">
             <% if (rights.CanAdd)
                { %>
-            <a href="javascript:void(0);" onclick="AddReceiptButtonClick()" class="btn btn-success btn-radius"><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>R</u>eceipt</span> </a>
-            <a href="javascript:void(0);" onclick="AddPaymentButtonClick()" class="btn btn-success btn-radius"><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>P</u>ayment</span> </a>
+            <a href="javascript:void(0);" onclick="AddReceiptButtonClick()" class="btn btn-success "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>R</u>eceipt</span> </a>
+            <a href="javascript:void(0);" onclick="AddPaymentButtonClick()" class="btn btn-success "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>P</u>ayment</span> </a>
             <%--<a href="javascript:void(0);" onclick="AddButtonClick()" class="btn btn-primary"><span><u>A</u>dd New</span> </a>--%>
             <% } %>
             <% if (rights.CanExport)
@@ -90,11 +216,11 @@
             <% } %>
         </div>
     </div>
-
-     <div id="spnEditLock" runat="server" style="display:none; color:red;text-align:center"></div>
-     <div id="spnDeleteLock" runat="server" style="display:none; color:red;text-align:center"></div>
-
-    <div class="relative">
+    
+        <div id="spnEditLock" runat="server" style="display:none; color:red;text-align:center"></div>
+        <div id="spnDeleteLock" runat="server" style="display:none; color:red;text-align:center"></div>
+    
+        <div class="relative">
         <dxe:ASPxGridView ID="Grid_CustomerReceiptPayment" runat="server" AutoGenerateColumns="False" KeyFieldName="ReceiptPayment_ID"
             ClientInstanceName="CgvCustomerReceiptPayment" Width="100%" SettingsBehavior-AllowFocusedRow="true"
             OnCustomCallback="Grid_CustomerReceiptPayment_CustomCallback" Settings-VerticalScrollableHeight="250" Settings-VerticalScrollBarMode="Auto"
@@ -350,6 +476,7 @@
 
 
         </dxe:ASPxGridView>
+    </div>
     </div>
     <dx:LinqServerModeDataSource ID="EntityServerModeDataSource" runat="server" OnSelecting="EntityServerModeDataSource_Selecting"
         ContextTypeName="ERPDataClassesDataContext" TableName="CustomerReceiptPaymentList" />

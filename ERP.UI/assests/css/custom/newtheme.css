@@ -8,6 +8,10 @@ Rev Number       DATE            VERSION        DEVELOPER            CHANGES
 1.0              08-02-2023      2.0.35         Pallab               inner page grid issue fix and design modification
 2.0              01-03-2023      2.0.36         Pallab               The Profile Image in the Welcome Panel in ERP has become so large that other functions in ERP could not be used.
                                                                      Refer: 25708
+3.0              17-05-2023      2.0.38         Pallab               When manually clicked for sidebar menu open, page main content part right side hiding issue fix
+                                                                     Refer: 26152
+4.0              25-05-2023      2.0.38         Pallab               "Session expired" message change and alert design modification
+                                                                     Refer: 26230
 ====================================================== Revision History ===========================================================*/
 
 *:focus {
@@ -498,9 +502,12 @@ p.copyright {
     min-height: 800px;
     /*z-index: 100;*/
     position: relative !important;
+    /*rev 3.0*/
     margin-left: 175px;
+    /*margin-left: 50px;*/
+    /*rev end 3.0*/
     padding: 15px 15px;
-    margin-top:75px;
+    margin-top: 75px;
 }
 .tpLbl {
     background: #61d2ac;
@@ -1246,8 +1253,8 @@ table, .dataTables_wrapper {
 }
 
 .dataTables_wrapper input[type="search"] {
-    height: 35px;
-    padding: 10px 15px;
+    height: 30px;
+    padding: 0px 15px;
     font-size: 12px;
     line-height: 1.42857143;
     color: #2c3e50;
@@ -1259,6 +1266,7 @@ table, .dataTables_wrapper {
     -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    margin-bottom: 5px;
 }
 
     .dataTables_wrapper input[type="search"]:focus {
@@ -2434,7 +2442,7 @@ select {
     width: auto;
 }
 select.btn {
-    height:30px !important;
+    height:31px !important;
     margin-right: 5px !important;
 }
 select.btn.btn-xs {
@@ -2597,7 +2605,8 @@ input + label {
     margin-left: 5px;
 }
 .cmpName {
-    line-height:26px;
+    line-height: 26px;
+    color: #f3f3f3;
 }
 .dxtc-link, .dxgvHeader_PlasticBlue td {
     font-size: 12px !important;
@@ -2964,7 +2973,7 @@ body {
     width:100%;
 }
 .lblHolder table td {
-    padding: 1px 11px !important;
+    padding: 4px 11px !important;
     vertical-align:top;
 }
 .lblHolder table tr:first-child td {
@@ -3177,8 +3186,11 @@ hr.tfour {
     border: 1px solid #177a67;
     color: #fff !important;
 }
+#ddlInventory.aspNetDisabled {
+    background: #42b39e !important;
+}
 .ui-dialog-buttonset {
-    float:none !important;
+    float: none !important;
     text-align: center;
     padding-bottom: 7px;
 }
@@ -3327,7 +3339,7 @@ hr.tfour {
         padding: 5px 8px;
         border-radius: 8px 8px 0 0;
         margin-bottom: 0;
-        color: #fff;
+        color: #fff !important;
         text-align: center;
         font-size:14px;
     }
@@ -3658,9 +3670,9 @@ textarea.form-control.input-sm {
 
 
 
-.dxeDisabled_PlasticBlue, .dxeDisabled_PlasticBlue td.dxe, .dxeDisabled_PlasticBlue .dxeEditArea_PlasticBlue, .dxeDisabled_PlasticBlue .dxeMemoEditArea_PlasticBlue {
-    background:#eee;
-}
+/*.dxeDisabled_PlasticBlue, .dxeDisabled_PlasticBlue td.dxe, .dxeDisabled_PlasticBlue .dxeEditArea_PlasticBlue, .dxeDisabled_PlasticBlue .dxeMemoEditArea_PlasticBlue {
+    background: #eee !important;
+}*/
 
 .btn .btn-icon {
     display: inline-block;
@@ -4081,7 +4093,7 @@ button:focus
     overflow: hidden;*/
 }
 
-.panel-title h3 {
+.panel-title h3, .panel-title h3 label {
     font-size: 26px !important;
     font-weight: 500 !important;
 }
@@ -4111,7 +4123,7 @@ input[type="text"], input[type="password"], textarea, .chosen-container-single .
         }*/
 
 label, .mylabel1, .clsTo, .dxeBase_PlasticBlue {
-    color: #141414 !important;
+    /*color: #141414 !important;*/
     font-size: 14px !important;
     font-weight: 500 !important;
     margin-bottom: 0 !important;
@@ -4147,7 +4159,7 @@ label, .mylabel1, .clsTo, .dxeBase_PlasticBlue {
     /* padding: 10px 0; */
     border-radius: 4px;
     text-align: center;
-    line-height: 19px;
+    line-height: 18px;
     z-index: 0;
 }
 
@@ -4260,3 +4272,80 @@ label, .mylabel1, .clsTo, .dxeBase_PlasticBlue {
         transform: rotate(90deg);
         right: 5px;
     }
+
+
+.close {
+    opacity: .6;
+    font-weight: 400;
+    color: #fff;
+}
+
+    .close:hover, .close:focus {
+        color: #fff;
+        opacity: 1;
+    }
+/*Rev 3.0*/
+/*.dxgvControl_PlasticBlue, .dxgvDisabled_PlasticBlue
+{
+    width: 100% !important;
+}*/
+/*Rev end 3.0*/
+/*Rev 4.0*/
+.ui-widget.ui-widget-content {
+    box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 70%);
+    border: 2px solid #d6d6d6;
+    border-radius: 8px;
+}
+
+.ui-widget-header {
+    border: 1px solid #063566 !important;
+    background: #063566 !important;
+    border-radius: 7px 7px 0 0 !important;
+}
+
+.ui-dialog-buttonset {
+    padding: 5px 0;
+    border-radius: 0 0 7px 7px !important;
+}
+
+.ui-dialog .ui-dialog-content h6 {
+    font-size: 17px !IMPORTANT;
+    color: #333;
+}
+
+
+div:where(.swal2-container) h2:where(.swal2-title) {
+    color: #111 !important;
+    padding: 0.5em 1em 0 !important;
+    font-size: 22px !important;
+}
+
+div:where(.swal2-container) .swal2-html-container {
+    font-size: 16px !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+    background-color: #5d23d1 !important;
+    color: #fff !important;
+    font-size: 14px !important;
+    border-radius: 30px !important;
+    padding: 8px 20px !important;
+}
+div:where(.swal2-container) div:where(.swal2-popup) {
+    width: 40em !important;
+    border-radius: 15px !important;
+    padding: 6px 0 15px !important;
+    box-shadow: 1px 1px 15px #1111113d !important;
+}
+
+div:where(.swal2-container).swal2-backdrop-show, div:where(.swal2-container).swal2-noanimation {
+    background: rgb(0 0 0 / 10%) !important;
+}
+/*Rev end 4.0*/
+
+.dxeOutOfRWarn_PlasticBlue {
+    width: 200px !important;
+    z-index: 99999 !important;
+    left: -5px !important;
+    top: 30px !important;
+}

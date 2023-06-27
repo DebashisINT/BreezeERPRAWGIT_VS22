@@ -1,4 +1,10 @@
-﻿using BusinessLogicLayer;
+﻿#region =======================Revision History=============================================================================================================
+//1.0   v2 .0.37    Debashis    01/06/2023  Running Balance Required in the Third Level Zooming report for PL - Horizontal & BS Horizontal from any Ledger.
+//                                          The Running Balance of the 3rd Level zooming of any ledger from PL - Horizontal & BS - Horizontal to be set as per Ledger Type
+//                                          Refer: 0026252 & 0026318
+#endregion =======================End of Revision History===================================================================================================
+
+using BusinessLogicLayer;
 using DevExpress.Export;
 using DevExpress.Web;
 using DevExpress.XtraPrinting;
@@ -25,7 +31,11 @@ namespace Reports.Reports.GridReports
         DateTime dtFrom;
         DateTime dtTo;
         static int PageStart = 1;
-        
+        //Rev 1.0
+        decimal TotalDebit = 0, TotalCredit = 0, TotalOpening = 0, TotalDBCR=0;
+        string MainLedgerType = "";
+        //End of Rev 1.0
+
         public EntityLayer.CommonELS.UserRightsForPage rights = new UserRightsForPage();
         protected void Page_PreInit(object sender, EventArgs e) // lead add
         {
@@ -1053,8 +1063,54 @@ namespace Reports.Reports.GridReports
 
         protected void ShowGridDetails2Level_SummaryDisplayText(object sender, ASPxGridViewSummaryDisplayTextEventArgs e)
         {
+            //Rev 1.0
+            //e.Text = string.Format("{0}", e.Value);
+            MainLedgerType = hdnLedgertype.Value.ToString();
+            if (e.Item.FieldName == "OPENING")
+            {
+                TotalOpening = Convert.ToDecimal(e.Value);
+            }
+            else if (e.Item.FieldName == "PR_DR_AMT")
+            {
+                TotalDebit = Convert.ToDecimal(e.Value);
+            }
+            else if (e.Item.FieldName == "PR_CR_AMT")
+            {
+                TotalCredit = Convert.ToDecimal(e.Value);
+            }
+            else if (e.Item.FieldName == "CLOSING")
+            {
+                if (MainLedgerType == "Asset" || MainLedgerType == "Expense")
+                {
+                    TotalDBCR = (TotalOpening + TotalDebit) - TotalCredit;
+                }
+                else
+                {
+                    TotalDBCR = (TotalOpening + TotalCredit) - TotalDebit;
+                }
+                e.Text = TotalDBCR.ToString();
+            }
+            else
+            {
+                e.Text = string.Format("{0}", e.Value);
+            }
+            //End of Rev 1.0
+        }
+
+        //Rev 1.0
+        protected void ShowGridDetails3Level_SummaryDisplayText(object sender, ASPxGridViewSummaryDisplayTextEventArgs e)
+        {
             e.Text = string.Format("{0}", e.Value);
         }
+        protected void gvStockSummary_SummaryDisplayText(object sender, ASPxGridViewSummaryDisplayTextEventArgs e)
+        {
+            e.Text = string.Format("{0}", e.Value);
+        }
+        protected void gridStockDetials_SummaryDisplayText(object sender, ASPxGridViewSummaryDisplayTextEventArgs e)
+        {
+            e.Text = string.Format("{0}", e.Value);
+        }
+        //End of Rev 1.0
 
         protected void ddlExport3_SelectedIndexChanged(object sender, EventArgs e)
         {

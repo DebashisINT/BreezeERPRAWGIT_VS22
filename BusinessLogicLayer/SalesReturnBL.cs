@@ -1012,21 +1012,8 @@ namespace BusinessLogicLayer
 
             return proc.GetTable();
         }
-        public DataTable GetIndentDetailsForCRGridBind(string Indent_Id, string Order_Key, string Product_Ids, string comapanyid, string finyear)
-        {
-            ProcedureExecute proc = new ProcedureExecute("prc_CRMSalesReturn_Details");
-            proc.AddVarcharPara("@Action", 100, "GetChallanforCR");
-            proc.AddVarcharPara("@invoice_ID", 4000, Indent_Id);
-            proc.AddVarcharPara("@OrderID_Key", 1000, Order_Key);
-            proc.AddVarcharPara("@Product_Id", 1000, Product_Ids);
-            proc.AddVarcharPara("@campany_Id", 100, comapanyid);
-            proc.AddVarcharPara("@FinYear", 100, finyear);
-
-            return proc.GetTable();
-        }
-
         //Rev 1.0
-        public DataTable GetSalesInvoiceforRDECbySIDetailsID(string Invoice_Id, string Invoice_Key, string Product_Ids, string comapanyid, string finyear, string InvoiceDetails_Ids)
+        public DataTable GetSalesInvoiceforRDECbySIDetailsID(string Invoice_Id, string Invoice_Key, string Product_Ids, string comapanyid, string finyear,string InvoiceDetails_Ids)
         {
             ProcedureExecute proc = new ProcedureExecute("prc_CRMSalesReturn_Details");
             proc.AddVarcharPara("@Action", 100, "GetSalesInvoiceforRDECbySIDetailsID");
@@ -1040,6 +1027,20 @@ namespace BusinessLogicLayer
 
         }
         //Rev 1.0 End
+        public DataTable GetIndentDetailsForCRGridBind(string Indent_Id, string Order_Key, string Product_Ids, string comapanyid, string finyear)
+        {
+            ProcedureExecute proc = new ProcedureExecute("prc_CRMSalesReturn_Details");
+            proc.AddVarcharPara("@Action", 100, "GetChallanforCR");
+            proc.AddVarcharPara("@invoice_ID", 4000, Indent_Id);
+            proc.AddVarcharPara("@OrderID_Key", 1000, Order_Key);
+            proc.AddVarcharPara("@Product_Id", 1000, Product_Ids);
+            proc.AddVarcharPara("@campany_Id", 100, comapanyid);
+            proc.AddVarcharPara("@FinYear", 100, finyear);
+
+            return proc.GetTable();
+        }
+
+
 
         public DataTable GetReturnforCRI(string Indent_Id, string comapanyid, string finyear)
         {

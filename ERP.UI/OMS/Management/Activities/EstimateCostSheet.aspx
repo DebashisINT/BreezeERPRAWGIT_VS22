@@ -1,4 +1,9 @@
-﻿<%@ Page Title="Estimate Cost Sheet" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" EnableEventValidation="false" CodeBehind="EstimateCostSheet.aspx.cs" Inherits="ERP.OMS.Management.Activities.EstimateCostSheet" %>
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                05-04-2023        2.0.37           Pallab              25915: Add Estimate/Cost Sheet module design modification
+====================================================== Revision History =============================================--%>
+
+<%@ Page Title="Estimate Cost Sheet" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" EnableEventValidation="false" CodeBehind="EstimateCostSheet.aspx.cs" Inherits="ERP.OMS.Management.Activities.EstimateCostSheet" %>
 
 <%@ Register Src="~/OMS/Management/Activities/UserControls/Sales_BillingShipping.ascx" TagPrefix="ucBS" TagName="Sales_BillingShipping" %>
 <%--<%@ Register Src="~/OMS/Management/Activities/UserControls/VehicleDetailsControl.ascx" TagPrefix="uc1" TagName="VehicleDetailsControl" %>
@@ -455,6 +460,50 @@
 
     </script>
     <%--Use for set focus on UOM after press ok on UOM--%>
+
+    
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+
+    <style>
+        select#ddlInventory
+        {
+            -webkit-appearance: auto !important;
+        }
+
+        input + label
+        {
+            margin-top: 13px;
+        }
+
+        #Popup_InlineRemarks_PW-1
+            {
+                position:fixed !important;
+                left: 18% !important;
+                top: 20% !important;
+            }
+
+        .aspNetDisabled
+        {
+                background: #f3f3f3 !important;
+        }
+        #ddlInventory.aspNetDisabled
+        {
+            background: #42b39e !important;
+        }
+
+        @media only screen and (max-width: 1380px) and (min-width: 1300px)
+        {
+            #Popup_MultiUOM_PW-1 , #Popup_Warehouse_PW-1 , #Popup_Taxes_PW-1 , #aspxTaxpopUp_PW-1 , #Popup_InlineRemarks_PW-1
+            {
+                position:fixed !important;
+                left: 15% !important;
+                top: 60px !important;
+            }
+        }
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <%-- Subhra Section Start--%>
@@ -550,8 +599,9 @@
 
         <HeaderStyle BackColor="LightGray" ForeColor="Black" />
     </dxe:ASPxPopupControl>
-
-    <div class="panel-title clearfix">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-title clearfix">
         <h3 class="pull-left">
             <asp:Label ID="lblHeadTitle" Text="" runat="server"></asp:Label>
             <%--<label>Add Proforma Invoice/ Quotation</label>--%>
@@ -640,7 +690,7 @@
 
         <div id="Cross_CloseWindow" runat="server" class="crossBtn"><a href="" onclick=""><i class="fa fa-times"></i></a></div>
     </div>
-    <div class="form_main">
+        <div class="form_main">
         <asp:Panel ID="pnl_quotation" runat="server">
             <div class="row">
                 <dxe:ASPxPageControl ID="ASPxPageControl1" runat="server" ClientInstanceName="page" Width="100%">
@@ -661,8 +711,9 @@
                                                 <asp:ListItem Text="All Item" Value="B" />
                                             </asp:DropDownList>
                                         </div>
-                                        <div class="col-md-3" id="divScheme" runat="server">
-                                            <dxe:ASPxLabel ID="lbl_NumberingScheme" Width="120px" runat="server" Text="Numbering Scheme">
+                                        <%--Rev 1.0: "simple-select" class add --%>
+                                        <div class="col-md-3 simple-select" id="divScheme" runat="server">
+                                            <dxe:ASPxLabel ID="lbl_NumberingScheme" Width="160px" runat="server" Text="Numbering Scheme">
                                             </dxe:ASPxLabel>
                                             <asp:DropDownList ID="ddl_numberingScheme" runat="server" Width="100%" TabIndex="1">
                                             </asp:DropDownList>
@@ -680,7 +731,8 @@
                                                 <img id="1gridHistory_DXPEForm_efnew_DXEFL_DXEditor2_EI3" class="dxEditors_edtError_PlasticBlue" src="/DXR.axd?r=1_36-tyKfc" title="Duplicate number">
                                             </span>
                                         </div>
-                                        <div class="col-md-3">
+                                        <%--Rev 1.0: "for-cust-icon" class add --%>
+                                        <div class="col-md-3 for-cust-icon">
                                             <dxe:ASPxLabel ID="ASPxLabel2" runat="server" Text="Posting Date" Width="120px" CssClass="inline">
                                             </dxe:ASPxLabel>
                                             <dxe:ASPxDateEdit ID="dt_PLQuote" runat="server" Date="" Width="100%" EditFormatString="dd-MM-yyyy" ClientInstanceName="tstartdate" TabIndex="3" UseMaskBehavior="True">
@@ -688,6 +740,9 @@
                                             </dxe:ASPxDateEdit>
                                             <span id="MandatorysDate" style="display: none" class="validclass">
                                                 <img id="1gridHistory_DXPEForm_efnew_DXEFL_DXEditor2_EI1" class="dxEditors_edtError_PlasticBlue" src="/DXR.axd?r=1_36-tyKfc" title="Mandatory"></span>
+                                            <%--Rev 1.0--%>
+                                            <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                            <%--Rev end 1.0--%>
                                         </div>
                                         <div style="clear: both"></div>
                                         <%--<div class="col-md-3">
@@ -703,7 +758,8 @@
                                                 <img id="2gridHistory_DXPEForm_efnew_DXEFL_DXEditor12_EI14" class="dxEditors_edtError_PlasticBlue" src="/DXR.axd?r=1_36-tyKfc"
                                                     title="Expiry Date must be greater than or equal to Proformat Date."></span>
                                         </div>--%>
-                                        <div class="col-md-3">
+                                        <%--Rev 1.0: "simple-select" class add --%>
+                                        <div class="col-md-3 simple-select">
                                             <dxe:ASPxLabel ID="lbl_Branch" runat="server" Text="Branch">
                                             </dxe:ASPxLabel>
                                             <asp:DropDownList ID="ddl_Branch" runat="server" Width="100%" TabIndex="5">
@@ -773,7 +829,7 @@
                                         </div>
                                         <div style="clear: both;"></div>
                                         <div class="col-md-3">
-                                            <asp:RadioButtonList ID="rdl_Salesquotation" runat="server" RepeatDirection="Horizontal" onchange="return selectValue();" Width="120px">
+                                            <asp:RadioButtonList ID="rdl_Salesquotation" runat="server" RepeatDirection="Horizontal" onchange="return selectValue();" Width="150px">
                                                 <asp:ListItem Text="Inquiry Number" Value="SINQ"></asp:ListItem>
                                             </asp:RadioButtonList>
                                             <dxe:ASPxCallbackPanel runat="server" ID="ComponentQuotationPanel" ClientInstanceName="cQuotationComponentPanel" OnCallback="ComponentQuotation_Callback">
@@ -941,7 +997,7 @@
                                             <asp:TextBox ID="txtAppRejRemarks" runat="server" Width="100%" TextMode="MultiLine" Rows="2" Columns="8" Height="50px"></asp:TextBox>
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-6 mt-10">
                                             <asp:Label ID="lblRearks" runat="server" Text="Remarks"></asp:Label>
                                             <asp:TextBox ID="txtProjRemarks" runat="server" Width="100%" TextMode="MultiLine" Rows="3" Columns="10" Height="50px">	
                                                     	
@@ -1490,10 +1546,10 @@
                                         <div class="col-md-12" id="divSubmitButton">
                                             <asp:Label ID="lbl_quotestatusmsg" runat="server" Text="" Font-Bold="true" ForeColor="Red" Font-Size="Medium"></asp:Label>
                                             <asp:Label ID="lbl_ApprovalMSg" runat="server" Text="" Font-Bold="true" ForeColor="Red" Font-Size="Medium"></asp:Label>
-                                            <dxe:ASPxButton ID="btn_SaveRecords" ClientInstanceName="cbtn_SaveRecords" runat="server" AutoPostBack="False" Text="S&#818;ave & New" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
+                                            <dxe:ASPxButton ID="btn_SaveRecords" ClientInstanceName="cbtn_SaveRecords" runat="server" AutoPostBack="False" Text="S&#818;ave & New" CssClass="btn btn-success" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {Save_ButtonClick();}" />
                                             </dxe:ASPxButton>
-                                            <dxe:ASPxButton ID="ASPxButton1" ClientInstanceName="cbtn_SaveRecords" runat="server" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
+                                            <dxe:ASPxButton ID="ASPxButton1" ClientInstanceName="cbtn_SaveRecords" runat="server" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-success" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {SaveExit_ButtonClick();}" />
                                             </dxe:ASPxButton>
                                             <%--   <asp:Button ID="ASPxButton2" runat="server" Text="UDF" CssClass="btn btn-primary" OnClientClick="if(OpenUdf()){ return false;}" />--%>
@@ -2599,6 +2655,7 @@
             <%--Debu Section End--%>
         </asp:Panel>
         <asp:HiddenField ID="hidIsLigherContactPage" runat="server" />
+    </div>
     </div>
     <div>
         <asp:HiddenField runat="server" ID="HDItemLevelTaxDetails" />

@@ -803,11 +803,7 @@ namespace BusinessLogicLayer
                     else 
                     {
                         doc = XDs.GetXmlDocument();
-                        try
-                        {
-                            string value = doc.SelectSingleNode(XmlNodes[GetCurrentNodeIndex]).Value.ToString();
-                        }
-                        catch { break; }
+                        string value = doc.SelectSingleNode(XmlNodes[GetCurrentNodeIndex]).Value.ToString();
                         string value1 = XmlAttributeValue[GetCurrentNodeIndex];
                         if (doc.SelectSingleNode(XmlNodes[GetCurrentNodeIndex]).Value.ToString() == XmlAttributeValue[GetCurrentNodeIndex])
                             GetCurrentNodeIndex++;

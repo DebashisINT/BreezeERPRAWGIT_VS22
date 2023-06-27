@@ -1,4 +1,12 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="SalesInquiryAdd.aspx.cs" EnableEventValidation="false" Inherits="ERP.OMS.Management.Activities.SalesInquiryAdd" %>
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                05-04-2023        2.0.37           Pallab              25846: Add Sales Inquiry module design modification
+2.0                21-06-2023        2.0.38           Sanchita            Some of the issues are there in Sales Invoice regarding 
+                                                                          Multi UOM in EVAC - FOR ALL SALES MODULES. Refer : 26403
+3.0   Pallab     V2.0.38     16-06-2023     "Multi UOM Details" popup parameter alignment issue fix . Mantis : 26331
+====================================================== Revision History =============================================--%>
+
+<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="SalesInquiryAdd.aspx.cs" EnableEventValidation="false" Inherits="ERP.OMS.Management.Activities.SalesInquiryAdd" %>
 
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
     Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
@@ -202,6 +210,11 @@
                             $("#chkUpdateRow").prop('checked', false);
                             $("#chkUpdateRow").removeAttr("checked");
                             // End of Mantis Issue 24428
+                            // Rev 2.0
+                            document.getElementById('lblInfoMsg').innerHTML = "";
+                            cbtn_SaveRecords_N.SetVisible(false);
+                            cbtn_SaveRecords_p.SetVisible(false);
+                            // End of Rev 2.0
                             cPopup_MultiUOM.Show();
                             cgrid_MultiUOM.cpDuplicateAltUOM = "";
                             AutoPopulateMultiUOM();
@@ -392,11 +405,16 @@
         // Mantis Issue 24428 
         function CalcBaseQty() {
              //debugger;
-           
+
             //var PackingQtyAlt = Productdetails.split("||@||")[20];  // Alternate UOM selected from Product Master (tbl_master_product_packingDetails.packing_quantity)
             //var PackingQty = Productdetails.split("||@||")[22];  // Alternate UOM selected from Product Master (tbl_master_product_packingDetails.sProduct_quantity)
            // var PackingSaleUOM = Productdetails.split("||@||")[25];  // Alternate UOM selected from Product Master (tbl_master_product_packingDetails.packing_saleUOM)
-           
+
+            // Rev 2.0
+            LoadingPanelMultiUOM.Show();
+            document.getElementById('lblInfoMsg').innerHTML = "";
+            // End of Rev 2.0
+
             var Productdetails = (grid.GetEditor('ProductID').GetText() != null) ? grid.GetEditor('ProductID').GetText() : "0";
             var PackingQtyAlt = 0;
             var PackingQty = 0;
@@ -412,6 +430,9 @@
                 data: JSON.stringify({ ProductID: ProductID }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
+                // Rev 2.0
+                async: false,
+                // End of Rev 2.0
                 success: function (msg) {
 
                     if (msg.d.length != 0) {
@@ -446,14 +467,22 @@
                         if (ConvFact > 0) {
                             var BaseQty = (altQty * ConvFact).toFixed(4);
                             $("#UOMQuantity").val(BaseQty);
+                            // Rev 2.0
+                            CalcBaseRate();
+                            // End of Rev 2.0
                         }
                     }
                     else {
                         $("#UOMQuantity").val("0.0000");
+                        // Rev 2.0
+                        document.getElementById('lblInfoMsg').innerHTML = "Base Quantity will not get auto calculated since no UOM Conversion details given for the selected Alt. UOM for Product : " + grid.GetEditor('Description').GetText();
+                        // End of Rev 2.0
                     }
                 }
             });
-
+            // End of Rev 2.0
+            LoadingPanelMultiUOM.Hide();
+            // End of Rev 2.0
           
         }
 
@@ -595,7 +624,449 @@
 
     </script>
 
+    <style>
+        /*Rev 1.0*/
 
+        select
+        {
+            height: 30px !important;
+            border-radius: 4px !important;
+            -webkit-appearance: none;
+            position: relative;
+            z-index: 1;
+            background-color: transparent;
+            padding-left: 10px !important;
+            padding-right: 22px !important;
+        }
+
+        select#ddlInventory
+        {
+            -webkit-appearance: auto;
+        }
+
+        .dxeButtonEditSys.dxeButtonEdit_PlasticBlue , .dxeTextBox_PlasticBlue
+        {
+            height: 30px;
+            border-radius: 4px;
+        }
+
+        .dxeButtonEditButton_PlasticBlue
+        {
+            background: #094e8c !important;
+            border-radius: 4px !important;
+            padding: 0 4px !important;
+        }
+
+        .calendar-icon {
+            position: absolute;
+            bottom: 6px;
+            right: 20px;
+            z-index: 0;
+            cursor: pointer;
+        }
+
+        #FormDate , #toDate , #dtTDate , #dt_PLQuote , #dt_PlQuoteExpiry
+        {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        .dxeDisabled_PlasticBlue
+        {
+            z-index: 0 !important;
+        }
+
+        #FormDate_B-1 , #toDate_B-1 , #dtTDate_B-1 , #dt_PLQuote_B-1 , #dt_PlQuoteExpiry_B-1
+        {
+            background: transparent !important;
+            border: none;
+            width: 30px;
+            padding: 10px !important;
+        }
+
+        #FormDate_B-1 #FormDate_B-1Img , #toDate_B-1 #toDate_B-1Img , #dtTDate_B-1 #dtTDate_B-1Img , #dt_PLQuote_B-1 #dt_PLQuote_B-1Img ,
+        #dt_PlQuoteExpiry_B-1 #dt_PlQuoteExpiry_B-1Img
+        {
+            display: none;
+        }
+
+        .dxtcLite_PlasticBlue > .dxtc-stripContainer .dxtc-activeTab, .dxgvFooter_PlasticBlue
+        {
+            background: #1b5ea4 !important;
+        }
+
+        .simple-select::after {
+            /*content: '<';*/
+            content: url(../../../assests/images/left-arw.png);
+            position: absolute;
+            top: 34px;
+            right: 13px;
+            font-size: 16px;
+            transform: rotate(269deg);
+            font-weight: 500;
+            background: #094e8c;
+            color: #fff;
+            height: 18px;
+            display: block;
+            width: 26px;
+            /* padding: 10px 0; */
+            border-radius: 4px;
+            text-align: center;
+            line-height: 18px;
+            z-index: 0;
+        }
+        .simple-select {
+            position: relative;
+                z-index: 0;
+        }
+        .simple-select:disabled::after
+        {
+            background: #1111113b;
+        }
+        select.btn
+        {
+            padding-right: 10px !important;
+        }
+
+        .panel-group .panel
+        {
+            box-shadow: 1px 1px 8px #1111113b;
+            border-radius: 8px;
+        }
+
+        .dxpLite_PlasticBlue .dxp-current
+        {
+            background-color: #1b5ea4;
+            padding: 3px 5px;
+            border-radius: 2px;
+        }
+
+        #accordion {
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        .dxgvHeader_PlasticBlue {
+    background: #1b5ea4 !important;
+    color: #fff !important;
+}
+        #ShowGrid
+        {
+            margin-top: 10px;
+        }
+
+        .pt-25{
+                padding-top: 25px !important;
+        }
+
+        .styled-checkbox {
+        position: absolute;
+        opacity: 0;
+        z-index: 1;
+    }
+
+        .styled-checkbox + label {
+            position: relative;
+            /*cursor: pointer;*/
+            padding: 0;
+            margin-bottom: 0 !important;
+        }
+
+            .styled-checkbox + label:before {
+                content: "";
+                margin-right: 6px;
+                display: inline-block;
+                vertical-align: text-top;
+                width: 16px;
+                height: 16px;
+                /*background: #d7d7d7;*/
+                margin-top: 2px;
+                border-radius: 2px;
+                border: 1px solid #c5c5c5;
+            }
+
+        .styled-checkbox:hover + label:before {
+            background: #094e8c;
+        }
+
+
+        .styled-checkbox:checked + label:before {
+            background: #094e8c;
+        }
+
+        .styled-checkbox:disabled + label {
+            color: #b8b8b8;
+            cursor: auto;
+        }
+
+            .styled-checkbox:disabled + label:before {
+                box-shadow: none;
+                background: #ddd;
+            }
+
+        .styled-checkbox:checked + label:after {
+            content: "";
+            position: absolute;
+            left: 3px;
+            top: 9px;
+            background: white;
+            width: 2px;
+            height: 2px;
+            box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white, 4px -6px 0 white, 4px -8px 0 white;
+            transform: rotate(45deg);
+        }
+
+        .dxgvEditFormDisplayRow_PlasticBlue td.dxgv, .dxgvDataRow_PlasticBlue td.dxgv, .dxgvDataRowAlt_PlasticBlue td.dxgv, .dxgvSelectedRow_PlasticBlue td.dxgv, .dxgvFocusedRow_PlasticBlue td.dxgv
+        {
+            padding: 6px 6px 6px !important;
+        }
+
+        #lookupCardBank_DDD_PW-1
+        {
+                left: -182px !important;
+        }
+        .plhead a>i
+        {
+                top: 9px;
+        }
+
+        .clsTo
+        {
+            display: flex;
+    align-items: flex-start;
+        }
+
+        input[type="radio"], input[type="checkbox"]
+        {
+            margin-right: 5px;
+        }
+        .dxeCalendarDay_PlasticBlue
+        {
+                padding: 6px 6px;
+        }
+
+        .modal-dialog
+        {
+            width: 50%;
+        }
+
+        .modal-header
+        {
+            padding: 8px 4px 8px 10px;
+            background: #094e8c !important;
+        }
+
+        .TableMain100 #ShowGrid , .TableMain100 #ShowGridList , .TableMain100 #ShowGridRet , .TableMain100 #ShowGridLocationwiseStockStatus 
+        
+        {
+            max-width: 98% !important;
+        }
+
+        /*div.dxtcSys > .dxtc-content > div, div.dxtcSys > .dxtc-content > div > div
+        {
+            width: 95% !important;
+        }*/
+
+        .btn-info
+        {
+                background-color: #1da8d1 !important;
+                background-image: none;
+        }
+
+        .for-cust-icon {
+            position: relative;
+            z-index: 1;
+        }
+
+        .dxeDisabled_PlasticBlue, .aspNetDisabled
+        {
+            background: #f3f3f3 !important;
+        }
+
+        .dxeButtonDisabled_PlasticBlue
+        {
+            background: #b5b5b5 !important;
+            border-color: #b5b5b5 !important;
+        }
+
+        #ddlValTech
+        {
+            width: 100% !important;
+            margin-bottom: 0 !important;
+        }
+
+        .dis-flex
+        {
+            display: flex;
+            align-items: baseline;
+        }
+
+        input + label
+        {
+            line-height: 1;
+                margin-top: 3px;
+        }
+
+        .dxtlHeader_PlasticBlue
+        {
+            background: #094e8c !important;
+        }
+
+        .dxeBase_PlasticBlue .dxichCellSys
+        {
+            padding-top: 2px !important;
+        }
+
+        .pBackDiv
+        {
+            border-radius: 10px;
+            box-shadow: 1px 1px 10px #1111112e;
+        }
+        .HeaderStyle th
+        {
+            padding: 5px;
+        }
+
+        .for-cust-icon {
+            position: relative;
+            z-index: 1;
+        }
+
+        .dxtcLite_PlasticBlue.dxtc-top > .dxtc-stripContainer
+        {
+            padding-top: 15px;
+        }
+
+        .pt-2
+        {
+            padding-top: 5px;
+        }
+        .pt-10
+        {
+            padding-top: 10px;
+        }
+
+        .pt-15
+        {
+            padding-top: 15px;
+        }
+
+        .pb-10
+        {
+            padding-bottom: 10px;
+        }
+
+        .pTop10 {
+    padding-top: 20px;
+}
+        .custom-padd
+        {
+            padding-top: 4px;
+    padding-bottom: 10px;
+        }
+
+        input + label
+        {
+                margin-right: 10px;
+        }
+
+        .btn
+        {
+            margin-bottom: 0;
+        }
+
+        .pl-10
+        {
+            padding-left: 10px;
+        }
+
+        /*.col-md-3>label, .col-md-3>span
+        {
+            margin-top: 0 !important;
+        }*/
+
+        .devCheck
+        {
+            margin-top: 5px;
+        }
+
+        .mtc-5
+        {
+            margin-top: 5px;
+        }
+
+        .mtc-10
+        {
+            margin-top: 10px;
+        }
+
+        select.btn
+        {
+           position: relative;
+           z-index: 0;
+        }
+
+        select
+        {
+            margin-bottom: 0;
+        }
+
+        .form-control
+        {
+            background-color: transparent;
+        }
+
+        #massrecdt
+        {
+            width: 100%;
+        }
+
+        .col-sm-3{
+            margin-bottom: 10px;
+        }
+
+        .crossBtn
+        {
+            top: 25px;
+                right: 25px;
+        }
+
+        input[type="text"], input[type="password"], textarea
+        {
+                margin-bottom: 0;
+        }
+
+        #txtQuantity_ET
+        {
+            height: 30px;
+        }
+
+        @media only screen and (max-width: 1380px) and (min-width: 1300px)
+        {
+            #Popup_MultiUOM_PW-1 , #Popup_Warehouse_PW-1 , #Popup_Taxes_PW-1 , #aspxTaxpopUp_PW-1 , #Popup_InlineRemarks_PW-1
+            {
+                position:fixed !important;
+                left: 15% !important;
+                top: 60px !important;
+            }
+        }
+
+        /*Rev 3.0*/
+        .mlableWh
+        {
+            width: 120px !important;
+            padding-top: 25px !important;
+        }
+
+        .mlableWh .dxeBase_PlasticBlue , .mlableWh label
+        {
+            line-height: 13px !important;
+        }
+        /*End of Rev 3.0*/
+
+        /*Rev end 1.0*/
+        </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <%-- Subhra Section Start--%>
@@ -689,8 +1160,9 @@
 
         <HeaderStyle BackColor="LightGray" ForeColor="Black" />
     </dxe:ASPxPopupControl>
-
-    <div class="panel-title clearfix">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-title clearfix">
         <h3 class="pull-left">
             <asp:Label ID="lblHeadTitle" Text="" runat="server"></asp:Label>
             <%--<label>Add Proforma Invoice/ Quotation</label>--%>
@@ -779,7 +1251,7 @@
 
         <div id="Cross_CloseWindow" runat="server" class="crossBtn"><a href="" onclick=""><i class="fa fa-times"></i></a></div>
     </div>
-    <div class="form_main">
+        <div class="form_main">
         <asp:Panel ID="pnl_quotation" runat="server">
             <div class="row">
                 <dxe:ASPxPageControl ID="ASPxPageControl1" runat="server" ClientInstanceName="page" Width="100%">
@@ -807,8 +1279,9 @@
                                                 <asp:ListItem Text="All Item" Value="B" />
                                             </asp:DropDownList>
                                         </div>
-                                        <div class="col-md-3" id="divScheme" runat="server">
-                                            <dxe:ASPxLabel ID="lbl_NumberingScheme" Width="120px" runat="server" Text="Numbering Scheme">
+                                        <%--Rev 1.0: "simple-select" class add --%>
+                                        <div class="col-md-3  simple-select" id="divScheme" runat="server">
+                                            <dxe:ASPxLabel ID="lbl_NumberingScheme" Width="160px" runat="server" Text="Numbering Scheme">
                                             </dxe:ASPxLabel>
                                             <asp:DropDownList ID="ddl_numberingScheme" runat="server" Width="100%" TabIndex="1">
                                             </asp:DropDownList>
@@ -826,7 +1299,8 @@
                                                 <img id="1gridHistory_DXPEForm_efnew_DXEFL_DXEditor2_EI" class="dxEditors_edtError_PlasticBlue" src="/DXR.axd?r=1_36-tyKfc" title="Duplicate number">
                                             </span>
                                         </div>
-                                        <div class="col-md-3">
+                                        <%--Rev 1.0: "for-cust-icon" class add --%>
+                                        <div class="col-md-3 for-cust-icon">
                                             <dxe:ASPxLabel ID="ASPxLabel2" runat="server" Text="Posting Date" Width="120px" CssClass="inline">
                                             </dxe:ASPxLabel>
                                             <dxe:ASPxDateEdit ID="dt_PLQuote" runat="server" Date="" Width="100%" EditFormatString="dd-MM-yyyy" ClientInstanceName="tstartdate" TabIndex="3" UseMaskBehavior="True">
@@ -834,6 +1308,9 @@
                                             </dxe:ASPxDateEdit>
                                             <span id="MandatorysDate" style="display: none" class="validclass">
                                                 <img id="1gridHistory_DXPEForm_efnew_DXEFL_DXEditor2_EI" class="dxEditors_edtError_PlasticBlue" src="/DXR.axd?r=1_36-tyKfc" title="Mandatory"></span>
+                                            <%--Rev 1.0--%>
+                                            <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                            <%--Rev end 1.0--%>
                                         </div>
                                         <div style="clear: both"></div>
                                         <div class="col-md-3">
@@ -848,8 +1325,12 @@
                                             <span id="MandatoryEgSDate" style="display: none" class="validclass">
                                                 <img id="2gridHistory_DXPEForm_efnew_DXEFL_DXEditor12_EI" class="dxEditors_edtError_PlasticBlue" src="/DXR.axd?r=1_36-tyKfc"
                                                     title="Expiry Date must be greater than or equal to Proformat Date."></span>
+                                            <%--Rev 1.0--%>
+                                            <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                            <%--Rev end 1.0--%>
                                         </div>
-                                        <div class="col-md-3">
+                                        <%--Rev 1.0: "simple-select" class add --%>
+                                        <div class="col-md-3 simple-select">
                                             <dxe:ASPxLabel ID="lbl_Branch" runat="server" Text="Branch">
                                             </dxe:ASPxLabel>
                                             <asp:DropDownList ID="ddl_Branch" runat="server" Width="100%" TabIndex="5">
@@ -958,7 +1439,8 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="row">
-                                                <div class="col-md-6 lblmTop8">
+                                                <%--Rev 1.0: "simple-select" class add --%>
+                                                <div class="col-md-6 lblmTop8 simple-select">
                                                     <dxe:ASPxLabel ID="lbl_Currency" runat="server" Text="Currency">
                                                     </dxe:ASPxLabel>
                                                     <asp:DropDownList ID="ddl_Currency" runat="server" Width="100%" TabIndex="10">
@@ -1387,7 +1869,7 @@
                                             </dxe:ASPxGridView>
                                         </div>
                                         <%-- Rev Rajdip --%>
-                                        <div class="content reverse horizontal-images clearfix" style="width: 100%; margin-right: 0; padding: 8px; height: auto; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; border-radius: 0;">
+                                        <div class="content reverse horizontal-images clearfix" style="width: 100%; margin-right: 0; padding: 8px 15px; height: auto; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; border-radius: 0; margin-top: 15px;">
                                             <ul>
                                                 <li class="clsbnrLblTotalQty">
                                                     <div class="horizontallblHolder">
@@ -1572,12 +2054,20 @@
                                         <br />
                                         <div class="col-md-12" id="divSubmitButton">
                                             <asp:Label ID="lbl_quotestatusmsg" runat="server" Text="" Font-Bold="true" ForeColor="Red" Font-Size="Medium"></asp:Label>
-                                            <dxe:ASPxButton ID="btn_SaveRecords" ClientInstanceName="cbtn_SaveRecords" runat="server" AutoPostBack="False" Text="S&#818;ave & New" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
+                                            <%--Rev 2.0--%>
+                                            <%--<dxe:ASPxButton ID="btn_SaveRecords" ClientInstanceName="cbtn_SaveRecords" runat="server" AutoPostBack="False" Text="S&#818;ave & New" CssClass="btn btn-success" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {Save_ButtonClick();}" />
                                             </dxe:ASPxButton>
-                                            <dxe:ASPxButton ID="ASPxButton1" ClientInstanceName="cbtn_SaveRecords" runat="server" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
+                                            <dxe:ASPxButton ID="ASPxButton1" ClientInstanceName="cbtn_SaveRecords" runat="server" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-success" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
+                                                <ClientSideEvents Click="function(s, e) {SaveExit_ButtonClick();}" />
+                                            </dxe:ASPxButton>--%>
+                                            <dxe:ASPxButton ID="btn_SaveRecords" ClientInstanceName="cbtn_SaveRecords_N" runat="server" AutoPostBack="False" Text="S&#818;ave & New" CssClass="btn btn-success" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
+                                                <ClientSideEvents Click="function(s, e) {Save_ButtonClick();}" />
+                                            </dxe:ASPxButton>
+                                            <dxe:ASPxButton ID="ASPxButton1" ClientInstanceName="cbtn_SaveRecords_p" runat="server" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-success" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {SaveExit_ButtonClick();}" />
                                             </dxe:ASPxButton>
+                                            <%--End of Rev 2.0--%>
                                             <%--   <asp:Button ID="ASPxButton2" runat="server" Text="UDF" CssClass="btn btn-primary" OnClientClick="if(OpenUdf()){ return false;}" />--%>
                                             <dxe:ASPxButton ID="ASPxButton2" ClientInstanceName="cbtn_SaveRecords" runat="server" AutoPostBack="False" Text="U&#818;DF" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {if(OpenUdf()){ return false}}" />
@@ -2182,7 +2672,7 @@
                                                 Quantity
                                             </div>
                                             <div class="Left_Content" style="">
-                                                <dxe:ASPxTextBox ID="txtQuantity" runat="server" ClientInstanceName="ctxtQuantity" DisplayFormatString="0.0000" HorizontalAlign="Right" Font-Size="12px" Width="100%" Height="15px">
+                                                <dxe:ASPxTextBox ID="txtQuantity" runat="server" ClientInstanceName="ctxtQuantity" DisplayFormatString="0.0000" HorizontalAlign="Right" Font-Size="12px" Width="100%" Height="30px">
                                                     <MaskSettings Mask="<0..999999999999>.<0..9999>" IncludeLiterals="DecimalSymbol" />
                                                     <ClientSideEvents TextChanged="function(s, e) {SaveWarehouse();}" />
                                                 </dxe:ASPxTextBox>
@@ -2285,6 +2775,12 @@
                 <asp:HiddenField ID="hdnSalesManAgentId" runat="server" />
                 <asp:HiddenField runat="server" ID="uniqueId" />
                 <asp:HiddenField runat="server" ID="hdAddOrEdit" />
+                 <%--Rev 2.0--%>
+                <dxe:ASPxLoadingPanel ID="LoadingPanelMultiUOM" runat="server" ClientInstanceName="LoadingPanelMultiUOM" ContainerElementID="divMultiUOM"
+                    Modal="True">
+                </dxe:ASPxLoadingPanel>
+                 <%--End of Rev 2.0--%>
+
                 <dxe:ASPxGlobalEvents ID="GlobalEvents" runat="server">
                     <ClientSideEvents ControlsInitialized="AllControlInitilize" />
                 </dxe:ASPxGlobalEvents>
@@ -2701,6 +3197,7 @@
         </asp:Panel>
         <asp:HiddenField ID="hidIsLigherContactPage" runat="server" />
     </div>
+    </div>
     <div>
         <asp:HiddenField runat="server" ID="HDItemLevelTaxDetails" />
         <asp:HiddenField runat="server" ID="HDHSNCodewisetaxSchemid" />
@@ -2819,7 +3316,8 @@
         </ContentStyle>
         <ContentCollection>
             <dxe:PopupControlContentControl runat="server">
-                <div class="Top clearfix">
+                <%--Rev 2.0 [ id="divMultiUOM" added ] --%>
+                <div class="Top clearfix" id="divMultiUOM">
 
 
 
@@ -2836,7 +3334,10 @@
                                             <div>
                                                 <%--Rev Sanchita--%>
                                                 <%--<input type="text" id="UOMQuantity" style="text-align: right;" maxlength="18"  class="allownumericwithdecimal" />--%>
-                                                <input type="text" id="UOMQuantity" style="text-align: right;" maxlength="18"  class="allownumericwithdecimal"  onchange="CalcBaseRate();" placeholder="0.0000"  />
+                                                <%--Rev 2.0--%>
+                                                <%--<input type="text" id="UOMQuantity" style="text-align: right;" maxlength="18"  class="allownumericwithdecimal"  onchange="CalcBaseRate();" placeholder="0.0000"  />--%>
+                                                <input type="text" id="UOMQuantity" style="text-align: right;" maxlength="18"  class="allownumericwithdecimal"  onfocusout="CalcBaseRate();" placeholder="0.0000"  />
+                                                <%--End of Rev 2.0--%>
                                                 <%--End of Rev Sanchita--%>
                                             </div>
                                         </div>
@@ -2861,7 +3362,10 @@
                                             <label>Base Rate </label>
                                         </div>
                                         <div>
-                                            <dxe:ASPxTextBox ID="cmbBaseRate" runat="server" Width="80px" ClientInstanceName="ccmbBaseRate" DisplayFormatString="0.000" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..999&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right" ReadOnly="true" ></dxe:ASPxTextBox>
+                                            <%--Rev 2.0--%>
+                                            <%--<dxe:ASPxTextBox ID="cmbBaseRate" runat="server" Width="80px" ClientInstanceName="ccmbBaseRate" DisplayFormatString="0.000" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..999&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right" ReadOnly="true" ></dxe:ASPxTextBox>--%>
+                                            <dxe:ASPxTextBox ID="cmbBaseRate" runat="server" Width="80px" ClientInstanceName="ccmbBaseRate" DisplayFormatString="0.00" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..99&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right" ReadOnly="true" ></dxe:ASPxTextBox>
+                                            <%--End of Rev 2.0--%>
                                         </div>
                                     </div>
                                 </td>
@@ -2891,7 +3395,10 @@
                                             <%--  <input type="text" id="AltUOMQuantity" style="text-align:right;"  maxlength="18" class="allownumericwithdecimal"/> --%>
                                             <dxe:ASPxTextBox ID="AltUOMQuantity" runat="server" ClientInstanceName="cAltUOMQuantity" DisplayFormatString="0.0000" MaskSettings-Mask="&lt;0..999999999&gt;.&lt;00..9999&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right">
                                                   <%--Mantis Issue 24428--%>
-                                                <ClientSideEvents TextChanged="function(s,e) { CalcBaseQty();}" />
+                                                <%--Rev 2.0--%>
+                                                <%--<ClientSideEvents TextChanged="function(s,e) { CalcBaseQty();}" />--%>
+                                                <ClientSideEvents LostFocus="function(s,e) { CalcBaseQty();}" />
+                                                <%--End of Rev 2.0--%>
                                                 <%--End of Mantis Issue 24428--%>
                                             </dxe:ASPxTextBox>
                                         </div>
@@ -2905,9 +3412,14 @@
                                             <label>Alt Rate </label>
                                         </div>
                                         <div>
-                                            <dxe:ASPxTextBox ID="cmbAltRate" Width="80px" runat="server" ClientInstanceName="ccmbAltRate" DisplayFormatString="0.000" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..999&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right"  >
+                                            <%--Rev 2.0--%>
+                                            <%--<dxe:ASPxTextBox ID="cmbAltRate" Width="80px" runat="server" ClientInstanceName="ccmbAltRate" DisplayFormatString="0.000" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..999&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right"  >
                                                 <ClientSideEvents TextChanged="function(s,e) { CalcBaseRate();}" />
+                                            </dxe:ASPxTextBox>--%>
+                                            <dxe:ASPxTextBox ID="cmbAltRate" Width="80px" runat="server" ClientInstanceName="ccmbAltRate" DisplayFormatString="0.00" MaskSettings-Mask="&lt;0..99999999&gt;.&lt;00..99&gt;" FocusedStyle-HorizontalAlign="Right" HorizontalAlign="Right"  >
+                                                <ClientSideEvents LostFocus="function(s,e) { CalcBaseRate();}" />
                                             </dxe:ASPxTextBox>
+                                            <%--End of Rev 2.0--%>
                                         </div>
                                     </div>
                                 </td>
@@ -2916,13 +3428,15 @@
                                         <div>
                                             
                                         </div>
-                                        <div>
+                                        <%--Rev 2.0 [ class="mlableWh" added] --%>
+                                        <div class="mlableWh" >
                                             <%--Rev Sanchita--%>
                                             <%--<label class="checkbox-inline mlableWh">
                                                 <input type="checkbox" id="chkUpdateRow"  />
                                               
                                             </label>--%>
-                                            <label class="checkbox-inline mlableWh">
+                                            <%--Rev 2.0 [ class="mlableWh" removed --%>
+                                            <label class="checkbox-inline ">
                                                 <input type="checkbox" id="chkUpdateRow"  />
                                                 <span style="margin: 0px 0; display: block">
                                                     <dxe:ASPxLabel ID="ASPxLabel18" runat="server" Text="Update Row">
@@ -2936,11 +3450,18 @@
                                     
                                 </td>
                                 <%--End of Mantis Issue 24428--%>
-                                <td style="padding-top: 14px;">
-                                    <dxe:ASPxButton ID="btnMUltiUOM" ClientInstanceName="cbtnMUltiUOM" Width="50px" runat="server" AutoPostBack="False" Text="Add" CssClass="btn btn-primary">
-                                        <ClientSideEvents Click="function(s, e) { if(!document.getElementById('myCheck').checked)  {SaveMultiUOM();}}" />
-                                    </dxe:ASPxButton>
-                                </td>
+                                <%--Rev 3.0--%>
+                                </tr>
+                                <tr>
+                                <%--End of Rev 3.0--%>
+                                    <td style="padding-top: 14px;">
+                                        <dxe:ASPxButton ID="btnMUltiUOM" ClientInstanceName="cbtnMUltiUOM" Width="50px" runat="server" AutoPostBack="False" Text="Add" CssClass="btn btn-primary">
+                                            <ClientSideEvents Click="function(s, e) { if(!document.getElementById('myCheck').checked)  {SaveMultiUOM();}}" />
+                                        </dxe:ASPxButton>
+                                    </td>
+                                <%--Rev 3.0--%>
+                                </tr>
+                                <%--End of Rev 3.0--%>
                             </tr>
                         </table>
 
@@ -3026,6 +3547,9 @@
                             <dxe:ASPxButton ID="ASPxButton7" ClientInstanceName="cbtnfinalUomSave" Width="50px" runat="server" AutoPostBack="False" Text="Save" CssClass="btn btn-primary">
                                 <ClientSideEvents Click="function(s, e) {FinalMultiUOM();}" />
                             </dxe:ASPxButton>
+                            <%--Rev 2.0--%>
+                            <label id="lblInfoMsg" style="font-weight:bold; color:red; " > </label>
+                            <%--End of Rev 2.0--%>
                         </div>
                     </div>
                 </div>

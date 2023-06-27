@@ -1,4 +1,9 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="CustomerPendingDeliveryList.aspx.cs" Inherits="ERP.OMS.Management.Activities.CustomerPendingDeliveryList"
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                11-04-2023        2.0.37           Pallab              25989: Customer Pending Delivery List module design modification & check in small device
+====================================================== Revision History =============================================--%>
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="CustomerPendingDeliveryList.aspx.cs" Inherits="ERP.OMS.Management.Activities.CustomerPendingDeliveryList"
     MasterPageFile="~/OMS/MasterPage/ERP.Master" %>
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
     Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
@@ -88,10 +93,43 @@
         });
     </script>
     <link href="CSS/CustomerPendingDeliveryList.css" rel="stylesheet" />
+
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        select
+        {
+            z-index: 0;
+        }
+
+        #GrdOrder {
+            max-width: 98% !important;
+        }
+        #FormDate, #toDate, #dtTDate, #dt_PLQuote, #dt_PlQuoteExpiry {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        select
+        {
+            -webkit-appearance: auto;
+        }
+
+        /*.calendar-icon
+        {
+                right: 10px;
+        }*/
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="panel-heading">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading">
         <div class="panel-title clearfix">
             <h3 class="pull-left">Customer Pending Delivery List</h3>
             <div id="pageheaderContent" class="scrollHorizontal pull-right wrapHolder content horizontal-images"  style="display:none;">
@@ -143,21 +181,28 @@
             <tr>
                 <td>
                     <label>From Date</label></td>
-                <td>
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>
                     <label>To Date</label>
                 </td>
-                <td>
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
-
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>Unit</td>
                 <td>
@@ -165,14 +210,14 @@
                     </dxe:ASPxComboBox>
                 </td>
                 <td>
-                    <input type="button" value="Show" class="btn btn-primary" onclick="updateGridByDate()" />
+                    <input type="button" value="Show" class="btn btn-success" onclick="updateGridByDate()" />
                 </td>
 
             </tr>
 
         </table>
     </div>
-    <div class="form_main">
+        <div class="form_main">
         <div class="clearfix">
             <%-- <% if (rights.CanAdd)
                { %>--%>
@@ -192,7 +237,7 @@
         </div>
     </div>
     
-    <div class="GridViewArea">
+        <div class="GridViewArea">
         <dxe:ASPxGridView ID="GrdOrder" runat="server" KeyFieldName="slno" AutoGenerateColumns="False"
             Width="100%" ClientInstanceName="cGrdOrder" OnCustomCallback="GrdOrder_CustomCallback" SettingsBehavior-AllowFocusedRow="true"
             OnDataBinding="GrdOrder_DataBinding"  SettingsDataSecurity-AllowEdit="false" SettingsDataSecurity-AllowInsert="false" SettingsDataSecurity-AllowDelete="false">
@@ -314,6 +359,7 @@
                 <asp:HiddenField ID="hfFromDate" runat="server" />
                 <asp:HiddenField ID="hfToDate" runat="server" />
                 <asp:HiddenField ID="hfBranchID" runat="server" />
+    </div>
     </div>
     <div>
         <dxe:ASPxGridViewExporter ID="exporter" runat="server" Landscape="false" PaperKind="A4" PageHeader-Font-Size="Larger" PageHeader-Font-Bold="true">

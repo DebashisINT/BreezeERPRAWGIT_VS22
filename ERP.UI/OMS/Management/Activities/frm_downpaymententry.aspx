@@ -1,4 +1,9 @@
-﻿<%@ Page Title="Finance Reconciliation" Language="C#" AutoEventWireup="true" MasterPageFile="~/OMS/MasterPage/ERP.Master" CodeBehind="frm_downpaymententry.aspx.cs" Inherits="ERP.OMS.Management.Activities.frm_downpaymententry" %>
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                11-04-2023        2.0.37           Pallab              25980: Finance Reconciliation module design modification & check in small device
+====================================================== Revision History =============================================--%>
+
+<%@ Page Title="Finance Reconciliation" Language="C#" AutoEventWireup="true" MasterPageFile="~/OMS/MasterPage/ERP.Master" CodeBehind="frm_downpaymententry.aspx.cs" Inherits="ERP.OMS.Management.Activities.frm_downpaymententry" %>
 
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
     Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
@@ -121,8 +126,31 @@
     </script>
     <script src="JS/frm_downpaymententry.js"></script>
     <link href="CSS/frm_downpaymententry.css" rel="stylesheet" />
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        .TableMain100 #ShowGrid, .TableMain100 #ShowGridList, .TableMain100 #ShowGridRet, .TableMain100 #ShowGridLocationwiseStockStatus, 
+        #downpaygrid {
+            max-width: 98% !important;
+        }
+        #FormDate, #toDate, #dtTDate, #dt_PLQuote, #dt_PlQuoteExpiry {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        select
+        {
+            -webkit-appearance: auto;
+        }
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
     <div class="panel-heading clearfix">
         <div class="panel-title pull-left">
             <h3 class="pull-left">Finance Reconciliation</h3>
@@ -131,20 +159,28 @@
             <tr>
                 <td>
                     <label>From Date</label></td>
-                <td>
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>
                     <label>To Date</label>
                 </td>
-                <td>
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>Unit</td>
                 <td>
@@ -157,14 +193,14 @@
             </tr>
         </table>
     </div>
-    <div class="form_main clearfix">
+    <div class="form_main clearfix mb-10">
         <% if (rights.CanAdd)
            { %>
-        <a href="javascript:void(0);" onclick="AddnewFinance()" class="btn btn-success btn-radius"><span><u>A</u>dd New</span> </a>
+        <a href="javascript:void(0);" onclick="AddnewFinance()" class="btn btn-success "><span><u>A</u>dd New</span> </a>
         <% } %>
         <% if (rights.CanExport)
            { %>
-        <asp:DropDownList ID="drdExport" runat="server" CssClass="btn btn-primary btn-radius" OnSelectedIndexChanged="cmbExport_SelectedIndexChanged" AutoPostBack="true" OnChange="if(!AvailableExportOption()){return false;}">
+        <asp:DropDownList ID="drdExport" runat="server" CssClass="btn btn-primary " OnSelectedIndexChanged="cmbExport_SelectedIndexChanged" AutoPostBack="true" OnChange="if(!AvailableExportOption()){return false;}">
             <asp:ListItem Value="0">Export to</asp:ListItem>
             <asp:ListItem Value="1">PDF</asp:ListItem>
             <asp:ListItem Value="2">XLS</asp:ListItem>
@@ -173,6 +209,7 @@
         </asp:DropDownList>
         <% } %>
     </div>
+        
     <div class="relative">
         <dxe:ASPxGridView ID="downpaygrid" runat="server" KeyFieldName="SrlNo" AutoGenerateColumns="False"
             Width="100%" ClientInstanceName="cdownpaygrid" SettingsBehavior-AllowFocusedRow="true"
@@ -309,6 +346,7 @@
         </dxe:ASPxGridView>
         <dx:LinqServerModeDataSource ID="EntityServerModeDataSource" runat="server" OnSelecting="EntityServerModeDataSource_Selecting"
             ContextTypeName="ERPDataClassesDataContext" TableName="v_FinanceReconciliationList" />
+    </div>
     </div>
     <dxe:ASPxGlobalEvents ID="GlobalEvents" runat="server">
         <ClientSideEvents ControlsInitialized="function(s,e){AllControlInitilize(s,e);}" />
@@ -585,7 +623,7 @@
                                         <asp:TextBox ID="txtNaration" runat="server"></asp:TextBox>
                                     </div>
                                     <div class="clear"></div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 mtc-5">
                                         <input type="button" value="Save" onclick="SaveOppening()" class="btn btn-primary" />
                                         <input type="button" value="Exit" onclick="Exit()" class="btn btn-danger" />
                                     </div>

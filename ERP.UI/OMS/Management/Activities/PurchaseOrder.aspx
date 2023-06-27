@@ -1,4 +1,9 @@
-﻿<%@ Page Title="PurchaseOrder" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="PurchaseOrder.aspx.cs"
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                17-04-2023        2.0.37           Pallab              25834: Add Purchase Order module design modification
+====================================================== Revision History =============================================--%>
+
+<%@ Page Title="PurchaseOrder" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="PurchaseOrder.aspx.cs"
     Inherits="ERP.OMS.Management.Activities.PurchaseOrder" EnableEventValidation="false" %>
 
 <%--<%@ Register Src="~/OMS/Management/Activities/UserControls/BillingShippingControl.ascx" TagPrefix="ucBS" TagName="BillingShippingControl" %>--%>
@@ -2620,10 +2625,92 @@ function acpContactPersonPhoneEndCall(s, e) {
         })
     </script>
     <%--End of Mantis Issue 25152--%>
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        select
+        {
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        #GrdSalesReturn {
+            max-width: 98% !important;
+        }
+        #FormDate , #toDate , #dtTDate , #dt_PLQuote , #dt_PLSales , #dt_SaleInvoiceDue , #dt_OADate , #dt_PODue
+        {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        #FormDate_B-1 , #toDate_B-1 , #dtTDate_B-1 , #dt_PLQuote_B-1 , #dt_PLSales_B-1 , #dt_SaleInvoiceDue_B-1 , #dt_OADate_B-1 , #dt_PODue_B-1
+        {
+            background: transparent !important;
+            border: none;
+            width: 30px;
+            padding: 10px !important;
+        }
+
+        #FormDate_B-1 #FormDate_B-1Img , #toDate_B-1 #toDate_B-1Img , #dtTDate_B-1 #dtTDate_B-1Img , #dt_PLQuote_B-1 #dt_PLQuote_B-1Img ,
+        #dt_PLSales_B-1 #dt_PLSales_B-1Img , #dt_SaleInvoiceDue_B-1 #dt_SaleInvoiceDue_B-1Img , #dt_OADate_B-1 #dt_OADate_B-1Img ,
+        #dt_PODue_B-1 #dt_PODue_B-1Img
+        {
+            display: none;
+        }
+
+        select
+        {
+            -webkit-appearance: none;
+        }
+        select#ddlInventory
+        {
+            -webkit-appearance: auto;
+        }
+
+        .calendar-icon
+        {
+                right: 20px;
+                bottom: 8px;
+        }
+        .padTabtype2 > tbody > tr > td
+        {
+            vertical-align: bottom;
+        }
+        #rdl_Salesquotation
+        {
+            margin-top: 0px;
+        }
+
+        .lblmTop8>span, .lblmTop8>label
+        {
+            margin-top: 0 !important;
+        }
+
+        .col-md-2, .col-md-4 {
+    margin-bottom: 10px;
+}
+
+        .simple-select::after
+        {
+                top: 26px;
+        }
+
+        input[disabled]
+        {
+            background: #f3f3f3;
+        }
+
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <%-- <script src="JS/SearchPopup.js"></script>--%>
-    <div class="panel-heading">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading">
         <div class="panel-title clearfix">
             <h3 class="pull-left">
                 <span class="">
@@ -2765,7 +2852,7 @@ function acpContactPersonPhoneEndCall(s, e) {
         </div>
 
     </div>
-    <div class="form_main">
+        <div class="form_main">
         <div class="row">
             <dxe:ASPxPageControl ID="ASPxPageControl1" runat="server" ClientInstanceName="page" Width="100%">
                 <TabPages>
@@ -2784,8 +2871,9 @@ function acpContactPersonPhoneEndCall(s, e) {
                                             <asp:ListItem Text="Service Item" Value="S" />
                                         </asp:DropDownList>
                                     </div>
-                                    <div class="col-md-2" runat="server" id="divNumberingScheme">
-                                        <dxe:ASPxLabel ID="lbl_NumberingScheme" Width="120px" runat="server" Text="Numbering Scheme">
+                                    <%--Rev 1.0: "simple-select" class add --%>
+                                    <div class="col-md-2 simple-select" runat="server" id="divNumberingScheme">
+                                        <dxe:ASPxLabel ID="lbl_NumberingScheme" Width="160px" runat="server" Text="Numbering Scheme">
                                         </dxe:ASPxLabel>
                                         <asp:DropDownList ID="ddl_numberingScheme" runat="server" Width="100%"
                                             DataTextField="SchemaName" DataValueField="Id" onchange="CmbScheme_ValueChange()">
@@ -2810,8 +2898,12 @@ function acpContactPersonPhoneEndCall(s, e) {
                                             <ClientSideEvents DateChanged="function(s, e) { TDateChange(e)}" GotFocus="function(s,e){cPLQuoteDate.ShowDropDown();}" />
                                         </dxe:ASPxDateEdit>
                                         <span id="MandatoryDate" class="PODate  pullleftClass fa fa-exclamation-circle iconRed " style="color: red; position: absolute; display: none" title="Mandatory"></span>
+                                        <%--Rev 1.0--%>
+                                        <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                        <%--Rev end 1.0--%>
                                     </div>
-                                    <div class="col-md-4">
+                                    <%--Rev 1.0: "simple-select" class add --%>
+                                    <div class="col-md-4 simple-select">
                                         <dxe:ASPxLabel ID="lbl_Branch" runat="server" Text="Unit">
                                         </dxe:ASPxLabel>
                                         <span style="color: red;">*</span>
@@ -2852,7 +2944,7 @@ function acpContactPersonPhoneEndCall(s, e) {
                                         </dxe:ASPxComboBox>
                                     </div>
                                     <div class="col-md-2 lblmTop8" id="indentRequisition" runat="server">
-                                        <asp:RadioButtonList ID="rdl_Salesquotation" runat="server" RepeatDirection="Horizontal" onchange="return selectValueForRadioBtn();" Width="85%">
+                                        <asp:RadioButtonList ID="rdl_Salesquotation" runat="server" RepeatDirection="Horizontal" onchange="return selectValueForRadioBtn();" Width="100%">
                                             <asp:ListItem Text="Indent" Value="Indent"></asp:ListItem>
                                             <asp:ListItem Text="Quotation" Value="Quotation"></asp:ListItem>
                                         </asp:RadioButtonList>
@@ -2933,7 +3025,8 @@ function acpContactPersonPhoneEndCall(s, e) {
                                                     <dxe:ASPxGridView runat="server" KeyFieldName="QuoteDetails_Id" ClientInstanceName="cgridproducts" ID="grid_Products"
                                                         Width="100%" SettingsBehavior-AllowSort="false" SettingsBehavior-AllowDragDrop="false" SettingsPager-Mode="ShowAllRecords" OnCustomCallback="cgridProducts_CustomCallback"
                                                         Settings-ShowFooter="false" AutoGenerateColumns="False" OnHtmlRowCreated="aspxGridProduct_HtmlRowCreated"
-                                                        OnRowInserting="Productgrid_RowInserting" OnRowUpdating="Productgrid_RowUpdating" OnRowDeleting="Productgrid_RowDeleting" Settings-VerticalScrollableHeight="300" Settings-VerticalScrollBarMode="Visible">
+                                                        OnRowInserting="Productgrid_RowInserting" OnRowUpdating="Productgrid_RowUpdating" OnRowDeleting="Productgrid_RowDeleting" Settings-VerticalScrollableHeight="300" 
+                                                        Settings-VerticalScrollBarMode="Visible" OnDataBinding="grid_Products_DataBinding">
 
                                                         <SettingsBehavior AllowDragDrop="False" AllowSort="False"></SettingsBehavior>
                                                         <SettingsPager Visible="false"></SettingsPager>
@@ -2958,7 +3051,7 @@ function acpContactPersonPhoneEndCall(s, e) {
                                                             </dxe:GridViewDataTextColumn>
 
                                                         </Columns>
-
+                                                        <Settings ShowFilterRow="true" ShowFilterRowMenu="true" />
                                                         <SettingsDataSecurity AllowEdit="true" />
                                                         <ClientSideEvents EndCallback="gridProducts_EndCallback" />
                                                     </dxe:ASPxGridView>
@@ -3048,7 +3141,8 @@ function acpContactPersonPhoneEndCall(s, e) {
 
 
                                     <div style="clear: both"></div>
-                                    <div class="col-md-2 lblmTop8">
+                                    <%--Rev 1.0: "simple-select" class add --%>
+                                    <div class="col-md-2 lblmTop8 simple-select">
                                         <dxe:ASPxLabel ID="lbl_Currency" runat="server" Text="Currency">
                                         </dxe:ASPxLabel>
                                         <asp:DropDownList ID="ddl_Currency" runat="server" Width="100%"
@@ -3064,7 +3158,8 @@ function acpContactPersonPhoneEndCall(s, e) {
                                             <ClientSideEvents LostFocus="ReBindGrid_Currency" />
                                         </dxe:ASPxTextBox>
                                     </div>
-                                    <div class="col-md-2 lblmTop8">
+                                    <%--Rev 1.0: "simple-select" class add --%>
+                                    <div class="col-md-2 lblmTop8 simple-select">
                                         <dxe:ASPxLabel ID="lbl_AmountAre" runat="server" Text="Amounts are">
                                         </dxe:ASPxLabel>
                                         <dxe:ASPxComboBox ID="ddl_AmountAre" runat="server" ClientIDMode="Static" ClientInstanceName="cddl_AmountAre" Width="100%" Native="true">
@@ -3100,7 +3195,9 @@ function acpContactPersonPhoneEndCall(s, e) {
                                                     <ClientSideEvents GotFocus="function(s,e){cdt_PODue.ShowDropDown();}" LostFocus="function(s, e) { SetFocusonGrid(e)}" />
                                                 </dxe:ASPxDateEdit>
                                                 <span id="MandatoryDueDate" class="PODueDate  pullleftClass fa fa-exclamation-circle iconRed " style="color: red; position: absolute; display: none" title="Mandatory"></span>
-
+                                                <%--Rev 1.0--%>
+                                                <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                                <%--Rev end 1.0--%>
                                             </div>
                                             <div class="col-md-4 lblmTop8">
                                                 <dxe:ASPxLabel ID="ASPxLabel1" runat="server" Text="Place of Supply[GST]">
@@ -3615,10 +3712,10 @@ function acpContactPersonPhoneEndCall(s, e) {
                                         <div class="pull-left">
                                             <asp:Label ID="lbl_quotestatusmsg" runat="server" Text="" Font-Bold="true" ForeColor="Red" Font-Size="Medium"></asp:Label>
                                             <dxe:ASPxButton ID="btn_SaveRecords" ClientInstanceName="cbtn_SaveRecords" runat="server" AutoPostBack="False" Text="S&#818;ave & New"
-                                                CssClass="btn btn-primary" UseSubmitBehavior="False">
+                                                CssClass="btn btn-success" UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {Save_ButtonClick();}" />
                                             </dxe:ASPxButton>
-                                            <dxe:ASPxButton ID="btnSaveExit" ClientInstanceName="cbtn_SaveRecordExits" runat="server" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
+                                            <dxe:ASPxButton ID="btnSaveExit" ClientInstanceName="cbtn_SaveRecordExits" runat="server" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-success" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {SaveExit_ButtonClick();}" />
                                             </dxe:ASPxButton>
                                             <dxe:ASPxButton ID="btnSaveUdf" ClientInstanceName="cbtn_SaveUdf" runat="server" AutoPostBack="False" Text="U&#818;DF" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
@@ -4899,6 +4996,7 @@ function acpContactPersonPhoneEndCall(s, e) {
                 <asp:Parameter Name="City" Type="string" />
             </SelectParameters>
         </asp:SqlDataSource>--%>
+    </div>
     </div>
     <dxe:ASPxLoadingPanel ID="LoadingPanel" runat="server" ClientInstanceName="LoadingPanel"
         Modal="True">

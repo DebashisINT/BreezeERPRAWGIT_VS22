@@ -1,4 +1,8 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="PurchaseChallanList_Stock.aspx.cs" Inherits="ERP.OMS.Management.Activities.PurchaseChallanList_Stock" %>
+﻿<%--=======================================================Revision History=======================================    
+    1.0   Pallab    V2.0.38   20-04-2023      25869: Purchase GRN (Stock Correction) module design modification
+=========================================================End Revision History=====================================--%>
+
+<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="PurchaseChallanList_Stock.aspx.cs" Inherits="ERP.OMS.Management.Activities.PurchaseChallanList_Stock" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <%--Code Added By Sandip For Approval Detail Section Start--%>
@@ -38,9 +42,42 @@
         }
     </style>
     <script src="JS/PurchaseChallanList_Stock.js?1.0"></script>
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        select
+        {
+            z-index: 0;
+        }
+
+        #Grid_PurchaseChallan {
+            max-width: 99% !important;
+        }
+        #FormDate, #toDate, #dtTDate, #dt_PLQuote, #dt_PlQuoteExpiry {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        select
+        {
+            -webkit-appearance: auto;
+        }
+
+        .calendar-icon
+        {
+                right: 18px;
+        }
+        
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="panel-heading clearfix">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main">
+        <div class="panel-heading clearfix">
         <div class="panel-title pull-left" id="td_contact1" runat="server">
             <h3>
                 <asp:Label ID="lblHeadTitle" runat="server" Text="Purchase GRN (Stock Correction)"></asp:Label>
@@ -51,20 +88,28 @@
                 <td>
                     <label>From </label>
                 </td>
-                <td style="width: 150px">
+                <%--Rev 1.0: "for-cust-icon" class add--%>
+                <td style="width: 150px" class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>
                     <label>To </label>
                 </td>
-                <td style="width: 150px">
+                <%--Rev 1.0: "for-cust-icon" class add--%>
+                <td style="width: 150px" class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>Unit</td>
                 <td>
@@ -80,7 +125,7 @@
         </table>
     </div>
 
-    <div class="form_main clearfix" id="btnAddNew">
+        <div class="form_main clearfix" id="btnAddNew">
         <div style="float: left; padding-right: 5px;">
             <div style="display: none;">
                 <% if (rights.CanAdd)
@@ -122,7 +167,7 @@
         </div>
     </div>
 
-    <div class="relative">
+        <div class="relative">
         <div class="makeFullscreen ">
          <span class="fullScreenTitle">Purchase GRN (Stock Correction)</span>
          <span class="makeFullscreen-icon half hovered " data-instance="CgvPurchaseOrder" title="Maximize Grid" id="expandCgvPurchaseOrder">
@@ -226,7 +271,7 @@
             </dxe:ASPxGridViewExporter>
         </div>
     </div>
-
+    </div>
     <%--DEBASHIS--%>
     <div class="PopUpArea">
         <dxe:ASPxPopupControl ID="ASPxDocumentsPopup" runat="server" ClientInstanceName="cDocumentsPopup"

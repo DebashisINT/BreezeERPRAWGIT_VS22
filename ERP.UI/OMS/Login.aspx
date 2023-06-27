@@ -3,6 +3,8 @@
 Rev Number         DATE              VERSION          DEVELOPER           CHANGES
 1.0                12-01-2023        2.0.35           Pallab              Change login url attached image(Image show when url share in social media)
 2.0                08-02-2023        2.0.35           Pallab              New team member names add
+3.0                19-04-2023        2.0.38           Pallab              25856: Login page error fix
+4.0                04-05-2023        2.0.38           Pallab              25935: Event banner should dynamically change according to the date for ERP
 ====================================================== Revision History ===========================================================--%>
 
 <%@ Page Language="C#" AutoEventWireup="true" Inherits="pLogin"
@@ -892,7 +894,10 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
             })
         })
         window.addEventListener('load', function (event) {
-            var theme = localStorage.getItem('theme').toString();
+            /*Rev 3.0*/
+            /*var theme = localStorage.getItem('theme').toString();*/
+            var theme = localStorage.getItem('theme');
+            /*Rev end 3.0*/
             console.log(theme)
             if (theme != '' || theme != undefined) {
                 $("#themeClass").attr('class', '').addClass(theme);
@@ -1320,8 +1325,13 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                     <img src="/assests/images/logo.png"  />
                   </div>
                   <div class="event-img">
-                    <img src="/assests/images/event-banner.jpg"  />
+                    
+                    <%--Rev 4.0 : id="EV1" & runat="server" added--%>
+                    <%--<img src="/assests/images/event-banner.jpg" />--%>   
+                    <img id="EV1" runat="server" src="" />
+                    <%--End of Rev 4.0--%>
                 </div>
+                  
             </div>
             <h1>Power-packed <span class="spEmpa" style="font-weight: 600;color: #062aa5;">Digital ERP</span> For <br />
                 Indian Businesses.</h1>
@@ -1433,47 +1443,50 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                 <div class="scrCnter" id="rc_app_156655">
                     <ul class="tc_s5621f_fg">
                         <%--Rev 2.0 : Avijit Bonu and Pallab Mukherjee name added--%>
-                        <li><span class="nameCR">Avijit Bonu</span></li>
-                         <li><span class="nameCR">Ankan Das</span></li>
-                        <li><span class="nameCR">Arindam Ghosal</span></li>
-                         <li><span class="nameCR">Arunabha Saha</span></li>
+                        <li><span class="nameCR">Abhinav Dahiwade</span></li>
                         <li><span class="nameCR">Abhishek Munshi</span></li>
-                        <li><span class="nameCR">Ashmitar Chowdhury</span></li>
                         <li><span class="nameCR">Ananya Deb</span></li>
+                        <li><span class="nameCR">Ankan Das</span></li>
+                        <li><span class="nameCR">Arindam Ghosal</span></li>
+                        <li><span class="nameCR">Arunabha Saha</span></li>
+                        <li><span class="nameCR">Ashmita Roy Chowdhury</span></li>
+                        <li><span class="nameCR">Avijit Bonu</span></li>
+                        <li><span class="nameCR">Bapi Dutta</span></li> 
                         <li><span class="nameCR">Bhaskar Chatterjee</span></li>
-                        <li><span class="nameCR">Bapi Dutta</span></li>
                         <li><span class="nameCR">Chinmoy Maiti</span></li>
                         <li class="tc_sfsf_fg"><span class="nameCR">Debashis Talukder</span></li>
                         <li><span class="nameCR">Debjyoti Dhar</span></li>
                         <li><span class="nameCR">Deep Narayan Mahajan</span></li>
                         <li><span class="nameCR">Goutam Kumar Das</span></li>
                         <li><span class="nameCR">Indranil Dey</span></li>
-                         <li><span class="nameCR">Jitendra Jha</span></li>
-                         <li><span class="nameCR">Kaushik Gupta</span></li>
-                         <li><span class="nameCR">Maynak Nandi</span></li>
+                        <li><span class="nameCR">Jitendra Jha</span></li>
+                        <li><span class="nameCR">Kaushik Gupta</span></li>
+                        <li><span class="nameCR">Maynak Nandi</span></li>
                         <li><span class="nameCR">Pallab Mukherjee</span></li>
-                         <li class="tc_s5221f_fg"><span class="nameCR">Priti Ghosh</span></li>
-                         <li><span class="nameCR">Pijush Kumar Bhattacharya</span></li>
+                        <li><span class="nameCR">Pijush Kumar Bhattacharya</span></li>
                          <li><span class="nameCR">Pratik Ghosh</span></li>
-                         <li><span class="nameCR">Rajdip Mukherjee</span></li>
-                         <li><span class="nameCR">Susanta Kundu</span></li>
-                         <li><span class="nameCR">Sanchita Saha</span></li>
-                         <li><span class="nameCR">Saheli Bhattacharya</span></li>
-                         <li><span class="nameCR">Suman Bachar</span></li>
-                         <li><span class="nameCR">Suman Roy</span></li>
-                         <li><span class="nameCR">Shantanu Saha</span></li>                   
-                         <li><span class="nameCR">Saikat Das</span></li>      
-                         <li><span class="nameCR">Sanjoy Ganguly</span></li>
-                         <li><span class="nameCR">Sayantani Mandal</span></li>
-                         <li><span class="nameCR">Subhra Mukherjee</span></li>
-                         <li><span class="nameCR">Sudip Biswas</span></li>
-                         <li><span class="nameCR">Sudip Kumar Pal</span></li>
-                         <li><span class="nameCR">Surojit Chatterjee</span></li>
-                         <li><span class="nameCR">Suvankar Dey</span></li>
+                        <li class="tc_s5221f_fg"><span class="nameCR">Priti Ghosh</span></li>
+                        <li><span class="nameCR">Priyanka</span></li>
+                        <li><span class="nameCR">Rajdip Mukherjee</span></li>
+                        <li><span class="nameCR">Saheli Bhattacharya</span></li>
+                        <li><span class="nameCR">Saikat Das</span></li> 
+                        <li><span class="nameCR">Sanchita Saha</span></li>
+                        <li><span class="nameCR">Sanjoy Ganguly</span></li>
+                        <li><span class="nameCR">Santanu Mukherjee</span></li>
+                        <li><span class="nameCR">Sayantani Mandal</span></li>
                         <li><span class="nameCR">Shantanu Saha</span></li>
+                        <li><span class="nameCR">Sneha das</span></li>
+                        <li><span class="nameCR">Sourav Goswami</span></li>
+                        <li><span class="nameCR">Subhra Mukherjee</span></li>
+                        <li><span class="nameCR">Sudip Biswas</span></li>
+                        <li><span class="nameCR">Sudip Kumar Pal</span></li>
+                        <li><span class="nameCR">Suman Bachar</span></li>
+                        <li><span class="nameCR">Suman Roy</span></li>  
+                        <li><span class="nameCR">Surojit Chatterjee</span></li>
+                        <li><span class="nameCR">Susanta Kundu</span></li>
+                        <li><span class="nameCR">Suvankar Dey</span></li> 
                         <li><span class="nameCR">Swatilekha Mukherjee</span></li>   
-                        <li><span class="nameCR">Tanmoy Ghosh</span></li>
-                        
+                        <li><span class="nameCR">Tanmoy Ghosh</span></li> 
                         
                     </ul>
                 </div>
