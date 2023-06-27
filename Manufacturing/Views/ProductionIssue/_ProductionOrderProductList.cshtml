@@ -1,7 +1,7 @@
 ﻿@*================================================== Revision History =============================================
-        Rev Number         DATE              VERSION          DEVELOPER           CHANGES
-        1.0                11-05-2023        V2.0.38           Priti              0026074: Some of the issues found in Issue for Production
-    ====================================================== Revision History =============================================*@
+    Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+    1.0                11-05-2023        V2.0.38           Priti              0026074: Some of the issues found in Issue for Production
+====================================================== Revision History =============================================*@
 
 @Html.DevExpress().GridView(settings =>
 {
@@ -12,8 +12,8 @@
     settings.Settings.HorizontalScrollBarMode = DevExpress.Web.ScrollBarMode.Auto;
     settings.Settings.VerticalScrollBarMode = DevExpress.Web.ScrollBarMode.Auto;
     settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-    settings.SettingsBehavior.AllowSort = false;
-    settings.CommandColumn.Visible = false;
+    settings.SettingsBehavior.AllowSort = true;
+
     settings.CommandColumn.Visible = true;
     settings.CommandColumn.ShowSelectCheckbox = true;
     //REV 1.0
@@ -21,7 +21,6 @@
     settings.CommandColumn.SelectAllCheckboxMode = ViewBag.SelectAllCheckBoxMode;
     settings.SettingsPager.PageSize = 100000;
     //REV 1.0 END
-
     settings.ClientSideEvents.SelectionChanged = "SelectionChanged";
     settings.Columns.Add(x =>
     {

@@ -1,4 +1,9 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="PurchaseChallanList.aspx.cs" Inherits="ERP.OMS.Management.Activities.PurchaseChallanList" %>
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                17-04-2023        2.0.37           Pallab              25838: Purchase GRN module design modification
+====================================================== Revision History =============================================--%>
+
+<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="PurchaseChallanList.aspx.cs" Inherits="ERP.OMS.Management.Activities.PurchaseChallanList" %>
 
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
@@ -47,9 +52,40 @@
     </script>
     <%--End of Mantis Issue 25402--%>
 
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        select
+        {
+            z-index: 0;
+        }
+
+        #Grid_PurchaseChallan {
+            max-width: 98% !important;
+        }
+        #FormDate, #toDate, #dtTDate, #dt_PLQuote, #dt_PlQuoteExpiry {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        select
+        {
+            -webkit-appearance: auto;
+        }
+
+        .calendar-icon
+        {
+                right: 18px;
+        }
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="panel-heading clearfix">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading clearfix">
         <div class="panel-title pull-left" id="td_contact1" runat="server">
             <h3>
                 <asp:Label ID="lblHeadTitle" runat="server" Text="Purchase GRN"></asp:Label>
@@ -60,20 +96,28 @@
                 <td>
                     <label>From </label>
                 </td>
-                <td style="width: 150px">
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td style="width: 150px" class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%" UseMaskBehavior="True">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>
                     <label>To </label>
                 </td>
-                <td style="width: 150px">
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td style="width: 150px" class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%" UseMaskBehavior="True">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>Unit</td>
                 <td>
@@ -89,18 +133,19 @@
         </table>
     </div>
 
-    <div class="form_main clearfix" id="btnAddNew">
+        <div class="form_main clearfix mb-10" id="btnAddNew">
         <div style="float: left; padding-right: 5px;">
             <% if (rights.CanAdd)
                { %>
+            <%--Rev 1.0: "btn-radius" class removed--%>
             <%--<a href="javascript:void(0);" onclick="AddButtonClick()" class="btn btn-primary"><span><u>A</u>dd New</span> </a>--%>
-            <a href="javascript:void(0);" onclick="OnAddInventoryButtonClick()" class="btn btn-success btn-radius"><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>I</u>nventory</span> </a>
-            <a href="javascript:void(0);" onclick="OnAddBothButtonClick()" class="btn btn-success btn-radius"><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>B</u>oth</span> </a>
+            <a href="javascript:void(0);" onclick="OnAddInventoryButtonClick()" class="btn btn-success "><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>I</u>nventory</span> </a>
+            <a href="javascript:void(0);" onclick="OnAddBothButtonClick()" class="btn btn-success"><span class="btn-icon"><i class="fa fa-plus"></i></span><span><u>B</u>oth</span> </a>
             <% } %>
 
             <% if (rights.CanExport)
                { %>
-            <asp:DropDownList ID="drdExport" runat="server" CssClass="btn btn-primary btn-radius" OnSelectedIndexChanged="cmbExport_SelectedIndexChanged" AutoPostBack="true" OnChange="if(!AvailableExportOption()){return false;}">
+            <asp:DropDownList ID="drdExport" runat="server" CssClass="btn btn-primary" OnSelectedIndexChanged="cmbExport_SelectedIndexChanged" AutoPostBack="true" OnChange="if(!AvailableExportOption()){return false;}">
                 <asp:ListItem Value="0">Export to</asp:ListItem>
                 <asp:ListItem Value="1">PDF</asp:ListItem>
                 <asp:ListItem Value="2">XLS</asp:ListItem>
@@ -108,7 +153,7 @@
                 <asp:ListItem Value="4">CSV</asp:ListItem>
             </asp:DropDownList>
             <% } %>
-
+            <%--Rev end 1.0--%>
             <%--Sandip Section for Approval Section in Design Start --%>
 
             <span id="spanStatus" runat="server">
@@ -131,7 +176,7 @@
         </div>
     </div>
 
-    <div class="relative">
+        <div class="relative">
         <div class="makeFullscreen ">
             <span class="fullScreenTitle">Purchase GRN</span>
             <span class="makeFullscreen-icon half hovered " data-instance="CgvPurchaseIndent" title="Maximize Grid" id="expandCgvPurchaseOrder"><i class="fa fa-expand"></i></span>
@@ -321,6 +366,7 @@
             <dxe:ASPxGridViewExporter ID="exporter" runat="server" Landscape="false" PaperKind="A4" PageHeader-Font-Size="Larger" PageHeader-Font-Bold="true">
             </dxe:ASPxGridViewExporter>
         </div>
+    </div>
     </div>
     <%--DEBASHIS--%>
     <div class="PopUpArea">
@@ -777,6 +823,6 @@
         </PanelCollection>
         <ClientSideEvents EndCallback="CallbackPanelEndCall" />
     </dxe:ASPxCallbackPanel>
-    <%--End of Mantis Issue 25402--%>en
+    <%--End of Mantis Issue 25402--%>
 </asp:Content>
 

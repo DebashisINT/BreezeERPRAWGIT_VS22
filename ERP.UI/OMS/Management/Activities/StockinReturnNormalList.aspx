@@ -1,4 +1,9 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/OMS/MasterPage/ERP.Master" CodeBehind="StockinReturnNormalList.aspx.cs" Inherits="ERP.OMS.Management.Activities.StockinReturnNormalList" %>
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                13-04-2023        2.0.37           Pallab              25815 :Receive Against Normal Return page design modification
+====================================================== Revision History =============================================--%>
+
+<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/OMS/MasterPage/ERP.Master" CodeBehind="StockinReturnNormalList.aspx.cs" Inherits="ERP.OMS.Management.Activities.StockinReturnNormalList" %>
 
 
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
@@ -40,14 +45,47 @@
     </script>
     
 <script src="JS/StockinReturnNormalList.js"></script>
+
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        select
+        {
+            z-index: 0;
+        }
+
+        #GrdSalesReturn {
+            max-width: 98% !important;
+        }
+        #FormDate, #toDate, #dtTDate, #dt_PLQuote, #dt_PlQuoteExpiry {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        select
+        {
+            -webkit-appearance: auto;
+        }
+
+        .calendar-icon
+        {
+                right: 10px;
+        }
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="panel-heading">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading">
         <div class="panel-title">
             <h3>Receive Against Normal Return</h3>
         </div>
     </div>
-    <div class="form_main">
+        <div class="form_main">
         <div class="clearfix">
                     <% if (rights.CanExport)
                                                { %>
@@ -64,20 +102,28 @@
                         <tr>
                             <td>
                                 <label>From Date</label></td>
-                            <td>
+                            <%--Rev 1.0: "for-cust-icon" class add --%>
+                            <td class="for-cust-icon">
                                 <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%">
                                     <buttonstyle width="13px">
                         </buttonstyle>
                                 </dxe:ASPxDateEdit>
+                                <%--Rev 1.0--%>
+                                <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                <%--Rev end 1.0--%>
                             </td>
                             <td>
                                 <label>To Date</label>
                             </td>
-                            <td>
+                            <%--Rev 1.0: "for-cust-icon" class add --%>
+                            <td class="for-cust-icon">
                                 <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%">
                                     <buttonstyle width="13px">
                         </buttonstyle>
                                 </dxe:ASPxDateEdit>
+                                <%--Rev 1.0--%>
+                                <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                <%--Rev end 1.0--%>
                             </td>
                             <td>Unit</td>
                             <td>
@@ -93,7 +139,7 @@
                     </table>
         </div>
     </div>
-     <div class="GridViewArea">
+        <div class="GridViewArea">
         <dxe:ASPxGridView ID="GrdSalesReturn" runat="server" KeyFieldName="SrlNo" AutoGenerateColumns="False" 
             Width="100%" ClientInstanceName="cGrdSalesReturn" OnCustomCallback="GrdSalesReturn_CustomCallback" SettingsBehavior-AllowFocusedRow="true" 
            
@@ -278,6 +324,7 @@
             <dx:LinqServerModeDataSource ID="EntityServerModeDataSource" runat="server" OnSelecting="EntityServerModeDataSource_Selecting"
             ContextTypeName="ERPDataClassesDataContext" TableName="v_StockInReturnNormalList" />
         <asp:HiddenField ID="hiddenedit" runat="server" />
+    </div>
     </div>
     <div style="display: none">
         <dxe:ASPxGridViewExporter ID="exporter" GridViewID="GrdSalesReturn" runat="server" Landscape="false" PaperKind="A4" PageHeader-Font-Size="Larger" PageHeader-Font-Bold="true">

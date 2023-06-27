@@ -1,4 +1,9 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="CustomerNoteList.aspx.cs" Inherits="ERP.OMS.Management.Activities.CustomerNoteList" %>
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                10-04-2023        2.0.37           Pallab              25963: Customer Debit/Credit Note module design modification & check in small device
+====================================================== Revision History =============================================--%>
+
+<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="CustomerNoteList.aspx.cs" Inherits="ERP.OMS.Management.Activities.CustomerNoteList" %>
 
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
 
@@ -204,7 +209,7 @@
 
 
                                        </script>
-                                        <script type="text/javascript">
+    <script type="text/javascript">
                                             $(document).ready(function () {
                                                 if ($('body').hasClass('mini-navbar')) {
                                                     var windowWidth = $(window).width();
@@ -230,13 +235,118 @@
                                             });
                                         </script>
 
-                                   </asp:Content>
+    
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+
+        <style>
+            select
+            {
+                -webkit-appearance: auto;
+            }
+            #FormDate , #toDate , #dtTDate , #dt_PLQuote , #dt_PLSales , #dt_SaleInvoiceDue , #dtPostingDate
+            {
+                position: relative;
+                z-index: 1;
+                background: transparent;
+            }
+
+            #FormDate_B-1 , #toDate_B-1 , #dtTDate_B-1 , #dt_PLQuote_B-1 , #dt_PLSales_B-1 , #dt_SaleInvoiceDue_B-1 , #dtPostingDate_B-1
+            {
+                background: transparent !important;
+                border: none;
+                width: 30px;
+                padding: 10px !important;
+            }
+
+            #FormDate_B-1 #FormDate_B-1Img , #toDate_B-1 #toDate_B-1Img , #dtTDate_B-1 #dtTDate_B-1Img , #dt_PLQuote_B-1 #dt_PLQuote_B-1Img ,
+            #dt_PLSales_B-1 #dt_PLSales_B-1Img , #dt_SaleInvoiceDue_B-1 #dt_SaleInvoiceDue_B-1Img , #dtPostingDate_B-1 #dtPostingDate_B-1Img
+            {
+                display: none;
+            }
+
+            .TableMain100 #ShowGrid , .TableMain100 #ShowGridList , .TableMain100 #ShowGridRet , .TableMain100 #ShowGridLocationwiseStockStatus ,
+        #GvJvSearch
+        {
+            max-width: 98% !important;
+        }
+
+        .calendar-icon
+        {
+                right: 5px !important;
+        }
+
+        /*select#ddlInventory
+        {
+            -webkit-appearance: auto;
+        }*/
+
+        .simple-select::after
+        {
+            top: 26px !important;
+            right: 13px !important;
+        }
+
+        .col-sm-3 , .col-md-3 , .col-md-2{
+            margin-bottom: 5px;
+        }
+
+        #rdl_Salesquotation
+        {
+            margin-top: 10px;
+        }
+        .col-md-3>label, .col-md-3>span
+        {
+            margin-top: 0 !important;
+        }
+
+        #drdTransCategory.aspNetDisabled {
+    background: #f3f3f3 !important;
+}
+
+       /* #CustomerTableTbl.dynamicPopupTbl>tbody>tr>td
+        {
+            width: 33.33%;
+        }*/
+
+       .lblmTop8>span, .lblmTop8>label
+        {
+                margin-top: 0 !important;
+        }
+
+            @media only screen and (max-width: 1380px) and (min-width: 1300px)
+            {
+
+                /*.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+                    padding-right: 10px;
+                    padding-left: 10px;
+                }
+
+                .simple-select::after
+                {
+                    right: 8px !important;
+                }
+                .calendar-icon {
+                    right: 13px !important;
+                }*/
+
+                input[type="radio"], input[type="checkbox"] {
+                    margin-right: 0px;
+                }
+            }
+        </style>
+    <%--Rev end 1.0--%>
+</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <dxe:ASPxGlobalEvents ID="GlobalEvents" runat="server">
         <ClientSideEvents ControlsInitialized="AllControlInitilize" />
     </dxe:ASPxGlobalEvents>
-<div class="panel-heading clearfix ">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading clearfix ">
     <div class="panel-title " id="myDiv">
         <h3 class="pull-left">
             <label id="TxtHeaded">Customer Debit/Credit Note</label>
@@ -246,20 +356,28 @@
         <tr>
             <td>
                 <label>From Date</label></td>
-            <td>
+            <%--Rev 1.0: "for-cust-icon" class add --%>
+            <td class="for-cust-icon">
                 <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%">
                     <ButtonStyle Width="13px">
                     </ButtonStyle>
                 </dxe:ASPxDateEdit>
+                <%--Rev 1.0--%>
+                <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                <%--Rev end 1.0--%>
             </td>
             <td>
                 <label>To Date</label>
             </td>
-            <td>
+            <%--Rev 1.0: "for-cust-icon" class add --%>
+            <td class="for-cust-icon">
                 <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%">
                     <ButtonStyle Width="13px">
                     </ButtonStyle>
                 </dxe:ASPxDateEdit>
+                <%--Rev 1.0--%>
+                <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                <%--Rev end 1.0--%>
             </td>
             <td>Unit</td>
             <td>
@@ -272,18 +390,18 @@
         </tr>
     </table>
 </div>
-    <div class="form_main">
+        <div class="form_main">
         <div id="TblSearch" class="clearfix">
             <div class="clearfix">
-                <div style="padding-right: 5px;">
+                <div class="mb-10" style="padding-right: 5px;">
                     <% if (rights.CanAdd)
                        { %>
-                    <a href="javascript:void(0);" onclick="OnAddButtonClick()" class="btn btn-success btn-radius"><span class="btn-icon"><i class="fa fa-plus" ></i></span><span><u>A</u>dd New</span> </a>
+                    <a href="javascript:void(0);" onclick="OnAddButtonClick()" class="btn btn-success"><span class="btn-icon"><i class="fa fa-plus" ></i></span><span><u>A</u>dd New</span> </a>
                     <% } %>
 
                     <% if (rights.CanExport)
                        { %>
-                    <asp:DropDownList ID="drdExport" runat="server" CssClass="btn btn-primary btn-radius" OnSelectedIndexChanged="cmbExport_SelectedIndexChanged" AutoPostBack="true" OnChange="if(!AvailableExportOption()){return false;}">
+                    <asp:DropDownList ID="drdExport" runat="server" CssClass="btn btn-primary" OnSelectedIndexChanged="cmbExport_SelectedIndexChanged" AutoPostBack="true" OnChange="if(!AvailableExportOption()){return false;}">
                         <asp:ListItem Value="0">Export to</asp:ListItem>
                         <asp:ListItem Value="1">PDF</asp:ListItem>
                         <asp:ListItem Value="2">XLS</asp:ListItem>
@@ -362,7 +480,7 @@
                             <CellStyle CssClass="gridcellleft"></CellStyle>
                             <Settings AllowAutoFilterTextInputTimer="False" />
                         </dxe:GridViewDataTextColumn>
-                        <dxe:GridViewDataTextColumn VisibleIndex="8" FieldName="Amount" Caption="Amount" CellStyle-HorizontalAlign="Right">
+                        <dxe:GridViewDataTextColumn VisibleIndex="8" FieldName="Amount" Caption="Amount" CellStyle-HorizontalAlign="Right" Width="150px">
                             <HeaderStyle HorizontalAlign="Right" />
                             <CellStyle Wrap="False">
                             </CellStyle>
@@ -370,7 +488,7 @@
                             </PropertiesTextEdit>
                             <Settings AllowAutoFilterTextInputTimer="False" />
                         </dxe:GridViewDataTextColumn>
-                        <dxe:GridViewDataTextColumn VisibleIndex="9" FieldName="Total_CGST" Caption="CGST" CellStyle-HorizontalAlign="Right">
+                        <dxe:GridViewDataTextColumn VisibleIndex="9" FieldName="Total_CGST" Caption="CGST" CellStyle-HorizontalAlign="Right" Width="150px">
                             <HeaderStyle HorizontalAlign="Right" />
                             <CellStyle Wrap="False"></CellStyle>
                             <PropertiesTextEdit DisplayFormatString="0.00"></PropertiesTextEdit>
@@ -504,7 +622,7 @@
         </div>
 
     </div>
-
+    </div>
     <div>
         <asp:HiddenField ID="hfIsFilter" runat="server" />
         <asp:HiddenField ID="hfFromDate" runat="server" />

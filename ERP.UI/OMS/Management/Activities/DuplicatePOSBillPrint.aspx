@@ -1,12 +1,46 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="DuplicatePOSBillPrint.aspx.cs" Inherits="ERP.OMS.Management.Activities.DuplicatePOSBillPrint" %>
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                11-04-2023        2.0.37           Pallab              25983: POS Bill Print module design modification & check in small device
+====================================================== Revision History =============================================--%>
+
+<%@ Page Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="DuplicatePOSBillPrint.aspx.cs" Inherits="ERP.OMS.Management.Activities.DuplicatePOSBillPrint" %>
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
     Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script src="JS/duplicateposbillprint.js"></script>
     <link href="CSS/duplicateposbillprint.css" rel="stylesheet" />
+
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+         
+        #GrdQuotation {
+            max-width: 98% !important;
+        }
+        #FormDate, #toDate, #dtTDate, #dt_PLQuote, #dt_PlQuoteExpiry {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        select
+        {
+            -webkit-appearance: auto;
+        }
+
+        /*.calendar-icon
+        {
+                right: 10px;
+        }*/
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="panel-heading">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading">
         <div class="panel-title clearfix">
             <h3 class="pull-left">POS Bill Print</h3>
             <div id="pageheaderContent" class="scrollHorizontal pull-right wrapHolder content horizontal-images">
@@ -58,21 +92,28 @@
             <tr>
                 <td>
                     <label>From Date</label></td>
-                <td>
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>
                     <label>To Date</label>
                 </td>
-                <td>
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
-
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>Unit</td>
                 <td>
@@ -87,7 +128,7 @@
 
         </table>
     </div>
-    <div class="GridViewArea relative">
+        <div class="GridViewArea relative">
         <%--<dxe:ASPxGridView ID="GrdQuotation" runat="server" KeyFieldName="Invoice_Id" AutoGenerateColumns="False"
             Width="100%" ClientInstanceName="cGrdQuotation" OnCustomCallback="GrdQuotation_CustomCallback" SettingsBehavior-AllowFocusedRow="true"
             SettingsBehavior-AllowSelectSingleRowOnly="false" SettingsBehavior-AllowSelectByRowClick="true" OnDataBinding="GrdQuotation_DataBinding" Settings-HorizontalScrollBarMode="Auto"
@@ -280,6 +321,7 @@
                             <asp:HiddenField ID="hfFromDate" runat="server" />
                             <asp:HiddenField ID="hfToDate" runat="server" />
                             <asp:HiddenField ID="hfBranchID" runat="server" />
+    </div>
     </div>
     <div style="display: none">
         <dxe:ASPxGridViewExporter ID="exporter" GridViewID="GrdQuotation" runat="server" Landscape="false" PaperKind="A4" PageHeader-Font-Size="Larger" PageHeader-Font-Bold="true">

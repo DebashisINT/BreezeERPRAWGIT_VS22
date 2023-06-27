@@ -1,8 +1,10 @@
 ﻿//@*==================================================== Revision History =========================================================================
 //     1.0  Priti V2.0.36    24-01-2023  0025611:MRP tagging feature required for Issue for Production
 //     2.0  Priti V2.0.38    11-05-2023  0026074: Some of the issues found in Issue for Production
-
+//     3.0  Priti V2.0.38    01-06-2023  0026257: Excess Qty for an Item to be Stock Transferred automatically to a specific Warehouse while making Issue for Prod
+//     4.0  Priti V2.0.38    23-06-2023  0026426: Issue in Issue for Production Module at the time of Edit
 //====================================================End Revision History=====================================================================*@
+
 using BusinessLogicLayer;
 using DataAccessLayer;
 using DevExpress.Web;
@@ -18,6 +20,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using UtilityLayer;
 
 namespace Manufacturing.Controllers
@@ -61,11 +64,16 @@ namespace Manufacturing.Controllers
         [HttpGet]
         public ActionResult ProductionIssueEntry()
         {
+            //Rev 3.0
+            string IsMRPMandatoryIssueforProduction = cSOrder.GetSystemSettingsResult("IsMRPMandatoryIssueforProduction");
+            string IsConsiderExcessQtyIssueforProduction = cSOrder.GetSystemSettingsResult("IsConsiderExcessQtyIssueforProduction");
+            //Rev 3.0 End
             string ProjectSelectInEntryModule = cSOrder.GetSystemSettingsResult("ProjectSelectInEntryModule");
             string HierarchySelectInEntryModule = cSOrder.GetSystemSettingsResult("Show_Hierarchy");
             string ProductionOrderShowNoOutstanding = cSOrder.GetSystemSettingsResult("ProductionOrderShowNoOutstanding");
-            string IsMRPTaggingIssueForProduction = cSOrder.GetSystemSettingsResult("IsMRPTaggingIssueForProduction");//REV 1.0
-
+            //REV 1.0
+            string IsMRPTaggingIssueForProduction = cSOrder.GetSystemSettingsResult("IsMRPTaggingIssueForProduction");
+            //REV 1.0 End
             if (!String.IsNullOrEmpty(HierarchySelectInEntryModule))
             {
                 if (HierarchySelectInEntryModule.ToUpper().Trim() == "YES")
@@ -205,7 +213,13 @@ namespace Manufacturing.Controllers
             ViewBag.ProjectShow = ProjectSelectInEntryModule;
             ViewBag.WorkOrderModuleSkipped = WorkOrderModuleSkipped;
             ViewBag.POShowNoOutstanding = ProductionOrderShowNoOutstanding;
-            ViewBag.ShowMRPTaggingIssueForProduction = IsMRPTaggingIssueForProduction;//REV 1.0
+            //REV 1.0
+            ViewBag.ShowMRPTaggingIssueForProduction = IsMRPTaggingIssueForProduction;
+            //Rev 1.0 End
+            //Rev 3.0
+            ViewBag.IsMRPMandatoryIssueforProduction = IsMRPMandatoryIssueforProduction;
+            ViewBag.ConsiderExcessQty = IsConsiderExcessQtyIssueforProduction;
+            //Rev 3.0 End
             TempData["Count"] = 1;
             TempData.Keep();
 
@@ -327,8 +341,9 @@ namespace Manufacturing.Controllers
                         objWOL.Hierarchy = Convert.ToString(row["HIERARCHY_NAME"]);
                         objWOL.FinishedItemID = Convert.ToString(row["Finished_ProductID"]);
                         objWOL.WarehouseID = Convert.ToString(row["BOMWarehouseID"]);
-
-
+                        //Rev 4.0
+                        objWOL.BalQty = Convert.ToDecimal(row["BalQty"]);
+                        //Rev 4.0 End
                         list.Add(objWOL);
 
 
@@ -421,6 +436,9 @@ namespace Manufacturing.Controllers
 
         public ActionResult GetProductionIssueDetailsProductList(Int64 DetailsID = 0)
         {
+            //Rev 3.0
+            string IsConsiderExcessQtyIssueforProduction = cSOrder.GetSystemSettingsResult("IsConsiderExcessQtyIssueforProduction");
+            //Rev 3.0 End
             string WorkOrderModuleSkipped = cSOrder.GetSystemSettingsResult("WorkOrderModuleSkipped");
             BOMProduct bomproductdataobj = new BOMProduct();
             List<BOMProduct> bomproductdata = new List<BOMProduct>();
@@ -560,6 +578,9 @@ namespace Manufacturing.Controllers
                 }
             }
             catch { }
+            //Rev 3.0
+            ViewBag.ConsiderExcessQty = IsConsiderExcessQtyIssueforProduction;
+            //Rev 3.0 End
             return PartialView("_ProductionIssueBOMProductGrid", bomproductdata);
         }
 
@@ -1241,6 +1262,28 @@ namespace Manufacturing.Controllers
             return Json(Message);
         }
 
+        //Rev 4.0
+        [HttpPost]
+        public JsonResult DeleteStockWarehouseList(List<udtStockProduct> items)
+        {
+            Boolean Success = false;
+            String Message = "";
+           
+            try
+            {
+                DataTable dt = ToDataTable(items);
+                if (dt.Rows.Count > 0)
+                {
+                    Session["PIssue_WarehouseData"] = null;
+                }
+                    
+                Success = true;
+            }
+            catch { }
+            Message = Success.ToString() ;
+            return Json(Message);
+        }
+        //Rev 4.0 End
         [HttpPost]
         public JsonResult getProductSerialNo(String productid = "0", String warehouse = "0", String Batch = "0", String PostingDate = null)
         {
@@ -1304,6 +1347,9 @@ namespace Manufacturing.Controllers
 
         public ActionResult GetProductionIssueList()
         {
+            //Rev 3.0
+            string IsConsiderExcessQtyIssueforProduction = cSOrder.GetSystemSettingsResult("IsConsiderExcessQtyIssueforProduction");
+            //Rev 3.0 End
             string WorkOrderModuleSkipped = cSOrder.GetSystemSettingsResult("WorkOrderModuleSkipped");
             string ProjectSelectInEntryModule = cSOrder.GetSystemSettingsResult("ProjectSelectInEntryModule");
             List<ProductionIssueViewModel> list = new List<ProductionIssueViewModel>();
@@ -1439,6 +1485,9 @@ namespace Manufacturing.Controllers
                         obj.Proj_Code = Convert.ToString(item["Proj_Code"]);
                         obj.Proj_Name = Convert.ToString(item["Proj_Name"]);
                         obj.Doctype = Convert.ToString(item["Doctype"]);
+                        //rev 3.0
+                        obj.StockTransfer_No = Convert.ToString(item["StockTransfer_No"]);
+                        //rev 3.0 End
                         list.Add(obj);
                     }
                 }
@@ -1448,6 +1497,9 @@ namespace Manufacturing.Controllers
             ViewBag.CanEdit = rights.CanEdit;
             ViewBag.CanDelete = rights.CanDelete;
             ViewBag.ProjectShow = ProjectSelectInEntryModule;
+            //Rev 3.0
+            ViewBag.ConsiderExcessQty = IsConsiderExcessQtyIssueforProduction;
+            //Rev 3.0 End
             return PartialView("_ProductionIssueDataList", list);
         }
 
@@ -1720,5 +1772,257 @@ namespace Manufacturing.Controllers
             }
         }
         //END REV 1.0
+
+        //Rev 3.0
+        public ActionResult GetIssueDetailsLineProductList()
+        {
+            Int64 DetailsID = 0;
+            //Rev 3.0
+            string IsConsiderExcessQtyIssueforProduction = cSOrder.GetSystemSettingsResult("IsConsiderExcessQtyIssueforProduction");
+            //Rev 3.0 End
+            string WorkOrderModuleSkipped = cSOrder.GetSystemSettingsResult("WorkOrderModuleSkipped");
+            BOMProduct bomproductdataobj = new BOMProduct();
+            List<BOMProduct> bomproductdata = new List<BOMProduct>();
+            try
+            {
+                if (TempData["DetailsID"] != null)
+                {
+                    DetailsID = Convert.ToInt64(TempData["DetailsID"]);
+                    TempData.Keep();
+                }
+                if (TempData["Doctype"] != null)
+                {
+                    obj.Doctype = Convert.ToString(TempData["Doctype"]);
+                }
+                //if (DetailsID > 0)
+                //{
+                    DataTable objData = new DataTable();
+                    //if (TempData["ProductDetailsIds"] != "" && TempData["ProductDetailsIds"] != null)
+                    //{
+                    //    objData = objWO.GetPODataByDetailsID("GetPODataByDetailsID", Convert.ToInt64(TempData["WorkOrderID"]), DetailsID, Convert.ToString(TempData["ProductDetailsIds"]));
+                    //}
+                    //else
+                    //{
+                        if (TempData["ProductionIssueID"] != null)
+                        {
+                            if (obj.Doctype == "BOM")
+                            {
+                                objData = objPI.GetProductionIssueData("GetBOMProductionIssueDataFromInvoice", Convert.ToInt64(TempData["ProductionIssueID"]), DetailsID);
+                            }
+                            else
+                            {
+                                if (WorkOrderModuleSkipped == "No")
+                                {
+                                    objData = objPI.GetProductionIssueData("GetBOMProductionIssueData", Convert.ToInt64(TempData["ProductionIssueID"]), DetailsID);
+                                }
+                                else
+                                {
+                                    objData = objPI.GetProductionIssueData("GetBOMProductionIssueDataSettingsWise", Convert.ToInt64(TempData["ProductionIssueID"]), DetailsID);
+                                }
+                            }
+                        }
+                        TempData["LineDetailsListDataTable"] = objData;
+                //else
+                //{
+                //    objData = objdata.GetBOMProductEntryListByID("GetBOMEntryProductsData", DetailsID);
+                //}
+                // }
+
+                if (objData != null && objData.Rows.Count > 0)
+                    {
+                        DataTable dt = objData;
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            bomproductdataobj = new BOMProduct();
+                            bomproductdataobj.SlNO = Convert.ToString(row["SlNO"]);
+                            bomproductdataobj.BOMProductsID = Convert.ToString(row["BOMProductsID"]);
+                            bomproductdataobj.Details_ID = Convert.ToString(row["Details_ID"]);
+                            bomproductdataobj.ProductName = Convert.ToString(row["sProducts_Code"]);
+                            bomproductdataobj.ProductId = Convert.ToString(row["ProductID"]);
+                            bomproductdataobj.ProductDescription = Convert.ToString(row["sProducts_Name"]);
+                            bomproductdataobj.DesignNo = Convert.ToString(row["DesignNo"]);
+                            bomproductdataobj.ItemRevisionNo = Convert.ToString(row["ItemRevisionNo"]);
+                            bomproductdataobj.ProductQty = Convert.ToString(row["StkQty"]);
+                            bomproductdataobj.ProductUOM = Convert.ToString(row["StkUOM"]);
+                            bomproductdataobj.Warehouse = Convert.ToString(row["WarehouseName"]);
+                            bomproductdataobj.Price = Convert.ToString(row["Price"]);
+                            bomproductdataobj.Amount = Convert.ToString(row["Amount"]);
+                            bomproductdataobj.BOMNo = Convert.ToString(row["BOMNo"]);
+                            bomproductdataobj.RevNo = Convert.ToString(row["RevNo"]);
+                            if (row["RevDate"] != null && Convert.ToString(row["RevDate"]) != "" && Convert.ToString(row["RevDate"]) != " " && Convert.ToString(row["RevDate"]) != null)
+                            {
+                                bomproductdataobj.RevDate = Convert.ToDateTime(row["RevDate"]).ToString("dd-MM-yyyy");
+                            }
+                            else
+                            {
+                                bomproductdataobj.RevDate = " ";
+                            }
+                            bomproductdataobj.Remarks = Convert.ToString(row["Remarks"]);
+                            bomproductdataobj.ProductsWarehouseID = Convert.ToString(row["WarehouseID"]);
+                            bomproductdataobj.Tag_Details_ID = Convert.ToString(row["Tag_Details_ID"]);
+                            bomproductdataobj.Tag_Production_ID = Convert.ToString(row["Tag_Production_ID"]);
+                            bomproductdataobj.RevNo = Convert.ToString(row["RevNo"]);
+                            bomproductdataobj.Product_NegativeStock = Convert.ToString(row["Product_NegativeStock"]);
+                            bomproductdataobj.AvlStk = Convert.ToString(row["AvlStk"]);
+
+                            bomproductdataobj.StkMsg = "0";
+                            bomproductdataobj.IsInventory = Convert.ToString(row["IsInventory"]);
+                            if (TempData["WorkOrderID"] != null)
+                            {
+                                bomproductdataobj.BalQty = Convert.ToString(row["StkQty"]);
+                            }
+
+                            if (TempData["ProductionIssueID"] != null)
+                            {
+                                bomproductdataobj.OLDQty = Convert.ToString(row["OLDQty"]);
+                                bomproductdataobj.BalQty = Convert.ToString(row["BalQty"]);
+                            }
+                            else
+                            {
+                                bomproductdataobj.OLDQty = Convert.ToString(row["StkQty"]);
+                            }
+                            if (TempData["ProductionIssueID"] != null)
+                            {
+                                bomproductdataobj.OLDAmount = Convert.ToString(row["OLDAmount"]);
+                            }
+                            else
+                            {
+                                bomproductdataobj.OLDAmount = Convert.ToString(row["Amount"]);
+                            }
+                            bomproductdataobj.InventoryType = Convert.ToString(row["InventoryType"]);
+
+                            bomproductdataobj.DetailsID = Convert.ToString(row["DetailsID"]);
+                            bomproductdataobj.ExcessQty= Convert.ToString(row["ExcessQty"]);
+
+                        bomproductdata.Add(bomproductdataobj);
+                        }
+                        ViewData["BOMEntryProductsTotalAm"] = bomproductdata.Sum(x => Convert.ToDecimal(x.Amount)).ToString();
+
+
+                        if (TempData["ProductionIssueID"] != null)
+                        {
+                            ViewData["ViewProductionIssueID"] = TempData["ProductionIssueID"];
+                        }
+
+
+                    }
+               // }
+            }
+            catch { }
+            //Rev 3.0
+            ViewBag.ConsiderExcessQty = IsConsiderExcessQtyIssueforProduction;
+            //Rev 3.0 End
+            return PartialView("_PartialPreViewLineItem", bomproductdata);
+        }
+
+        public ActionResult ExportPreviewLineGridList(int type)
+        {
+            ViewData["LineDetailsListDataTable"] = TempData["LineDetailsListDataTable"];
+
+            TempData.Keep();
+            DataTable dt = (DataTable)TempData["LineDetailsListDataTable"];
+            if (ViewData["LineDetailsListDataTable"] != null && dt.Rows.Count > 0)
+            {
+
+                switch (type)
+                {
+                    case 1:
+                        return GridViewExtension.ExportToPdf(GetPreviewLineGridView(ViewData["LineDetailsListDataTable"]), ViewData["LineDetailsListDataTable"]);
+                    //break;
+                    case 2:
+                        return GridViewExtension.ExportToXlsx(GetPreviewLineGridView(ViewData["LineDetailsListDataTable"]), ViewData["LineDetailsListDataTable"]);
+                    //break;
+                    case 3:
+                        return GridViewExtension.ExportToXls(GetPreviewLineGridView(ViewData["LineDetailsListDataTable"]), ViewData["LineDetailsListDataTable"]);
+                    //break;
+                    case 4:
+                        return GridViewExtension.ExportToRtf(GetPreviewLineGridView(ViewData["LineDetailsListDataTable"]), ViewData["LineDetailsListDataTable"]);
+                    //break;
+                    case 5:
+                        return GridViewExtension.ExportToCsv(GetPreviewLineGridView(ViewData["LineDetailsListDataTable"]), ViewData["LineDetailsListDataTable"]);
+                    default:
+                        break;
+                }
+                return null;
+            }
+            else
+            {
+                return this.RedirectToAction("MRP", "MRP");
+            }
+        }
+
+        private GridViewSettings GetPreviewLineGridView(object datatable)
+        {
+            var settings = new GridViewSettings();
+            settings.Name = "Preview Line Items";
+            settings.SettingsExport.ExportedRowType = GridViewExportedRowType.All;
+            settings.SettingsExport.FileName = "Production Issue Entry";
+            TempData.Keep();
+            DataTable dt = (DataTable)datatable;
+
+            foreach (System.Data.DataColumn datacolumn in dt.Columns)
+            {
+                if (datacolumn.ColumnName == "SlNO" || datacolumn.ColumnName == "sProducts_Code"
+                    || datacolumn.ColumnName == "sProducts_Name" || datacolumn.ColumnName == "StkQty"
+                    || datacolumn.ColumnName == "StkUOM" || datacolumn.ColumnName == "ExcessQty"                    
+                    )
+                {
+                    settings.Columns.Add(column =>
+                    {
+                        if (datacolumn.ColumnName == "SlNO")
+                        {
+                            column.Caption = "SlNO";
+                            column.VisibleIndex = 0;
+                        }                        
+                        else if (datacolumn.ColumnName == "sProducts_Code")
+                        {
+                            column.Caption = "PRODUCTS NAME";
+                            column.VisibleIndex = 1;
+
+                        }
+                        else if (datacolumn.ColumnName == "sProducts_Name")
+                        {
+                            column.Caption = "PRODUCT DESCRIPTION";
+                            column.VisibleIndex = 2;
+                        }                       
+                        else if (datacolumn.ColumnName == "STKQTY")
+                        {
+                            column.Caption = "QTY";
+                            column.VisibleIndex = 3;
+                        }
+                        else if (datacolumn.ColumnName == "StkUOM")
+                        {
+                            column.Caption = "UOM";
+                            column.VisibleIndex = 4;
+                        }
+                        else if (datacolumn.ColumnName == "ExcessQty")
+                        {
+                            column.Caption = "EXCESS QTY.";
+                            column.VisibleIndex = 5;
+                        }
+                        
+                        column.FieldName = datacolumn.ColumnName;
+                        if (datacolumn.DataType.FullName == "System.Decimal")
+                        {
+                            column.PropertiesEdit.DisplayFormatString = "0.00";
+                        }
+                        if (datacolumn.DataType.FullName == "System.DateTime")
+                        {
+                            column.PropertiesEdit.DisplayFormatString = "dd-MM-yyyy";
+                        }
+                    });
+                }
+
+            }
+
+            settings.SettingsExport.PaperKind = System.Drawing.Printing.PaperKind.A4;
+            settings.SettingsExport.LeftMargin = 20;
+            settings.SettingsExport.RightMargin = 20;
+            settings.SettingsExport.TopMargin = 20;
+            settings.SettingsExport.BottomMargin = 20;
+
+            return settings;
+        }
+        
     }
 }

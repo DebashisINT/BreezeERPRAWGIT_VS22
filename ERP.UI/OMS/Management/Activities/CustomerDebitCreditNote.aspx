@@ -1,4 +1,10 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="CustomerDebitCreditNote.aspx.cs" Inherits="ERP.OMS.Management.Activities.CustomerDebitCreditNote" %>
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                10-04-2023        2.0.37           Pallab              25964: Add Customer Debit/Credit Note module design modification & check in small device
+2.0                20-06-2023        2.0.38           Pallab              26394: Add Customer Debit/Credit Note all bootstrap modal outside click event disable
+====================================================== Revision History =============================================--%>
+
+<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="CustomerDebitCreditNote.aspx.cs" Inherits="ERP.OMS.Management.Activities.CustomerDebitCreditNote" %>
 
 <%@ Register Src="~/OMS/Management/Activities/UserControls/Sales_BillingShipping.ascx" TagPrefix="ucbs" TagName="Sales_BillingShipping" %>
 
@@ -101,27 +107,125 @@
         //Hierarchy End Tanmoy
     </script>
     <link href="CSS/CustomerDebitCreditNote.css" rel="stylesheet" />
+
+    
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+
+    <style>
+            #FormDate , #toDate , #dtTDate , #dt_PLQuote , #dt_PLSales , #dt_SaleInvoiceDue , #dtPostingDate
+            {
+                position: relative;
+                z-index: 1;
+                background: transparent;
+            }
+
+            #FormDate_B-1 , #toDate_B-1 , #dtTDate_B-1 , #dt_PLQuote_B-1 , #dt_PLSales_B-1 , #dt_SaleInvoiceDue_B-1 , #dtPostingDate_B-1
+            {
+                background: transparent !important;
+                border: none;
+                width: 30px;
+                padding: 10px !important;
+            }
+
+            #FormDate_B-1 #FormDate_B-1Img , #toDate_B-1 #toDate_B-1Img , #dtTDate_B-1 #dtTDate_B-1Img , #dt_PLQuote_B-1 #dt_PLQuote_B-1Img ,
+            #dt_PLSales_B-1 #dt_PLSales_B-1Img , #dt_SaleInvoiceDue_B-1 #dt_SaleInvoiceDue_B-1Img , #dtPostingDate_B-1 #dtPostingDate_B-1Img
+            {
+                display: none;
+            }
+
+        .calendar-icon
+        {
+                right: 18px !important;
+        }
+
+        /*select#ddlInventory
+        {
+            -webkit-appearance: auto;
+        }*/
+
+        .simple-select::after
+        {
+            top: 26px !important;
+            right: 13px !important;
+        }
+
+        .col-sm-3 , .col-md-3 , .col-md-2{
+            margin-bottom: 5px;
+        }
+
+        #rdl_Salesquotation
+        {
+            margin-top: 10px;
+        }
+        .col-md-3>label, .col-md-3>span
+        {
+            margin-top: 0 !important;
+        }
+        .lblmBot4 > span, .lblmBot4 > label
+        {
+                margin-bottom: 0px !important;
+        }
+
+        #drdTransCategory.aspNetDisabled {
+    background: #f3f3f3 !important;
+}
+
+       /* #CustomerTableTbl.dynamicPopupTbl>tbody>tr>td
+        {
+            width: 33.33%;
+        }*/
+
+       .lblmTop8>span, .lblmTop8>label
+        {
+                margin-top: 0 !important;
+        }
+
+            @media only screen and (max-width: 1380px) and (min-width: 1300px)
+            {
+
+                .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+                    padding-right: 10px;
+                    padding-left: 10px;
+                }
+
+                .simple-select::after
+                {
+                    right: 8px !important;
+                }
+                .calendar-icon {
+                    right: 13px !important;
+                }
+
+                input[type="radio"], input[type="checkbox"] {
+                    margin-right: 0px;
+                }
+            }
+        </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <dxe:ASPxGlobalEvents ID="GlobalEvents" runat="server">
         <ClientSideEvents ControlsInitialized="AllControlInitilize" />
     </dxe:ASPxGlobalEvents>
-
-    <div class="panel-title clearfix" id="myDiv">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-title clearfix" id="myDiv">
         <h3 class="pull-left">
             <label id="TxtHeaded">Add Customer Debit/Credit Note</label>
         </h3>
     </div>
-    <div id="ApprovalCross" runat="server" class="crossBtn"><a href="CustomerNoteList.aspx"><i class="fa fa-times"></i></a></div>
+        <div id="ApprovalCross" runat="server" class="crossBtn"><a href="CustomerNoteList.aspx"><i class="fa fa-times"></i></a></div>
 
-
-    <dxe:ASPxPageControl ID="ASPxPageControl1" runat="server" ClientInstanceName="page" Width="100%">
+        <dxe:ASPxPageControl ID="ASPxPageControl1" runat="server" ClientInstanceName="page" Width="100%">
         <TabPages>
             <dxe:TabPage Name="General" Text="General">
                 <ContentCollection>
                     <dxe:ContentControl runat="server">
-                        <div style="background: #f5f4f3; padding: 8px 0; margin-bottom: 0px; border-radius: 4px; border: 1px solid #ccc;" class="clearfix">
+                        <div style=" padding: 8px 0; margin-bottom: 0px; border-radius: 4px;" class="clearfix">
                             <div class="col-md-3">
                                 <label>Note Type</label>
                                 <div>
@@ -161,6 +265,9 @@
                                         <%--  <ClientSideEvents DateChanged="function(s,e){DateChange()}" />--%>
                                         <ClientSideEvents LostFocus="Posting_LostFocus" />
                                     </dxe:ASPxDateEdit>
+                                    <%--Rev 1.0--%>
+                                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                    <%--Rev end 1.0--%>
                                 </div>
                             </div>
                             <div class="col-md-2 lblmTop8">
@@ -544,10 +651,10 @@
                         <div>
 
                             <b><span id="tagged" runat="server" style="display: none; color: red">This Customer Debit/Credit Note is tagged with Document : <span id="spanTaggedDocNo"></span>. Cannot Modify data!!</span></b>
-                            <dxe:ASPxButton ID="btnSaveRecords" ClientInstanceName="cbtnSaveNew" runat="server" AutoPostBack="False" Text="S&#818;ave & New" CssClass="btn btn-primary" UseSubmitBehavior="False">
+                            <dxe:ASPxButton ID="btnSaveRecords" ClientInstanceName="cbtnSaveNew" runat="server" AutoPostBack="False" Text="S&#818;ave & New" CssClass="btn btn-success" UseSubmitBehavior="False">
                                 <ClientSideEvents Click="function(s, e) {SaveButtonClickNew();}" />
                             </dxe:ASPxButton>
-                            <dxe:ASPxButton ID="btn_SaveRecords" ClientInstanceName="cbtnSaveRecords" runat="server" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-primary" UseSubmitBehavior="False">
+                            <dxe:ASPxButton ID="btn_SaveRecords" ClientInstanceName="cbtnSaveRecords" runat="server" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-success" UseSubmitBehavior="False">
                                 <ClientSideEvents Click="function(s, e) {SaveButtonClick();}" />
                             </dxe:ASPxButton>
                             <dxe:ASPxButton ID="btnUDF" ClientInstanceName="cbtnUDF" runat="server" AutoPostBack="False" Text="U&#818;DF" CssClass="btn btn-primary" UseSubmitBehavior="False">
@@ -598,14 +705,18 @@
 	                                            }"></ClientSideEvents>
 
     </dxe:ASPxPageControl>
-
-    <div class="modal fade" id="Segment1Model" role="dialog">
+    </div>
+    <%--Rev 2.0--%>
+    <%--<div class="modal fade" id="Segment1Model" role="dialog">--%>
+    <div class="modal fade" id="Segment1Model" role="dialog" data-backdrop="static" data-keyboard="false">
+    <%--Rev end 2.0--%>
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" id="ModuleSegment1header"></h4>
+                    <%--Rev 1.0: modal title add --%>
+                    <h4 class="modal-title" id="ModuleSegment1header">Segment1 Search</h4>
                 </div>
                 <div class="modal-body">
                     <input type="text" onkeydown="Segment1keydown(event)" id="txtSegment1Search" autofocus width="100%" placeholder="Search By Segment Name,Segment Code" />
@@ -625,13 +736,17 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="Segment2Model" role="dialog">
+    <%--Rev 2.0--%>
+    <%--<div class="modal fade" id="Segment2Model" role="dialog">--%>
+    <div class="modal fade" id="Segment2Model" role="dialog" data-backdrop="static" data-keyboard="false">
+    <%--Rev end 2.0--%>
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" id="ModuleSegment2Header"></h4>
+                    <%--Rev 1.0: modal title add --%>
+                    <h4 class="modal-title" id="ModuleSegment2Header">Segment2 Search</h4>
                 </div>
                 <div class="modal-body">
                     <input type="text" onkeydown="Segment2keydown(event)" id="txtSegment2Search" autofocus width="100%" placeholder="Search By Segment Name,Segment Code" />
@@ -651,13 +766,17 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="Segment3Model" role="dialog">
+    <%--Rev 2.0--%>
+    <%--<div class="modal fade" id="Segment3Model" role="dialog">--%>
+    <div class="modal fade" id="Segment3Model" role="dialog" data-backdrop="static" data-keyboard="false">
+    <%--Rev end 2.0--%>
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" id="ModuleSegment3Header"></h4>
+                    <%--Rev 1.0: modal title add --%>
+                    <h4 class="modal-title" id="ModuleSegment3Header">Segment3 Search</h4>
                 </div>
                 <div class="modal-body">
                     <input type="text" onkeydown="Segment3keydown(event)" id="txtSegment3Search" autofocus width="100%" placeholder="Search By Segment Name,Segment Code" />
@@ -677,12 +796,16 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="Segment4Model" role="dialog">
+    <%--Rev 2.0--%>
+    <%--<div class="modal fade" id="Segment4Model" role="dialog">--%>
+    <div class="modal fade" id="Segment4Model" role="dialog" data-backdrop="static" data-keyboard="false">
+    <%--Rev end 2.0--%>
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <%--Rev 1.0: modal title add --%>
                     <h4 class="modal-title" id="ModuleSegment4Header">Segment4 Search</h4>
                 </div>
                 <div class="modal-body">
@@ -703,7 +826,10 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="Segment5Model" role="dialog">
+    <%--Rev 2.0--%>
+    <%--<div class="modal fade" id="Segment5Model" role="dialog">--%>
+    <div class="modal fade" id="Segment5Model" role="dialog" data-backdrop="static" data-keyboard="false">
+    <%--Rev end 2.0--%>
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
@@ -734,8 +860,10 @@
 
 
     <%--Modal Section--%>
-
-    <div class="modal fade" id="CustModel" role="dialog">
+    <%--Rev 2.0--%>
+    <%--<div class="modal fade" id="CustModel" role="dialog">--%>
+    <div class="modal fade" id="CustModel" role="dialog" data-backdrop="static" data-keyboard="false">
+    <%--Rev end 2.0--%>
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
@@ -765,8 +893,10 @@
 
 
 
-
-    <div class="modal fade" id="MainAccountModel" role="dialog">
+    <%--Rev 2.0--%>
+    <%--<div class="modal fade" id="MainAccountModel" role="dialog">--%>
+    <div class="modal fade" id="MainAccountModel" role="dialog" data-backdrop="static" data-keyboard="false">
+        <%--Rev end 2.0--%>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

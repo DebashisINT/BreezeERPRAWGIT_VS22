@@ -1,6 +1,8 @@
 ﻿<%--/*********************************************************************************************************
  * Rev 1.0      Sanchita      V2.0.37       Tolerance feature required in Sales Order Module 
- *                                          Refer: 25223
+ *                                          Refer: 25223  -- WORK REVERTED
+   Rev 2.0      Pallab        V2.0.37       Add Sales Order page design modification
+                                            Refer: 25813
  **********************************************************************************************************/--%>
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SalesOrderAdd.aspx.cs" MasterPageFile="~/OMS/MasterPage/ERP.Master"
     Inherits="ERP.OMS.Management.Activities.SalesOrderAdd" EnableEventValidation="false" %>
@@ -785,6 +787,91 @@ function PerformCallToGridBind() {
             min-width: 100px;
         }
     </style>
+
+    
+
+    <%--Rev 2.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+
+        <style>
+            #FormDate , #toDate , #dtTDate , #dt_PLQuote , #dt_PLSales , #dt_OADate
+        {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+            #FormDate_B-1 , #toDate_B-1 , #dtTDate_B-1 , #dt_PLQuote_B-1 , #dt_PLSales_B-1 , #dt_OADate_B-1
+        {
+            background: transparent !important;
+            border: none;
+            width: 30px;
+            padding: 10px !important;
+        }
+
+        #FormDate_B-1 #FormDate_B-1Img , #toDate_B-1 #toDate_B-1Img , #dtTDate_B-1 #dtTDate_B-1Img , #dt_PLQuote_B-1 #dt_PLQuote_B-1Img ,
+        #dt_PLSales_B-1 #dt_PLSales_B-1Img , #dt_OADate_B-1 #dt_OADate_B-1Img
+        {
+            display: none;
+        }
+
+        .calendar-icon
+        {
+                right: 18px !important;
+        }
+
+        select#ddlInventory
+        {
+            -webkit-appearance: auto;
+        }
+
+        .simple-select::after
+        {
+            top: 26px !important;
+            right: 13px !important;
+        }
+
+        .col-sm-3 , .col-md-3 , .col-md-2{
+            margin-bottom: 5px;
+        }
+
+        #rdl_Salesquotation
+        {
+            margin-top: 10px;
+        }
+        .col-md-3>label, .col-md-3>span
+        {
+            margin-top: 0 !important;
+        }
+
+        #CustomerTableTbl.dynamicPopupTbl>tbody>tr>td
+        {
+            width: 33.33%;
+        }
+
+            @media only screen and (max-width: 1380px) and (min-width: 1300px)
+            {
+
+                .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+                    padding-right: 10px;
+                    padding-left: 10px;
+                }
+
+                .simple-select::after
+                {
+                    right: 8px !important;
+                }
+                .calendar-icon {
+                    right: 13px !important;
+                }
+
+                input[type="radio"], input[type="checkbox"] {
+                    margin-right: 0px;
+                }
+            }
+        </style>
+    <%--Rev end 2.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <%-- Subhra Section Start--%>
@@ -793,8 +880,9 @@ function PerformCallToGridBind() {
 
     <%--Subhra Section End--%>
 
-
-    <div class="panel-title clearfix">
+    <%--Rev 2.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-title clearfix">
 
         <h3 class="pull-left">
             <%--<asp:Label ID="lblHeadTitle" Text="" runat="server"></asp:Label>--%>
@@ -981,7 +1069,7 @@ function PerformCallToGridBind() {
         </div>--%>
         <%-- <div class="crossBtn" id="divcross1" runat="server"><a href="SalesOrderList.aspx"><i class="fa fa-times"></i></a></div>--%>
     </div>
-    <div class="form_main">
+        <div class="form_main">
         <asp:Panel ID="pnl_quotation" runat="server">
             <div class="row">
 
@@ -1021,11 +1109,11 @@ function PerformCallToGridBind() {
                                                         </dxe:ASPxCallbackPanel>--%>
                                             </div>
                                         </div>
-
-                                        <div class="col-md-2" id="ddl_Num" runat="server">
+                                        <%--Rev 2.0: "simple-select" class add --%>
+                                        <div class="col-md-2 simple-select" id="ddl_Num" runat="server">
 
                                             <label>
-                                                <dxe:ASPxLabel ID="lbl_NumberingScheme" Width="120px" runat="server" Text="Numbering Scheme">
+                                                <dxe:ASPxLabel ID="lbl_NumberingScheme" Width="150px" runat="server" Text="Numbering Scheme">
                                                 </dxe:ASPxLabel>
                                             </label>
                                             <asp:DropDownList ID="ddl_numberingScheme" runat="server" Width="100%">
@@ -1048,8 +1136,8 @@ function PerformCallToGridBind() {
                                                 <img id="3gridHistory_DXPEForm_efnew_DXEFL_DXEditor2_EI" class="dxEditors_edtError_PlasticBlue" src="/DXR.axd?r=1_36-tyKfc" title="Mandatory" /></span>
 
                                         </div>
-
-                                        <div class="col-md-2">
+                                        <%--Rev 2.0: "for-cust-icon" class add --%>
+                                        <div class="col-md-2 for-cust-icon">
                                             <label>
                                                 <dxe:ASPxLabel ID="ASPxLabel2" runat="server" Text="Posting Date" Width="120px" CssClass="inline">
                                                 </dxe:ASPxLabel>
@@ -1067,9 +1155,12 @@ function PerformCallToGridBind() {
                                             <span id="MandatoryEgSDate" style="display: none" class="validclass">
                                                 <img id="3gridHistory_DXPEForm_efnew_DXEFL_DXEditor2114_EI" class="dxEditors_edtError_PlasticBlue" src="/DXR.axd?r=1_36-tyKfc" title="Sales Order date must not be prior date than quotation date" /></span>
 
-
+                                            <%--Rev 2.0--%>
+                                            <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                            <%--Rev end 2.0--%>
                                         </div>
-                                        <div class="col-md-2">
+                                        <%--Rev 2.0: "simple-select" class add --%>
+                                        <div class="col-md-2 simple-select">
                                             <label>
                                                 <dxe:ASPxLabel ID="lbl_Branch" runat="server" Text="Unit">
                                                 </dxe:ASPxLabel>
@@ -1280,6 +1371,7 @@ function PerformCallToGridBind() {
                                                 <ClientSideEvents TextChanged="CreditDays_TextChanged" />
                                             </dxe:ASPxTextBox>
                                         </div>
+
                                         <div class="col-md-2 lblmTop8">
                                             <dxe:ASPxLabel ID="lbl_DueDate" runat="server" Text="Due Date">
                                             </dxe:ASPxLabel>
@@ -1299,7 +1391,7 @@ function PerformCallToGridBind() {
                                             <%--  <dxe:ASPxComboBox ID="ddl_Quotation" runat="server" ClientInstanceName="cddl_Quotatione" TabIndex="12" Width="100%">
                         <clientsideevents selectedindexchanged="function(s, e) { QuotationNumberChanged();}" />
                     </dxe:ASPxComboBox>--%>
-                                            <asp:RadioButtonList ID="rdl_Salesquotation" runat="server" RepeatDirection="Horizontal" onchange="return selectValue();" Width="85%">
+                                            <asp:RadioButtonList ID="rdl_Salesquotation" runat="server" RepeatDirection="Horizontal" onchange="return selectValue();" Width="90%">
                                                 <asp:ListItem Text="Quotation" Value="QN"></asp:ListItem>
                                                 <asp:ListItem Text="Inquiry" Value="SINQ"></asp:ListItem>
                                             </asp:RadioButtonList>
@@ -1405,7 +1497,8 @@ function PerformCallToGridBind() {
                                             </dxe:ASPxTextBox>
                                         </div>
 
-                                        <div class="col-md-2">
+                                        <%--Rev 2.0: "for-cust-icon" class add --%>
+                                        <div class="col-md-2 for-cust-icon">
                                             <label>
                                                 <dxe:ASPxLabel ID="lbl_OADate" runat="server" Text="Party Order Date" Width="120px">
                                                 </dxe:ASPxLabel>
@@ -1421,6 +1514,9 @@ function PerformCallToGridBind() {
                                                 <%-- <clientsideevents datechanged="function(s,e){SetDifference1();}"
                             validation="function(s,e){e.isValid = (CheckDifference()>=0)}" />--%>
                                             </dxe:ASPxDateEdit>
+                                            <%--Rev 2.0--%>
+                                            <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                            <%--Rev end 2.0--%>
                                         </div>
                                         <div class="col-md-2" style="display: none;">
                                             <label>
@@ -1446,7 +1542,7 @@ function PerformCallToGridBind() {
 
 
                                         <div class="col-md-2">
-                                            <span style="margin: 3px 0; display: block">
+                                            <span style=" display: block">
                                                 <dxe:ASPxLabel ID="lbl_Refference" runat="server" Text="Reference">
                                                 </dxe:ASPxLabel>
                                             </span>
@@ -1458,9 +1554,9 @@ function PerformCallToGridBind() {
                                         </div>
 
 
-
-                                        <div class="col-md-1">
-                                            <label style="margin: 3px 0; display: block">Currency:  </label>
+                                        <%--Rev 2.0: "simple-select" class add --%>
+                                        <div class="col-md-1 simple-select">
+                                            <label style=" display: block">Currency:  </label>
                                             <div>
                                                 <asp:DropDownList ID="ddl_Currency" runat="server" Width="100%"
                                                     DataSourceID="SqlCurrency" DataValueField="Currency_ID"
@@ -1475,7 +1571,7 @@ function PerformCallToGridBind() {
                                             </div>
                                         </div>
                                         <div class="col-md-1">
-                                            <label style="margin: 3px 0; display: block">Exch. Rate:  </label>
+                                            <label style=" display: block">Exch. Rate:  </label>
                                             <div>
                                                 <dxe:ASPxTextBox ID="txt_Rate" runat="server" Width="100%" ClientInstanceName="ctxtRate">
                                                 </dxe:ASPxTextBox>
@@ -1509,7 +1605,7 @@ function PerformCallToGridBind() {
 
 
                                         <div class="col-md-2">
-                                            <span style="margin: 3px 0; display: block">
+                                            <span style=" display: block">
                                                 <dxe:ASPxLabel ID="lbl_AmountAre" runat="server" Text="Amounts are">
                                                 </dxe:ASPxLabel>
                                             </span>
@@ -1588,7 +1684,7 @@ function PerformCallToGridBind() {
 
                                         <div class="clear"></div>
                                         <div class="col-md-2">
-                                            <label class="checkbox-inline">
+                                            <label class="checkbox-inline" style="margin-top: 30px;">
                                                 <asp:CheckBox ID="chkSendMail" runat="server"></asp:CheckBox>
                                                 <span style="margin: 0px 0; display: block">
                                                     <dxe:ASPxLabel ID="ASPxLabel8" runat="server" Text="Send Email">
@@ -1653,7 +1749,7 @@ function PerformCallToGridBind() {
                                             </asp:DropDownList>
                                         </div>
                                         <%--Rev 1.0--%>
-                                        <%--<div class="col-md-2 lblmTop8">
+                                        <%--<div id="divQtyTolerance" runat="server" class="col-md-2 lblmTop8">
                                             <dxe:ASPxLabel ID="lblTolerance" runat="server" Text="Quantity Tolerance %">
                                             </dxe:ASPxLabel>
                                            <dxe:ASPxTextBox runat="server" ID="txtQtyTolerance" ClientInstanceName="ctxtQtyTolerance" Width="100%" CssClass="pull-left">
@@ -2238,10 +2334,10 @@ function PerformCallToGridBind() {
                                         <br />
                                         <div class="col-md-12" id="divSubmitButton" runat="server">
                                             <asp:Label ID="lbl_quotestatusmsg" runat="server" Text="" Font-Bold="true" ForeColor="Red" Font-Size="Medium"></asp:Label>
-                                            <dxe:ASPxButton ID="btn_SaveRecords" ClientInstanceName="cbtn_SaveNewRecords" runat="server" AccessKey="X" AutoPostBack="False" Text="Save & N&#818;ew" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
+                                            <dxe:ASPxButton ID="btn_SaveRecords" ClientInstanceName="cbtn_SaveNewRecords" runat="server" AccessKey="X" AutoPostBack="False" Text="Save & N&#818;ew" CssClass="btn btn-success" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {Save_ButtonClick();}" />
                                             </dxe:ASPxButton>
-                                            <dxe:ASPxButton ID="btn_SaveExit" ClientInstanceName="cbtn_SaveExitRecords" runat="server" AccessKey="X" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
+                                            <dxe:ASPxButton ID="btn_SaveExit" ClientInstanceName="cbtn_SaveExitRecords" runat="server" AccessKey="X" AutoPostBack="False" Text="Save & Ex&#818;it" CssClass="btn btn-success" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {SaveExit_ButtonClick();}" />
                                             </dxe:ASPxButton>
                                             <%--<asp:Button ID="ASPxButton2" runat="server" Text="UDF" CssClass="btn btn-primary" OnClientClick="if(OpenUdf()){ return false;}" />--%>
@@ -3120,7 +3216,7 @@ function PerformCallToGridBind() {
                                                 Quantity
                                             </div>
                                             <div class="Left_Content" style="">
-                                                <dxe:ASPxTextBox ID="txtQuantity" runat="server" ClientInstanceName="ctxtQuantity" HorizontalAlign="Right" Font-Size="12px" Width="100%" Height="15px">
+                                                <dxe:ASPxTextBox ID="txtQuantity" runat="server" ClientInstanceName="ctxtQuantity" HorizontalAlign="Right" Font-Size="12px" Width="100%" Height="31px">
                                                     <MaskSettings Mask="<0..999999999999>.<0..99>" IncludeLiterals="DecimalSymbol" />
                                                     <ClientSideEvents TextChanged="function(s, e) {SaveWarehouse();}" />
                                                 </dxe:ASPxTextBox>
@@ -3130,7 +3226,7 @@ function PerformCallToGridBind() {
                                         <div class="col-md-3">
                                             <div>
                                             </div>
-                                            <div class="Left_Content" style="padding-top: 14px">
+                                            <div class="Left_Content" style="padding-top: 17px">
                                                 <dxe:ASPxButton ID="btnWarehouse" ClientInstanceName="cbtnWarehouse" Width="50px" runat="server" AutoPostBack="False" Text="Add" CssClass="btn btn-primary" UseSubmitBehavior="false">
                                                     <ClientSideEvents Click="function(s, e) {if(!document.getElementById('myCheck').checked) SaveWarehouse();}" />
                                                 </dxe:ASPxButton>
@@ -3637,7 +3733,7 @@ function PerformCallToGridBind() {
         </dxe:ASPxPopupControl>
         <asp:HiddenField ID="hidIsLigherContactPage" runat="server" />
     </div>
-
+    </div>
     <div>
         <asp:HiddenField runat="server" ID="hdnIsDistanceCalculate" />
         <asp:HiddenField runat="server" ID="hdnTransCategory" />
@@ -3705,7 +3801,7 @@ function PerformCallToGridBind() {
     <%--  <asp:SqlDataSource ID="sqlQuationList" runat="server" 
         SelectCommand="select ttq.Quote_Id,ttq.Quote_Number,IsNull(CONVERT(VARCHAR(10), ttq.Quote_Date, 103),'') as Quote_Date	 ,case when( tmc.cnt_middleName is null  or tmc.cnt_middleName='') then isnull(tmc.cnt_firstName,'')+' ' +isnull(tmc.cnt_LastName,'')+' ' else   isnull(tmc.cnt_firstName,'')+' '+ isnull(tmc.cnt_middleName,'')+' ' +isnull(tmc.cnt_LastName,'')+' ' end as name from tbl_trans_Quotation  ttq left join tbl_master_contact tmc on ttq.Customer_Id=tmc.cnt_internalId where ttq.Quote_Number is not null and ttq.Quote_Number <>' '"></asp:SqlDataSource>--%>
     <dxe:ASPxPopupControl ID="Popup_MultiUOM" runat="server" ClientInstanceName="cPopup_MultiUOM"
-        Width="900px" HeaderText="Multi UOM Details" PopupHorizontalAlign="WindowCenter"
+        Width="1100px" HeaderText="Multi UOM Details" PopupHorizontalAlign="WindowCenter"
         BackColor="white" PopupVerticalAlign="WindowCenter" CloseAction="CloseButton"
         Modal="True" ContentStyle-VerticalAlign="Top" EnableHierarchyRecreation="True"
         ContentStyle-CssClass="pad">
@@ -3737,7 +3833,7 @@ function PerformCallToGridBind() {
                                             <div>
                                                 <%--Mantis Issue 24913--%>
                                                 <%--<input type="text" style="width:80px" id="UOMQuantity" style="text-align: right;" maxlength="18" readonly="true" class="allownumericwithdecimal" />--%>
-                                                <input type="text" style="width:80px" id="UOMQuantity" style="text-align: right;" maxlength="18" class="allownumericwithdecimal" onchange="CalcBaseRate()" />
+                                                <input type="text" style="width:105px" id="UOMQuantity" style="text-align: right;" maxlength="18" class="allownumericwithdecimal" onchange="CalcBaseRate()" />
                                                 <%--End of Mantis Issue 24913--%>
                                             </div>
                                         </div>

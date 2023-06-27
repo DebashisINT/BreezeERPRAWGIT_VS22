@@ -1,4 +1,9 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="PendingDeliveryList.aspx.cs" MasterPageFile="~/OMS/MasterPage/ERP.Master"
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                11-04-2023        2.0.37           Pallab              25987: Pending Delivery List module design modification & check in small device
+====================================================== Revision History =============================================--%>
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="PendingDeliveryList.aspx.cs" MasterPageFile="~/OMS/MasterPage/ERP.Master"
     Inherits="ERP.OMS.Management.Activities.PendingDeliveryList" EnableEventValidation="false" %>
 
 
@@ -476,6 +481,31 @@
             margin-top:0 !important;
         }
     </style>
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        #GrdOrder {
+            max-width: 98% !important;
+        }
+        #FormDate, #toDate, #dtTDate, #dt_PLQuote, #dt_PlQuoteExpiry {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        select
+        {
+            -webkit-appearance: auto;
+        }
+
+        /*.calendar-icon
+        {
+                right: 10px;
+        }*/
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <dxe:ASPxPopupControl ID="Popup_OrderStatus" runat="server" ClientInstanceName="cOrderStatus"
@@ -567,7 +597,9 @@
                         </dxe:PopupControlContentControl>
             </contentcollection>
     </dxe:ASPxPopupControl>
-    <div class="panel-heading clearfix">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading clearfix">
         <div class="panel-title pull-left">
             <h3>Pending Delivery List</h3>
         </div>
@@ -575,20 +607,28 @@
             <tr>
                 <td>
                     <label>From Date</label></td>
-                <td>
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>
                     <label>To Date</label>
                 </td>
-                <td>
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>Unit</td>
                 <td>
@@ -596,14 +636,14 @@
                     </dxe:ASPxComboBox>
                 </td>
                 <td>
-                    <input type="button" value="Show" class="btn btn-primary" onclick="updateGridByDate()" />
+                    <input type="button" value="Show" class="btn btn-success" onclick="updateGridByDate()" />
                 </td>
 
             </tr>
 
         </table>
     </div>
-    <div class="form_main" style="display: block;">
+        <div class="form_main" style="display: block;">
         <div class="clearfix">
             <% if (rights.CanAdd)
                { %>
@@ -622,7 +662,7 @@
             <% } %>
         </div>
     </div><br />
-    <div class="GridViewArea">
+        <div class="GridViewArea">
         <dxe:ASPxGridView ID="GrdOrder" runat="server" KeyFieldName="Bill_Id" AutoGenerateColumns="False"
             Width="100%" DataSourceID="EntityServerModeDataSource" ClientInstanceName="cGrdOrder"  OnCustomCallback="GrdOrder_CustomCallback" SettingsBehavior-AllowFocusedRow="true"
             OnSummaryDisplayText="ShowGrid_SummaryDisplayText" SettingsDataSecurity-AllowEdit="false" HorizontalScrollBarMode="Auto" 
@@ -843,6 +883,7 @@
         <dx:LinqServerModeDataSource ID="EntityServerModeDataSource" runat="server" OnSelecting="EntityServerModeDataSource_Selecting"
             ContextTypeName="ERPDataClassesDataContext" TableName="v_GetDeliveryChallanReceipt" />
 
+    </div>
     </div>
     <div style="display: none">
         <dxe:ASPxGridViewExporter ID="exporter" runat="server" Landscape="false" PaperKind="A4" PageHeader-Font-Size="Larger" PageHeader-Font-Bold="true">

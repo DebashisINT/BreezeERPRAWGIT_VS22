@@ -1,8 +1,14 @@
-﻿<%@ Page Title="Estimate / Cost Sheet" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true"
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                05-04-2023        2.0.37           Pallab              25910: Estimate / Cost Sheet module design modification
+====================================================== Revision History =============================================--%>
+
+<%@ Page Title="Estimate / Cost Sheet" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true"
     CodeBehind="EstimateCostSheetList.aspx.cs" Inherits="ERP.OMS.Management.Activities.frm_EstimateCostSheetMain" %>
 
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    
     <script src="JS/EstimateCostSheetList.js?v?3.1"></script>
     <link href="CSS/SalesQuotaion.css?1.0.1" rel="stylesheet" />
     <link href="CSS/PosSalesInvoice.css" rel="stylesheet" />
@@ -125,10 +131,28 @@
             line-height: 22px;
         }
     </style>
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        #FormDate, #toDate, #dtTDate, #dt_PLQuote, #dt_PlQuoteExpiry {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        select
+        {
+            -webkit-appearance: auto;
+        }
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-
-    <div class="panel-heading clearfix">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading clearfix">
         <div class="panel-title pull-left">
             <h3>Estimate / Cost Sheet</h3>
         </div>
@@ -137,20 +161,28 @@
                 <td>
                     <label>From </label>
                 </td>
-                <td style="width: 150px">
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td style="width: 150px" class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%" UseMaskBehavior="True">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>
                     <label>To </label>
                 </td>
-                <td style="width: 150px">
+                <%--Rev 1.0: "for-cust-icon" class add --%>
+                <td style="width: 150px" class="for-cust-icon">
                     <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%" UseMaskBehavior="True">
                         <ButtonStyle Width="13px">
                         </ButtonStyle>
                     </dxe:ASPxDateEdit>
+                    <%--Rev 1.0--%>
+                    <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                    <%--Rev end 1.0--%>
                 </td>
                 <td>Unit</td>
                 <td>
@@ -163,11 +195,11 @@
             </tr>
         </table>
     </div>
-    <div class="form_main">
+        <div class="form_main">
         <div class="clearfix">
             <% if (rights.CanAdd)
                { %>
-            <a href="javascript:void(0);" onclick="OnAddButtonClick()" class="btn btn-success btn-radius"><span class="btn-icon"><i class="fa fa-plus"></i></span><span>New</span> </a><%} %>
+            <a href="javascript:void(0);" onclick="OnAddButtonClick()" class="btn btn-success"><span class="btn-icon"><i class="fa fa-plus"></i></span><span>New</span> </a><%} %>
 
             <%--<dxe:ASPxButton ID="btn_Approval" runat="server" class="btn btn-primary" Text="Pending Approval" ClientInstanceName="cbtn_Approval">
                 <ClientSideEvents Click="function (s, e) {OpenPopUPApprovalStatus();}" />
@@ -205,7 +237,7 @@
             </span>--%>
         </div>
     </div>
-    <div class="GridViewArea relative">
+        <div class="GridViewArea relative">
         <div class="makeFullscreen ">
             <span class="fullScreenTitle">Estimate / Cost Sheet</span>
             <span class="makeFullscreen-icon half hovered " data-instance="cGrdEstimateCost" title="Maximize Grid" id="expandcGrdEstimateCost">
@@ -398,6 +430,7 @@
                 ContextTypeName="ERPDataClassesDataContext" TableName="EstimateCostSheetList" />
             <asp:HiddenField ID="hiddenedit" runat="server" />
         </div>
+    </div>
     </div>
     <div style="display: none">
         <dxe:ASPxGridViewExporter ID="exporter" GridViewID="GrdQuotation" runat="server" Landscape="false" PaperKind="A4" PageHeader-Font-Size="Larger" PageHeader-Font-Bold="true">

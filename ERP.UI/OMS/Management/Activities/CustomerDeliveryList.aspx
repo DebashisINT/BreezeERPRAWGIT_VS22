@@ -1,4 +1,9 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true"  CodeBehind="CustomerDeliveryList.aspx.cs" 
+﻿<%--================================================== Revision History =============================================
+Rev Number         DATE              VERSION          DEVELOPER           CHANGES
+1.0                12-04-2023        2.0.37           Pallab              25988: Customer Delivery (Route) module design modification & check in small device
+====================================================== Revision History =============================================--%>
+
+<%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true"  CodeBehind="CustomerDeliveryList.aspx.cs" 
     Inherits="ERP.OMS.Management.Activities.CustomerDeliveryList"   %>
 
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
@@ -315,11 +320,52 @@
 
     </script>
     <link href="CSS/CustomerDeliveryList.css" rel="stylesheet" />
+
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        #GrdOrder {
+            max-width: 98% !important;
+        }
+        #FormDate, #toDate, #dtTDate, #dt_PLQuote, #dt_PlQuoteExpiry , #ASPxDateEditFrom , #ASPxDateEditTo {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        select
+        {
+            -webkit-appearance: auto;
+        }
+
+        /*.calendar-icon
+        {
+                right: 10px;
+        }*/
+
+
+        #FormDate_B-1 , #toDate_B-1 , #dtTDate_B-1 , #dt_PLQuote_B-1 , #dt_partyInvDt_B-1, #ASPxDateEditFrom_B-1, #ASPxDateEditTo_B-1
+        {
+            background: transparent !important;
+            border: none;
+            width: 30px;
+            padding: 10px !important;
+        }
+
+        #FormDate_B-1 #FormDate_B-1Img , #toDate_B-1 #toDate_B-1Img , #dtTDate_B-1 #dtTDate_B-1Img , #dt_PLQuote_B-1 #dt_PLQuote_B-1Img ,
+        #dt_partyInvDt_B-1 #dt_partyInvDt_B-1Img, #ASPxDateEditFrom_B-1 #ASPxDateEditFrom_B-1Img, #ASPxDateEditTo_B-1 #ASPxDateEditTo_B-1Img
+        {
+            display: none;
+        }
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-
-    <div class="panel-heading clearfix">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading clearfix">
         <div class="panel-title pull-left">
             <h3>Customer Delivery (Route)</h3>
         </div>
@@ -335,33 +381,41 @@
                             </dxe:ASPxComboBox>
                         </td>
                         <td>From Date :</td>
-                        <td width="100px">
+                        <%--Rev 1.0: "for-cust-icon" class add --%>
+                        <td width="150px" class="for-cust-icon">
                                 <dxe:ASPxDateEdit ID="ASPxDateEditFrom" runat="server" ClientInstanceName="cFormDate" EditFormat="Custom" EditFormatString="dd-MM-yyyy"  UseMaskBehavior="True" TabIndex="23">
                                     <ButtonStyle Width="13px"></ButtonStyle>
                                 </dxe:ASPxDateEdit>
+                            <%--Rev 1.0--%>
+                            <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                            <%--Rev end 1.0--%>
                         </td>
                         <td>To Date :</td>
-                        <td width="100px">
+                        <%--Rev 1.0: "for-cust-icon" class add --%>
+                        <td width="150px" class="for-cust-icon">
                             <dxe:ASPxDateEdit ID="ASPxDateEditTo" runat="server" EditFormat="Custom" ClientInstanceName="ctoDate" EditFormatString="dd-MM-yyyy" UseMaskBehavior="True" TabIndex="23" >
                                 <ButtonStyle Width="13px"></ButtonStyle>
                             </dxe:ASPxDateEdit>
+                            <%--Rev 1.0--%>
+                            <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                            <%--Rev end 1.0--%>
                         </td>
                         <td>
                            <%-- <dxe:ASPxButton ID="btnShow" ClientInstanceName="cinBtnShow" runat="server" AutoPostBack="False" Text="Show" CssClass="btn btn-primary"  >
                                     <ClientSideEvents Click="function(s, e) {LoadFilteredGrid(); e.processOnServer=false;}" />
                             </dxe:ASPxButton>--%>
-                            <input type="button" value="Show" class="btn btn-primary" onclick="updateGridByDate()" />
+                            <input type="button" value="Show" class="btn btn-success" onclick="updateGridByDate()" />
                         </td>
                     </tr>
                 </table>
     </div>
 
-    <div class="form_main">
+        <div class="form_main">
         <div class="Main">
             <div class="clearfix">              
                <% if (rights.CanAdd)
                     { %>
-                <a href="javascript:void(0);" onclick="OnAddButtonClick()" class="btn btn-primary"><span><u>A</u>dd New</span> </a>
+                <a href="javascript:void(0);" onclick="OnAddButtonClick()" class="btn btn-info"><span><u>A</u>dd New</span> </a>
                 <% } %>
                 <% if (rights.CanExport)
                                 { %>
@@ -564,7 +618,7 @@
 
         </div>
     </div>
-
+    </div>
      <%--DEBASHIS--%>
     <div class="PopUpArea">
         <dxe:ASPxPopupControl ID="ASPxDocumentsPopup" runat="server" ClientInstanceName="cDocumentsPopup"

@@ -1,4 +1,5 @@
 ﻿/***************************************************************************************************************************************
+ * Rev 1.0      Sanchita      V2.0.38       Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
  * Rev 2.0      Sanchita      V2.0.38       Tax amount is not calculating automatically while modifying PI/Quotation. Mantis : 26411
  ***************************************************************************************************************************************/
 using System;
@@ -2721,7 +2722,7 @@ namespace ERP.OMS.Management.Activities
                             //if (Session["MultiUOMData"] != null)
                             //{
                             if (dtb.Rows.Count > 0)
-                            { 
+                            {
                                 // Mantis Issue 24428
                                 //if (strUOMQuantity != null)
                                 //{
@@ -2733,6 +2734,31 @@ namespace ERP.OMS.Management.Activities
                                 //    }
                                 //}
                                 // End of Mantis Issue 24428
+
+                                // Rev 1.0
+                                DataRow[] MultiUoMresult;
+
+                                MultiUoMresult = dtb.Select("SrlNo ='" + strSrlNo + "' and UpdateRow ='True'");
+
+                                if (MultiUoMresult.Length > 0)
+                                {
+                                    ////////if ((Convert.ToDecimal(MultiUoMresult[0]["Quantity"]) != Convert.ToDecimal(dr["Quantity"])) ||
+                                    ////////    (Math.Round(Convert.ToDecimal(MultiUoMresult[0]["AltQuantity"]), 2) != Math.Round(Convert.ToDecimal(dr["Order_AltQuantity"]), 2)) ||
+                                    ////////    (Math.Round(Convert.ToDecimal(MultiUoMresult[0]["BaseRate"]), 2) != Math.Round(Convert.ToDecimal(dr["SalePrice"]), 2))
+                                    ////////    )
+                                    ////////{
+                                    ////////    validate = "checkMultiUOMData_QtyMismatch";
+                                    ////////    grid.JSProperties["cpcheckMultiUOMData"] = strSrlNo;
+                                    ////////    break;
+                                    ////////}
+                                }
+                                else
+                                {
+                                    validate = "checkMultiUOMData_NotFound";
+                                    grid.JSProperties["cpcheckMultiUOMData"] = strSrlNo;
+                                    break;
+                                }
+                                // End of Rev 1.0
                             }
                             else if (dtb.Rows.Count < 1)
                             {
@@ -2964,7 +2990,13 @@ namespace ERP.OMS.Management.Activities
                     validate = "nullStateCode";
                 }
 
-                if (validate == "outrange" || validate == "ReducedQuantity" || validate == "ExceedQuantity" || validate == "duplicate" || validate == "checkWarehouse" || validate == "duplicateProduct" || validate == "nullAmount" || validate == "nullQuantity" || validate == "errorUdf" || validate == "transporteMandatory" || validate == "nullStateCode" || validate == "TCMandatory" || validate == "BillingShippingNull" || validate == "checkMultiUOMData")
+                // Rev 1.0 [validate == "checkMultiUOMData_QtyMismatch", "checkMultiUOMData_NotFound" added]
+                if (validate == "outrange" || validate == "ReducedQuantity" || validate == "ExceedQuantity" || validate == "duplicate" 
+                    || validate == "checkWarehouse" || validate == "duplicateProduct" || validate == "nullAmount" || validate == "nullQuantity" 
+                    || validate == "errorUdf" || validate == "transporteMandatory" || validate == "nullStateCode" || validate == "TCMandatory" 
+                    || validate == "BillingShippingNull" || validate == "checkMultiUOMData"
+                    || validate == "checkMultiUOMData_QtyMismatch" || validate == "checkMultiUOMData_NotFound"
+                    )
                 {
                     grid.JSProperties["cpSaveSuccessOrFail"] = validate;
                 }
@@ -8944,7 +8976,6 @@ namespace ERP.OMS.Management.Activities
             return null;
 
         }
-
         // Rev 2.0
         [WebMethod]
         public static string DeleteTaxForRateChange(string UniqueVal, string SrlNo)
@@ -8953,7 +8984,7 @@ namespace ERP.OMS.Management.Activities
             if (HttpContext.Current.Session["FinalTaxRecord" + Convert.ToString(UniqueVal)] != null)
             {
                 dt = (DataTable)HttpContext.Current.Session["FinalTaxRecord" + Convert.ToString(UniqueVal)];
-
+               
                 DataRow[] MultiUoMresult = dt.Select("SlNo='" + SrlNo + "'");
 
                 foreach (DataRow dr in MultiUoMresult)

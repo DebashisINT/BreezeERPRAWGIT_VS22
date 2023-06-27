@@ -1410,7 +1410,6 @@ namespace ERP.OMS.Management.Activities
                 //    validate = "duplicateProduct";
                 //}
                 //Rev 1.0 End
-
                 foreach (DataRow dr in tempQuotation.Rows)
                 {
                     decimal ProductQuantity = Convert.ToDecimal(dr["Quantity"]);
@@ -1924,6 +1923,7 @@ namespace ERP.OMS.Management.Activities
                     InvoiceDetails_Id += "," + Convert.ToString(grid_Products.GetSelectedFieldValues("ComponentDetailsID")[i]);
                 }
                 QuoComponent1 = QuoComponent1.TrimStart(',');
+                InvoiceDetails_Id = InvoiceDetails_Id.TrimStart(',');
                 string Quote_Nos = Convert.ToString(e.Parameters.Split('~')[1]);
                 string companyId = Convert.ToString(HttpContext.Current.Session["LastCompany"]);
                 var SelectedSalesInvoiceType = rdl_SalesInvoice.SelectedValue;
@@ -1936,10 +1936,9 @@ namespace ERP.OMS.Management.Activities
                     {
                         if (SelectedSalesInvoiceType == "TSI")
                         { 
-                            dt_QuotationDetails = objSalesReturnBL.GetTransitInvoiceforRDEC(QuoComponent1, IdKey, Product_id1, companyId, fin_year); 
-                        }
-                        else
-                        {
+                            dt_QuotationDetails = objSalesReturnBL.GetTransitInvoiceforRDEC(QuoComponent1, IdKey, Product_id1, companyId, fin_year); }
+                        else 
+                        { 
                             //Rev 1.0
                             //dt_QuotationDetails = objSalesReturnBL.GetSalesInvoiceforRDEC(QuoComponent1, IdKey, Product_id1, companyId, fin_year);
                             dt_QuotationDetails = objSalesReturnBL.GetSalesInvoiceforRDECbySIDetailsID(QuoComponent1, IdKey, Product_id1, companyId, fin_year, InvoiceDetails_Id);

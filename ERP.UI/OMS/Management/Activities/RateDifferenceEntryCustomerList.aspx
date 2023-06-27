@@ -1,7 +1,7 @@
 ﻿<%--==========================================================Revision History ============================================================================================   
- 1.0   Priti   V2.0.36   18-01-2023     	0025318: Views to be converted to Procedures in the Listing Page of Transaction / Return-Sales / Rate Difference Entry Customer
- 2.0   Priti   V2.0.36   17-02-2023         After Listing view upgradation delete data show in listing issue solved.
-
+ 1.0   Priti     V2.0.36    18-01-2023     	0025318: Views to be converted to Procedures in the Listing Page of Transaction / Return-Sales / Rate Difference Entry Customer
+ 2.0   Priti     V2.0.36    17-02-2023         After Listing view upgradation delete data show in listing issue solved.
+ 3.0   Pallab    V2.0.37    13-04-2023     	25818: Rate Difference Entry Customer page design modification
 ========================================== End Revision History =======================================================================================================--%>
 
 
@@ -352,8 +352,8 @@
                     cGrdSalesReturn.cpDelete = null;
                    
                     /* Rev 2.0*/
-                    //  cGrdSalesReturn.Refresh();
-                    updateGridByDate();
+                      cGrdSalesReturn.Refresh();
+                    //updateGridByDate();
                     /* Rev 2.0 End*/
                 }
             }
@@ -429,18 +429,50 @@
             });
         });
     </script>
+
+    <%--Rev 3.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        select
+        {
+            z-index: 0;
+        }
+
+        #GrdSalesReturn {
+            max-width: 98% !important;
+        }
+        #FormDate, #toDate, #dtTDate, #dt_PLQuote, #dt_PlQuoteExpiry {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        select
+        {
+            -webkit-appearance: auto;
+        }
+
+        .calendar-icon
+        {
+                right: 10px;
+        }
+    </style>
+    <%--Rev end 3.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="panel-heading">
+    <%--Rev 3.0: "outer-div-main" class add --%>
+    <div class="outer-div-main clearfix">
+        <div class="panel-heading">
         <div class="panel-title">
             <h3>Rate Difference Entry Customer</h3>
         </div>
     </div>
-    <div class="form_main">
+        <div class="form_main">
         <div class="clearfix">
             <% if (rights.CanAdd)
                { %>
-            <a href="javascript:void(0);" onclick="OnAddButtonClick()" class="btn btn-primary"><span><u>A</u>dd New</span> </a><%} %>
+            <a href="javascript:void(0);" onclick="OnAddButtonClick()" class="btn btn-success"><span><u>A</u>dd New</span> </a><%} %>
 
             <% if (rights.CanExport)
                { %>
@@ -458,20 +490,28 @@
                 <tr>
                     <td>
                         <label>From Date</label></td>
-                    <td>
+                    <%--Rev 3.0: "for-cust-icon" class add --%>
+                    <td class="for-cust-icon">
                         <dxe:ASPxDateEdit ID="FormDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="cFormDate" Width="100%">
                             <ButtonStyle Width="13px">
                             </ButtonStyle>
                         </dxe:ASPxDateEdit>
+                        <%--Rev 3.0--%>
+                        <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                        <%--Rev end 3.0--%>
                     </td>
                     <td>
                         <label>To Date</label>
                     </td>
-                    <td>
+                    <%--Rev 3.0: "for-cust-icon" class add --%>
+                    <td class="for-cust-icon">
                         <dxe:ASPxDateEdit ID="toDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" ClientInstanceName="ctoDate" Width="100%">
                             <ButtonStyle Width="13px">
                             </ButtonStyle>
                         </dxe:ASPxDateEdit>
+                        <%--Rev 3.0--%>
+                        <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                        <%--Rev end 3.0--%>
                     </td>
                     <td>Unit</td>
                     <td>
@@ -487,7 +527,7 @@
             </table>
         </div>
     </div>
-    <div class="GridViewArea">
+        <div class="GridViewArea">
         <dxe:ASPxGridView ID="GrdSalesReturn" ClientInstanceName="cGrdSalesReturn" runat="server" KeyFieldName="SrlNo"
             AutoGenerateColumns="False" Width="100%" SettingsBehavior-AllowFocusedRow="true"
             OnCustomCallback="GrdSalesReturn_CustomCallback"
@@ -653,6 +693,7 @@
         <dx:LinqServerModeDataSource ID="EntityServerModeDataSource" runat="server" OnSelecting="EntityServerModeDataSource_Selecting"
             ContextTypeName="ERPDataClassesDataContext" TableName="v_RateDifferenceEntryCustomerList" />
         <asp:HiddenField ID="hiddenedit" runat="server" />
+    </div>
     </div>
     <div style="display: none">
         <dxe:ASPxGridViewExporter ID="exporter" GridViewID="GrdSalesReturn" runat="server" Landscape="false" PaperKind="A4" PageHeader-Font-Size="Larger" PageHeader-Font-Bold="true">

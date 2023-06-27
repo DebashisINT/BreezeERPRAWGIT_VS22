@@ -1,3 +1,7 @@
+<%--=======================================================Revision History=========================================================    
+    1.0   Pallab    V2.0.38   20-04-2023      25868: Add Vendor Payment/Receipt module design modification
+=========================================================End Revision History=======================================================--%>
+
 <%@ Page Title="VendorPaymentReceipt" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="VendorPaymentReceipt.aspx.cs" Inherits="ERP.OMS.Management.Activities.VendorPaymentReceipt" %>
 
 <%@ Register Src="~/OMS/Management/Activities/UserControls/BillingShippingControl.ascx" TagPrefix="ucBS" TagName="BillingShippingControl" %>
@@ -328,9 +332,114 @@ function Currency_Rate() {
     </script>
 
 
+    <%--Rev 1.0--%>
+    <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
+    
+    <style>
+        select
+        {
+            z-index: 1;
+        }
+
+        #grid {
+            max-width: 98% !important;
+        }
+        #FormDate , #toDate , #dtTDate , #dt_PLQuote , #dt_PLSales , #dt_SaleInvoiceDue , #dtPostingDate , #dtChallandate
+        {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        #FormDate_B-1 , #toDate_B-1 , #dtTDate_B-1 , #dt_PLQuote_B-1 , #dt_PLSales_B-1 , #dt_SaleInvoiceDue_B-1 , #dtPostingDate_B-1 ,
+        #dtChallandate_B-1
+        {
+            background: transparent !important;
+            border: none;
+            width: 30px;
+            padding: 10px !important;
+        }
+
+        #FormDate_B-1 #FormDate_B-1Img , #toDate_B-1 #toDate_B-1Img , #dtTDate_B-1 #dtTDate_B-1Img , #dt_PLQuote_B-1 #dt_PLQuote_B-1Img ,
+        #dt_PLSales_B-1 #dt_PLSales_B-1Img , #dt_SaleInvoiceDue_B-1 #dt_SaleInvoiceDue_B-1Img , #dtPostingDate_B-1 #dtPostingDate_B-1Img ,
+        #dtChallandate_B-1 #dtChallandate_B-1Img
+        {
+            display: none;
+        }
+
+        /*select
+        {
+            -webkit-appearance: auto;
+        }*/
+
+        .calendar-icon
+        {
+                right: 20px;
+                bottom: 8px;
+        }
+        .padTabtype2 > tbody > tr > td
+        {
+            vertical-align: bottom;
+        }
+        #rdl_Salesquotation
+        {
+            margin-top: 0px;
+        }
+
+        .lblmTop8>span, .lblmTop8>label
+        {
+            margin-top: 0 !important;
+        }
+
+        .col-md-2, .col-md-4 {
+    margin-bottom: 10px;
+}
+
+        .simple-select::after
+        {
+                top: 6px;
+            right: -2px;
+        }
+
+        .dxeErrorFrameWithoutError_PlasticBlue.dxeControlsCell_PlasticBlue
+        {
+            padding: 0;
+        }
+
+        .aspNetDisabled
+        {
+            background: #f3f3f3 !important;
+        }
+
+        .backSelect {
+    background: #42b39e !important;
+}
+
+        #ddlInventory
+        {
+                -webkit-appearance: auto;
+        }
+
+        /*.wid-90
+        {
+            width: 100%;
+        }
+        .dxtcLite_PlasticBlue.dxtc-top > .dxtc-content
+        {
+            width: 97%;
+        }*/
+        .newLbl
+        {
+                margin: 3px 0 !important;
+        }
+
+    </style>
+    <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="panel-title clearfix">
+    <%--Rev 1.0: "outer-div-main" class add --%>
+    <div class="outer-div-main">
+        <div class="panel-title clearfix">
         <h3 class="pull-left">
             <asp:Label ID="lblHeadTitle" Text="Add Vendor Payment/Receipt" runat="server"></asp:Label>
         </h3>
@@ -374,7 +483,7 @@ function Currency_Rate() {
         </div>
         <div id="divcross" class="crossBtn" style="margin-left: 100px;"><a href="VendorPaymentReceiptList.aspx"><i class="fa fa-times"></i></a></div>
     </div>
-    <div class="form_main  clearfix">
+        <div class="form_main  clearfix">
 
         <dxe:ASPxPageControl ID="ASPxPageControl1" runat="server" ClientInstanceName="page" Width="100%">
             <TabPages>
@@ -382,14 +491,15 @@ function Currency_Rate() {
                     <ContentCollection>
                         <dxe:ContentControl runat="server">
                             <div id="DivEntry">
-                                <div id="divChangable" runat="server" style="background: #f5f4f3; padding: 5px 0 5px 0; margin-bottom: 10px; border-radius: 4px; border: 1px solid #ccc;">
+                                <div id="divChangable" runat="server" style=" padding: 5px 0 5px 0; margin-bottom: 10px; border-radius: 4px;">
                                     <div class="">
 
                                         <div class="col-md-3">
-                                            <label for="exampleInputName2" style="margin-top: 8px">
+                                            <label for="exampleInputName2" style="">
                                                 Voucher Type <b id="bTypeText" runat="server" style="width: 20%; display: none; font-size: 12px"></b>
                                             </label>
-                                            <div>
+                                            <%--Rev 1.0: "simple-select" class add --%>
+                                            <div class="simple-select">
                                                 <asp:DropDownList ID="ComboVoucherType" runat="server" Width="100%" onchange="rbtnType_SelectedIndexChanged()">
                                                     <asp:ListItem Text="Payment" Value="P" Selected="True" />
                                                     <asp:ListItem Text="Receipt" Value="R" />
@@ -397,7 +507,7 @@ function Currency_Rate() {
                                             </div>
                                         </div>
                                         <div class="col-md-3" id="divNumberingScheme" runat="server">
-                                            <label style="margin-top: 8px">Numbering Scheme</label>
+                                            <label style="">Numbering Scheme</label>
                                             <dxe:ASPxComboBox ID="CmbScheme" EnableIncrementalFiltering="True" ClientInstanceName="cCmbScheme"
                                                 SelectedIndex="0" EnableCallbackMode="true"
                                                 TextField="SchemaName" ValueField="ID"
@@ -434,6 +544,9 @@ function Currency_Rate() {
                                                     <ClientSideEvents GotFocus="TransDate_GotFocus" LostFocus="function(s, e) { SetLostFocusonDemand(e)}"></ClientSideEvents>
                                                 </dxe:ASPxDateEdit>
                                                 <span id="MandatoryTransDate" class="iconTransDate  pullleftClass fa fa-exclamation-circle iconRed " style="color: red; position: absolute; display: none" title="Mandatory"></span>
+                                                <%--Rev 1.0--%>
+                                                <img src="/assests/images/calendar-icon.png" class="calendar-icon"/>
+                                                <%--Rev end 1.0--%>
                                             </div>
                                         </div>
 
@@ -442,7 +555,8 @@ function Currency_Rate() {
                                         <div class="col-md-2 lblmTop8">
 
                                             <label>For Unit <span style="color: red">*</span></label>
-                                            <div>
+                                            <%--Rev 1.0: "simple-select" class add --%>
+                                            <div class="simple-select">
                                                 <asp:DropDownList ID="ddlBranch" runat="server" DataSourceID="dsBranch" onchange="ddlBranch_SelectedIndexChanged()"
                                                     DataTextField="BANKBRANCH_NAME" DataValueField="BANKBRANCH_ID" Width="100%">
                                                 </asp:DropDownList>
@@ -589,7 +703,7 @@ function Currency_Rate() {
 
 
 
-                                        <div class="col-md-4" style="margin-top: 7px; margin-bottom: 5px;" id="ProductSection" runat="server">
+                                        <div class="col-md-4" style=" margin-bottom: 5px;" id="ProductSection" runat="server">
                                             <div style="height: auto; margin-bottom: 5px;">
                                                 Select product to calculate GST for Advance
                                             </div>
@@ -853,7 +967,7 @@ function Currency_Rate() {
 
                                         <span id="tdSaveButtonNew" runat="server">
                                             <dxe:ASPxButton ID="btnSaveNew" ClientInstanceName="cbtnSaveNew" runat="server"
-                                                AutoPostBack="false" CssClass="btn btn-primary" TabIndex="0" Text="Save & N&#818;ew"
+                                                AutoPostBack="false" CssClass="btn btn-success" TabIndex="0" Text="Save & N&#818;ew"
                                                 UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {SaveButtonClickNew();}" />
                                             </dxe:ASPxButton>
@@ -861,7 +975,7 @@ function Currency_Rate() {
                                         </span>
                                         <span id="tdSaveButton" runat="server">
                                             <dxe:ASPxButton ID="btnSaveRecords" ClientInstanceName="cbtnSaveRecords" runat="server"
-                                                AutoPostBack="false" CssClass="btn btn-primary" TabIndex="0" Text="Save & Ex&#818;it"
+                                                AutoPostBack="false" CssClass="btn btn-success" TabIndex="0" Text="Save & Ex&#818;it"
                                                 UseSubmitBehavior="False">
                                                 <ClientSideEvents Click="function(s, e) {SaveButtonClick();}" />
                                             </dxe:ASPxButton>
@@ -1310,7 +1424,7 @@ function Currency_Rate() {
         <asp:HiddenField ID="hdntdschecking" runat="server" />
         <%--TDS Section --%>
     </div>
-    <div id="DivHiddenField">
+        <div id="DivHiddenField">
         <asp:HiddenField ID="hdnBtnClick" runat="server" />
         <asp:HiddenField ID="hdnInstrumentType" runat="server" />
         <asp:HiddenField ID="hdnPageStatus" runat="server" />
@@ -1329,7 +1443,7 @@ function Currency_Rate() {
         <%--for Project  --%>
     </div>
 
-    <div id="DivDataSource">
+        <div id="DivDataSource">
         <%-- <asp:SqlDataSource ID="SqlSchematype" runat="server"
             SelectCommand=""></asp:SqlDataSource>--%>
         <asp:SqlDataSource ID="SqlCurrencyBind" runat="server"></asp:SqlDataSource>
@@ -1337,9 +1451,10 @@ function Currency_Rate() {
             ConflictDetection="CompareAllValues"
             SelectCommand=""></asp:SqlDataSource>
     </div>
-    <dxe:ASPxLoadingPanel ID="LoadingPanel" runat="server" ClientInstanceName="LoadingPanel" ContainerElementID="grid"
+        <dxe:ASPxLoadingPanel ID="LoadingPanel" runat="server" ClientInstanceName="LoadingPanel" ContainerElementID="grid"
         Modal="True">
     </dxe:ASPxLoadingPanel>
+    </div>
     <%--UDF Popup --%>
     <dxe:ASPxPopupControl ID="ASPXPopupControl" runat="server"
         CloseAction="CloseButton" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" ClientInstanceName="popup" Height="630px"
