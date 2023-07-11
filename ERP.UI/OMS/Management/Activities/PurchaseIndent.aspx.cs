@@ -310,11 +310,11 @@ namespace ERP.OMS.Management.Activities
                 {
                     if (BackDatedEntryPurchaseIndent.ToUpper().Trim() == "YES")
                     {
-                        HdnBackDatedEntryPurchaseIndent.Value = "1";
+                        HdnBackDatedEntryPurchaseIndent1.Value = "1";
                     }
                     else if (BackDatedEntryPurchaseIndent.ToUpper().Trim() == "NO")
                     {
-                        HdnBackDatedEntryPurchaseIndent.Value = "0";
+                        HdnBackDatedEntryPurchaseIndent1.Value = "0";
                     }
                 }
                 //Rev 1.0 End

@@ -2621,6 +2621,6 @@ function ProductsComboGotFocusChange(s, e) {
     </dxe:ASPxCallbackPanel>
     <%--End of Mantis Issue 25394--%>
     <%--Rev 4.0 --%>
-     <asp:HiddenField ID="HdnBackDatedEntryPurchaseIndent" runat="server" />
+     <asp:HiddenField ID="HdnBackDatedEntryPurchaseIndent1" runat="server" />
   <%--  Rev 4.0 End--%>
 </asp:Content>
