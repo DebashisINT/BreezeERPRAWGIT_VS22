@@ -1,4 +1,7 @@
-﻿
+﻿//==================================================== Revision History =========================================================================
+//1.0  Priti V2.0.39    18-08-2023  0026720: Previous product has not been deleted in the Revised BOM.
+//====================================================End Revision History=====================================================================*@
+
 using BusinessLogicLayer;
 using DataAccessLayer;
 using DevExpress.Web;
@@ -443,6 +446,10 @@ namespace Manufacturing.Controllers
                             bomproductdataobj.AltUom = Convert.ToString(row["AltUom"]);
                             bomproductdataobj.MultiUOMSelectionForManufacturing = cSOrder.GetSystemSettingsResult("MultiUOMSelectionForManufacturing");
                             //End of rev Pratik
+
+                            //Rev 1.0
+                            bomproductdataobj.ActualSL = Convert.ToString(row["SlNO"]);
+                            //Rev 1.0 End
                             bomproductdata.Add(bomproductdataobj);
 
                         }
@@ -589,7 +596,9 @@ namespace Manufacturing.Controllers
                             obj.AltQuantity = Convert.ToDecimal(item.AltQuantity);
                             obj.AltUom = (item.AltUom);
                             //End Rev Pratik
-
+                            //Rev 1.0
+                            obj.ActualSL = (item.ActualSL);
+                            //Rev 1.0 End
                             udtlist.Add(obj);
                         }
                     }
@@ -616,12 +625,30 @@ namespace Manufacturing.Controllers
                             obj.AltQuantity = Convert.ToDecimal(item.AltQuantity);
                             obj.AltUom = (item.AltUom);
                             //End Rev Pratik
-
+                            //Rev 1.0
+                            obj.ActualSL = "0";
+                            //Rev 1.0 End
                             udtlist.Add(obj);
                         }
-                    }                  
+                    }
+                    //Rev 1.0
+                    foreach (var item in updateValues.DeleteKeys)
+                    {
+                        Int32 delId = Convert.ToInt32(item);                     
 
-                    if (udtlist.Count > 0)
+                        foreach (var item1 in udtlist.ToList())
+                        {
+                            Int32 delId1 = Convert.ToInt32(item1.ActualSL);
+
+                            if(delId1== delId)
+                            {
+                                udtlist.Remove(item1);
+                            }                           
+                        }                        
+                    }
+                    //Rev 1.0 End
+
+                        if (udtlist.Count > 0)
                     {
                         SaveDataArea = 1;
                         //Rev work start 03.08.2022    mantise no:0025098 code retification
@@ -647,8 +674,8 @@ namespace Manufacturing.Controllers
                             obj1.AltUom = (item.AltUom);
                             //End Rev Pratik
                             //Rev work start 03.08.2022 mantise no:0025098 code retification
-                                obj1.SlNo = Convert.ToInt32(item.SlNo);
-                                //Rev work close 03.08.2022 mantise no:0025098 code retification
+                            obj1.SlNo = Convert.ToInt32(item.SlNo);
+                            //Rev work close 03.08.2022 mantise no:0025098 code retification
                             udt.Add(obj1);
                         }
 
@@ -1162,7 +1189,12 @@ namespace Manufacturing.Controllers
                         }
                     }
 
-                    if (udtlist.Count > 0)
+                    foreach (var item in updateValues.DeleteKeys)
+                    { 
+
+                    }
+
+                        if (udtlist.Count > 0)
                     {
                         udtlist = udtlist.OrderBy(x => x.SlNo).ToList();
 
