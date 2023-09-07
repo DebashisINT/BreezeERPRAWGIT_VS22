@@ -26,7 +26,7 @@ namespace ERP.OMS.Management.Master
 
             if (TimeSpan.Compare(DateTime.Now.TimeOfDay, dateTime.TimeOfDay) != -1)
             {
-                if (Convert.ToString(Session["UserName"]).ToUpper() == "ADMIN")
+                if ((Convert.ToString(Session["UserName"]).ToUpper() == "ADMIN") || (Convert.ToString(Session["UserName"]).ToUpper() == "MANAGER"))
                 {
                     if (!Page.IsPostBack)
                     {
