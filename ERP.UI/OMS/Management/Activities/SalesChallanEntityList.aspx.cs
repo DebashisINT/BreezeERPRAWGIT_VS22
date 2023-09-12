@@ -45,17 +45,31 @@ namespace ERP.OMS.Management.Activities
                 string ProjectSelectInEntryModule = cSOrder.GetSystemSettingsResult("ProjectSelectInEntryModule");
                 if (!String.IsNullOrEmpty(ProjectSelectInEntryModule))
                 {
+                    // Rev Sanchita
+                    //if (ProjectSelectInEntryModule == "Yes")
+                    //{
+                    //    GrdOrder.Columns[11].Visible = true;
+
+
+                    //}
+                    //else if (ProjectSelectInEntryModule.ToUpper().Trim() == "NO")
+                    //{
+                    //    GrdOrder.Columns[11].Visible = false;
+
+                    //}
+
                     if (ProjectSelectInEntryModule == "Yes")
                     {
-                        GrdOrder.Columns[11].Visible = true;
+                        GrdOrder.Columns[9].Visible = true;
 
 
                     }
                     else if (ProjectSelectInEntryModule.ToUpper().Trim() == "NO")
                     {
-                        GrdOrder.Columns[11].Visible = false;
+                        GrdOrder.Columns[9].Visible = false;
 
                     }
+                    // End of Rev Sanchita
                 }
 
 

@@ -173,14 +173,24 @@ namespace ERP.OMS.Management.Activities
             string ProjectSelectInEntryModule = cbl.GetSystemSettingsResult("ProjectSelectInEntryModule");
             if (!String.IsNullOrEmpty(ProjectSelectInEntryModule))
             {
+                // Rev Sanchita
+                //if (ProjectSelectInEntryModule == "Yes")
+                //{
+                //    GrdQuotation.Columns[8].Visible = true;
+                //}
+                //else if (ProjectSelectInEntryModule.ToUpper().Trim() == "NO")
+                //{
+                //    GrdQuotation.Columns[8].Visible = false;
+                //}
                 if (ProjectSelectInEntryModule == "Yes")
                 {
-                    GrdQuotation.Columns[8].Visible = true;
+                    GrdQuotation.Columns[9].Visible = true;
                 }
                 else if (ProjectSelectInEntryModule.ToUpper().Trim() == "NO")
                 {
-                    GrdQuotation.Columns[8].Visible = false;
+                    GrdQuotation.Columns[9].Visible = false;
                 }
+                // End of RevSanchita
             }
 
             DataTable dtposTimeEdit = oDBEngine.GetDataTable("SELECT  top 1 convert(varchar(50),Lock_Fromdate,110) LockCon_Fromdate,convert(varchar(50),Lock_Todate,110) LockCon_Todate,convert(varchar(10),Lock_Fromdate,105) Dataedit_Fromdate,convert(varchar(10),Lock_Todate,105) Dataedit_Todate FROM Trans_LockConfigouration_Details WHERE  Type='Edit' and Module_Id=10");
