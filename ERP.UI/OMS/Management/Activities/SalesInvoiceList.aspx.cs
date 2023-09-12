@@ -45,14 +45,17 @@ namespace ERP.OMS.Management.Activities
             {
                 if (ProjectSelectInEntryModule == "Yes")
                 {
-                    GrdQuotation.Columns[10].Visible = true;
-
-
+                    // Rev Sanchita
+                    //GrdQuotation.Columns[10].Visible = true;
+                    GrdQuotation.Columns[11].Visible = true;
+                    // End of Rev Sanchita
                 }
                 else if (ProjectSelectInEntryModule.ToUpper().Trim() == "NO")
                 {
-                    GrdQuotation.Columns[10].Visible = false;
-
+                    // Rev Sanchita
+                    //GrdQuotation.Columns[10].Visible = false;
+                    GrdQuotation.Columns[11].Visible = false;
+                    // End of Rev Sanchita
                 }
             }
             MasterSettings objmaster = new MasterSettings();
@@ -60,17 +63,29 @@ namespace ERP.OMS.Management.Activities
             
                 if (hdnActiveEInvoice.Value == "0")
                 {
-                    GrdQuotation.Columns[18].Visible = false;
+                    // Rev Sanchita
+                    //GrdQuotation.Columns[18].Visible = false;
+                    //GrdQuotation.Columns[19].Visible = false;
+                    //GrdQuotation.Columns[20].Visible = false;
+                    //GrdQuotation.Columns[21].Visible = false;
                     GrdQuotation.Columns[19].Visible = false;
                     GrdQuotation.Columns[20].Visible = false;
                     GrdQuotation.Columns[21].Visible = false;
+                    GrdQuotation.Columns[22].Visible = false;
+                    // End of Rev Sanchita
                 }
                 else if (hdnActiveEInvoice.Value == "1")
                 {
-                    GrdQuotation.Columns[18].Visible = true;
+                    // Rev Sanchita
+                    //GrdQuotation.Columns[18].Visible = true;
+                    //GrdQuotation.Columns[19].Visible = true;
+                    //GrdQuotation.Columns[20].Visible = true;
+                    //GrdQuotation.Columns[21].Visible = true;
                     GrdQuotation.Columns[19].Visible = true;
                     GrdQuotation.Columns[20].Visible = true;
                     GrdQuotation.Columns[21].Visible = true;
+                    GrdQuotation.Columns[22].Visible = true;
+                    // End of Rev Sanchita
                 }
             
 
@@ -205,7 +220,10 @@ namespace ERP.OMS.Management.Activities
         }
         public void bindexport(int Filter)
         {
-            GrdQuotation.Columns[6].Visible = false;
+            // Rev Sanchita
+            //GrdQuotation.Columns[6].Visible = false;
+            GrdQuotation.Columns[7].Visible = false;
+            // End of Rev Sanchita
             string filename = "Sales Invoice";
             exporter.FileName = filename;
             exporter.FileName = "GrdSalesinvoice";
