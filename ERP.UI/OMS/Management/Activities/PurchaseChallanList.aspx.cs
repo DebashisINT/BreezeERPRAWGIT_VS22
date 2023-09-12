@@ -56,14 +56,24 @@ namespace ERP.OMS.Management.Activities
             string ProjectSelectInEntryModule = cbl.GetSystemSettingsResult("ProjectSelectInEntryModule");
             if (!String.IsNullOrEmpty(ProjectSelectInEntryModule))
             {
+                // Rev Sanchita
+                //if (ProjectSelectInEntryModule == "Yes")
+                //{
+                //    Grid_PurchaseChallan.Columns[14].Visible = true;
+                //}
+                //else if (ProjectSelectInEntryModule.ToUpper().Trim() == "NO")
+                //{
+                //    Grid_PurchaseChallan.Columns[14].Visible = false;
+                //}
                 if (ProjectSelectInEntryModule == "Yes")
                 {
-                    Grid_PurchaseChallan.Columns[14].Visible = true;
+                    Grid_PurchaseChallan.Columns[15].Visible = true;
                 }
                 else if (ProjectSelectInEntryModule.ToUpper().Trim() == "NO")
                 {
-                    Grid_PurchaseChallan.Columns[14].Visible = false;
+                    Grid_PurchaseChallan.Columns[15].Visible = false;
                 }
+                // End of Rev Sanchita
             }
             //End Rev Tanmoy
 

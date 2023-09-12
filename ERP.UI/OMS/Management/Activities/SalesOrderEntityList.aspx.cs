@@ -57,34 +57,64 @@ namespace ERP.OMS.Management.Activities
             string ApproveSettingsSalesOrder = cSOrder.GetSystemSettingsResult("ApproveSettingsSalesOrder");
             if (!String.IsNullOrEmpty(ProjectSelectInEntryModule))
             {
+                // Rev Sanchita
+                //if (ProjectSelectInEntryModule == "Yes")
+                //{
+                //    GrdOrder.Columns[4].Visible = true;                
+
+                //}
+                //else if (ProjectSelectInEntryModule.ToUpper().Trim() == "NO")
+                //{
+                //    GrdOrder.Columns[4].Visible = false;                   
+                //}
+
                 if (ProjectSelectInEntryModule == "Yes")
                 {
-                    GrdOrder.Columns[4].Visible = true;                
+                    GrdOrder.Columns[5].Visible = true;
 
                 }
                 else if (ProjectSelectInEntryModule.ToUpper().Trim() == "NO")
                 {
-                    GrdOrder.Columns[4].Visible = false;                   
+                    GrdOrder.Columns[5].Visible = false;
                 }
+                // End of Rev Sanchita
             }
 
             if (!String.IsNullOrEmpty(ApproveSettingsSalesOrder))
             {
+                // Rev Sanchita
+                //if (ApproveSettingsSalesOrder == "Yes")
+                //{
+                //    GrdOrder.Columns[17].Visible = true;
+                //    GrdOrder.Columns[18].Visible = true;
+                //    GrdOrder.Columns[19].Visible = true;
+                //    isApprove = true;
+                //}
+                //else if (ApproveSettingsSalesOrder.ToUpper().Trim() == "NO")
+                //{
+                //    GrdOrder.Columns[17].Visible = false;
+                //    GrdOrder.Columns[18].Visible = false;
+                //    GrdOrder.Columns[19].Visible = false;
+                //    isApprove = false;
+
+                //}
+
                 if (ApproveSettingsSalesOrder == "Yes")
                 {
-                    GrdOrder.Columns[17].Visible = true;
                     GrdOrder.Columns[18].Visible = true;
                     GrdOrder.Columns[19].Visible = true;
+                    GrdOrder.Columns[20].Visible = true;
                     isApprove = true;
                 }
                 else if (ApproveSettingsSalesOrder.ToUpper().Trim() == "NO")
                 {
-                    GrdOrder.Columns[17].Visible = false;
                     GrdOrder.Columns[18].Visible = false;
                     GrdOrder.Columns[19].Visible = false;
+                    GrdOrder.Columns[20].Visible = false;
                     isApprove = false;
 
                 }
+                // End of Rev Sanchita
             }
 
             string PrintButton = cSOrder.GetSystemSettingsResult("PrintbuttonSOlistingForInvoiceDetails");

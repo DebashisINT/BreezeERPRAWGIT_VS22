@@ -416,11 +416,11 @@
                                     <a href="javascript:void(0);" onclick="onInfluencerCommissionReturn('<%#Eval("Return_Id")%>')" class="" title="">
                                         <span class='ico editSeven'><i class='fa fa-user-plus' aria-hidden='true'></i></span><span class='hidden-xs'>Influecer Return</span></a>
                                     <%-- REV 3.0--%>
-                                    <% if (rights.CanUpdateTransporter)
-                                        { %>
+                                    <%--<% if (rights.CanUpdateTransporter)
+                                        { %>--%>
                                     <a href="javascript:void(0);" onclick="UpdateTransporter('<%#Eval("Return_Id")%>')" class="" title="">
                                         <span class='ico editColor'><i class='fa fa-pencil' aria-hidden='true'></i></span><span class='hidden-xs'>Update Transporter</span></a>
-                                    <% } %>
+                                    <%--<% } %>--%>
                                     <%-- REV 3.0 END--%>
                             </div>
                         </DataItemTemplate>
