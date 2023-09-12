@@ -2,6 +2,7 @@
 Rev Number         DATE              VERSION          DEVELOPER           CHANGES
 1.0                05-05-2023        2.0.37           Pallab              26038: Purchase Invoice module design modification & check in small device
 2.0                30-05-2023        2.0.38           Sanchita            ERP - Listing Views - Purchase Invoice. refer: 26250   
+4.0                28-07-2023        V2.0.39           Priti               26609:Attachment icon will be shown against the document number if there is any attachment - Sales Challan
 ====================================================== Revision History =============================================--%>
 
 <%@ Page Title="Purchase Invoice" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" EnableEventValidation="false"
@@ -245,6 +246,19 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                         <CellStyle Wrap="False" CssClass="gridcellleft"></CellStyle>
                         <Settings AllowAutoFilterTextInputTimer="False" />
                     </dxe:GridViewDataTextColumn>
+                    <%--Rev 4.0--%>
+                    <dxe:GridViewDataTextColumn HeaderStyle-HorizontalAlign="Center" CellStyle-HorizontalAlign="center" VisibleIndex="1" Width="40px" FixedStyle="Left">
+                        <DataItemTemplate>
+                            <img src="../../../assests/images/attachment.png" style='<%#Eval("IsAttachmentDoc")%>' />                        
+                        </DataItemTemplate>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                        <CellStyle HorizontalAlign="Center"></CellStyle>
+
+                        <HeaderTemplate><span></span></HeaderTemplate>
+                        <EditFormSettings Visible="False"></EditFormSettings>
+                        <Settings AllowAutoFilterTextInputTimer="False"/>
+                    </dxe:GridViewDataTextColumn>
+                    <%--End of Rev 4.0--%>
                     <dxe:GridViewDataTextColumn Caption="Document No." FieldName="InvoiceNumber" VisibleIndex="1" Width="130px">
                         <CellStyle CssClass="gridcellleft" Wrap="true">
                         </CellStyle>
