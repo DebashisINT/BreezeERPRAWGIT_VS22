@@ -2,6 +2,7 @@
 Rev Number         DATE              VERSION          DEVELOPER           CHANGES
 1.0                05-05-2023        2.0.37           Pallab              26038: Purchase Invoice module design modification & check in small device
 2.0                30-05-2023        2.0.38           Sanchita            ERP - Listing Views - Purchase Invoice. refer: 26250   
+3.0                03-07-2023        V2.0.39           Pallab              Printing a different document while taking print from Purchase Invoice module. refer: 26494 
 4.0                28-07-2023        V2.0.39           Priti               26609:Attachment icon will be shown against the document number if there is any attachment - Sales Challan
 ====================================================== Revision History =============================================--%>
 
@@ -112,11 +113,13 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                 right: 18px;
         }
 
-        .floatedBtnArea
+        /*Rev 3.0*/
+       /* .floatedBtnArea
         {
             width: 62% !important;
             height: 70px;
-        }
+        }*/
+        /*Rev end 3.0*/
 
         .dxgvSearchPanel_PlasticBlue
         {
@@ -126,6 +129,12 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
         {
                 margin-bottom: 10px;
         }
+        /*Rev 3.0*/
+        .floatedBtnArea > a:not(:last-child)
+        {
+                margin-right: 10px !important;
+        }
+        /*Rev end 3.0*/
     </style>
     <%--Rev end 1.0--%>
 </asp:Content>
