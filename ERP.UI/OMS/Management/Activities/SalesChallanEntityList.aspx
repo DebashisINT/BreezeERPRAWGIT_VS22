@@ -1263,7 +1263,6 @@
                     <Settings AllowAutoFilterTextInputTimer="False" />
                     <Settings AutoFilterCondition="Contains" />
                 </dxe:GridViewDataTextColumn>
-
                 <dxe:GridViewDataTextColumn Caption="Entered By" FieldName="EnteredBy"
                     VisibleIndex="15" Width="150">
                     <CellStyle CssClass="gridcellleft" Wrap="true">
@@ -1282,7 +1281,6 @@
                     </CellStyle>
                     <Settings AllowAutoFilterTextInputTimer="False" />
                 </dxe:GridViewDataTextColumn>
-
                 <%--End of Rev Sayantani--%>
                 <dxe:GridViewDataTextColumn HeaderStyle-HorizontalAlign="Center" CellStyle-HorizontalAlign="center" VisibleIndex="18" Width="0">
                     <DataItemTemplate>
@@ -1332,7 +1330,7 @@
             <%-- --Rev Sayantani--%>
             <SettingsBehavior ConfirmDelete="true" EnableCustomizationWindow="true" EnableRowHotTrack="true" />
             <%-- <SettingsCookies Enabled="true" StorePaging="true" StoreColumnsVisiblePosition="false" />--%>
-            <SettingsCookies Enabled="true" StorePaging="true" Version="3.0" />
+            <SettingsCookies Enabled="true" StorePaging="true" Version="2.17" />
             <%-- -- End of Rev Sayantani --%>
             <SettingsContextMenu Enabled="true"></SettingsContextMenu>
             <ClientSideEvents EndCallback="function (s, e) {grid_EndCallBack();}" RowClick="gridRowclick" />

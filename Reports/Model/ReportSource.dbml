@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="PK02122020" Class="ReportSourceDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=3.7.30.86,1480\SQLEXPRESS;Initial Catalog=PK02122020;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="PK02122020ConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=3.7.30.86,1480\SQLEXPRESS;Initial Catalog=PK02122020;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="PK02122020ConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.v_ReportCustomer" Member="v_ReportCustomers">
     <Type Name="v_ReportCustomer">
       <Column Name="Nid" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
@@ -2300,78 +2300,6 @@
       <Column Name="SECTION" Type="System.String" DbType="NVarChar(80)" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.SALEPURCHASEORDERREGISTERDETAIL_REPORT" Member="SALEPURCHASEORDERREGISTERDETAIL_REPORTs">
-    <Type Name="SALEPURCHASEORDERREGISTERDETAIL_REPORT">
-      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SEQ" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
-      <Column Name="ACTIONTYPE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
-      <Column Name="MODULETYPE" Type="System.String" DbType="NVarChar(5)" CanBeNull="true" />
-      <Column Name="IMPORTPURCHASE" Type="System.String" DbType="NVarChar(3)" CanBeNull="true" />
-      <Column Name="BRANCHID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
-      <Column Name="BRANCHNAME" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="PARTYNAME" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="SALESMAN_NAME" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="DOC_ID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
-      <Column Name="DOCONO" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
-      <Column Name="DOCDATE" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
-      <Column Name="ORDERSTAT" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
-      <Column Name="PRODUCTDESC" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="PRODUCTCLASS_NAME" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="QTY" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
-      <Column Name="RATE" Type="System.Decimal" DbType="Decimal(38,3)" CanBeNull="true" />
-      <Column Name="GROSAMOUNT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="TAX_MISC" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="CGST_AMT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="SGST_AMT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="IGST_AMT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="UTGST_AMT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="OTHER_AMT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="TOTALAMOUNT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="city_name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="state" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="cou_country" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="SHIP_TO_PARTY" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="DISCNTRCV" Type="System.String" DbType="NVarChar(3)" CanBeNull="true" />
-      <Column Name="DISCNTRCVDTLS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="COMMISSIONRCV" Type="System.String" DbType="NVarChar(3)" CanBeNull="true" />
-      <Column Name="COMMISSIONRCVDTLS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="COMMISSIONRATE" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
-      <Column Name="DELIVERYDATE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
-      <Column Name="DELREMARKS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="INSURANCECOVERAGE" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="FREIGHTCHARGES" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="FREIGHTREMARKS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="PERMITVALUE" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="OTHREMARKS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="CERTREQ" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
-      <Column Name="DELDETAILS" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="TC_PAYMENTTERMS" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
-      <Column Name="TRNSPRTRNAME" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
-      <Column Name="BANK_NAME" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
-      <Column Name="BANK_BRANCH" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="BANK_ADDRESS" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="BANK_LANDMARK" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="BANK_PIN" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
-      <Column Name="BANK_ACNO" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
-      <Column Name="BANK_SWIFTCODE" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="RTGS" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="IFSC" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="NEFT" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="BANK_REMARKS" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
-      <Column Name="TYPEOFIMPORT" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="INCODVTERMS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="PAYMENTTRMREMARKS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="INCODVTERMSREMARKS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="VALIDITYOFORDERDATE" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="INVNO" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
-      <Column Name="INVDATE" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
-      <Column Name="PARTYINVNO" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
-      <Column Name="PARTYINVDATE" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
-      <Column Name="PARTYORDNO" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="PARTYORDDATE" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
-      <Column Name="CREATEDBY" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.PARTYOUTSTANDINGDET_REPORT" Member="PARTYOUTSTANDINGDET_REPORTs">
     <Type Name="PARTYOUTSTANDINGDET_REPORT">
       <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
@@ -4081,39 +4009,6 @@
       <Column Name="SERIALNUMBER" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.PENDING_SALEPURCHASE_ORDER_REPORT" Member="PENDING_SALEPURCHASE_ORDER_REPORTs">
-    <Type Name="PENDING_SALEPURCHASE_ORDER_REPORT">
-      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SLNO" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="TRANSACTION_TYPE" Type="System.String" DbType="NVarChar(5)" CanBeNull="true" />
-      <Column Name="MODULETYPE" Type="System.String" DbType="NVarChar(5)" CanBeNull="true" />
-      <Column Name="IMPORTPURCHASE" Type="System.String" DbType="NVarChar(3)" CanBeNull="true" />
-      <Column Name="ORDER_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="ORDER_BRANCHID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="BRANCH_DESCRIPTION" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="ORDER_NUMBER" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
-      <Column Name="ORDER_DATE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
-      <Column Name="PARTYORDNO" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="PARTYORDDATE" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
-      <Column Name="CUSTVEND_ID" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="CUSTVEND_NAME" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="PROJ_NAME" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="ORDER_SALESMANID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SALESMAN_NAME" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="ORDERDETAILS_PRODUCTID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
-      <Column Name="SHORTNAME" Type="System.String" DbType="NVarChar(80)" CanBeNull="true" />
-      <Column Name="ORDERDETAILS_PRODUCTDESCRIPTION" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="SPRODUCTS_NAME" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="UOM_NAME" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="SALEPRICE" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
-      <Column Name="ACTUAL_QUANTITY" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
-      <Column Name="MATURE_QUANTITY" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
-      <Column Name="BALANCE_QUANTITY" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
-      <Column Name="ACTUAL_VALUES" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="MATURE_VALUES" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="BALANCE_VALUES" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.PENDINGSALEPURCHASEORDERCOLUMNAR_REPORT" Member="PENDINGSALEPURCHASEORDERCOLUMNAR_REPORTs">
     <Type Name="PENDINGSALEPURCHASEORDERCOLUMNAR_REPORT">
       <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
@@ -4266,31 +4161,111 @@
       <Column Name="BAL_QTY" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.SUBLEDGERPOSTING_REPORT" Member="SUBLEDGERPOSTING_REPORTs">
-    <Type Name="SUBLEDGERPOSTING_REPORT">
+  <Table Name="dbo.PENDING_SALEPURCHASE_ORDER_REPORT" Member="PENDING_SALEPURCHASE_ORDER_REPORTs">
+    <Type Name="PENDING_SALEPURCHASE_ORDER_REPORT">
       <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SLNO" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TRANSACTION_TYPE" Type="System.String" DbType="NVarChar(5)" CanBeNull="true" />
+      <Column Name="MODULETYPE" Type="System.String" DbType="NVarChar(5)" CanBeNull="true" />
+      <Column Name="IMPORTPURCHASE" Type="System.String" DbType="NVarChar(3)" CanBeNull="true" />
+      <Column Name="ORDER_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ORDER_BRANCHID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BRANCH_DESCRIPTION" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="ORDER_NUMBER" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="ORDER_DATE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="PARTYORDNO" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="PARTYORDDATE" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="CUSTVEND_ID" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="CUSTVEND_NAME" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PROJ_NAME" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="ORDER_SALESMANID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SALESMAN_NAME" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ORDERDETAILS_PRODUCTID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="SHORTNAME" Type="System.String" DbType="NVarChar(80)" CanBeNull="true" />
+      <Column Name="ORDERDETAILS_PRODUCTDESCRIPTION" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="SPRODUCTS_NAME" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="UOM_NAME" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="SALEPRICE" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="ACTUAL_QUANTITY" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="MATURE_QUANTITY" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="BALANCE_QUANTITY" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="ACTUAL_VALUES" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="MATURE_VALUES" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="BALANCE_VALUES" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="CUSTVEND_CODE" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SALEPURCHASEORDERREGISTERDETAIL_REPORT" Member="SALEPURCHASEORDERREGISTERDETAIL_REPORTs">
+    <Type Name="SALEPURCHASEORDERREGISTERDETAIL_REPORT">
+      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEQ" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="ACTIONTYPE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="MODULETYPE" Type="System.String" DbType="NVarChar(5)" CanBeNull="true" />
+      <Column Name="IMPORTPURCHASE" Type="System.String" DbType="NVarChar(3)" CanBeNull="true" />
       <Column Name="BRANCHID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
-      <Column Name="BRANCH_DESC" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="CODE" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
-      <Column Name="SUBLEDGER" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
-      <Column Name="LEDG_DESC" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="TRAN_DATE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="BRANCHNAME" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="PARTYNAME" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="SALESMAN_NAME" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="DOC_ID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
-      <Column Name="MODULE_TYPE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
-      <Column Name="DOCUMENT_NO" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Particulars" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="REC_PAYMODE" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Payee_Info" Type="System.String" DbType="NVarChar(400)" CanBeNull="true" />
-      <Column Name="Header_Narration" Type="System.String" DbType="NVarChar(400)" CanBeNull="true" />
-      <Column Name="PARTYINVOICENO" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="PARTYINVOICEDATE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
-      <Column Name="OP_DEBIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="OP_CREDIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="PR_DEBIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="PR_CREDIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="CL_DEBIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
-      <Column Name="CL_CREDIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="DOCONO" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="DOCDATE" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="ORDERSTAT" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="PRODUCTDESC" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="PRODUCTCLASS_NAME" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="QTY" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="UOM" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="RATE" Type="System.Decimal" DbType="Decimal(38,3)" CanBeNull="true" />
+      <Column Name="GROSAMOUNT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="TAX_MISC" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="CGST_AMT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="SGST_AMT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="IGST_AMT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="UTGST_AMT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="OTHER_AMT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="TOTALAMOUNT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="city_name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="state" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="cou_country" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SHIP_TO_PARTY" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DISCNTRCV" Type="System.String" DbType="NVarChar(3)" CanBeNull="true" />
+      <Column Name="DISCNTRCVDTLS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="COMMISSIONRCV" Type="System.String" DbType="NVarChar(3)" CanBeNull="true" />
+      <Column Name="COMMISSIONRCVDTLS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="COMMISSIONRATE" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="DELIVERYDATE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="DELREMARKS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="INSURANCECOVERAGE" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="FREIGHTCHARGES" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="FREIGHTREMARKS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="PERMITVALUE" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="OTHREMARKS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CERTREQ" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="DELDETAILS" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="TC_PAYMENTTERMS" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="TRNSPRTRNAME" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="BANK_NAME" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="BANK_BRANCH" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="BANK_ADDRESS" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="BANK_LANDMARK" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="BANK_PIN" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="BANK_ACNO" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="BANK_SWIFTCODE" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="RTGS" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="IFSC" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="NEFT" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="BANK_REMARKS" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="TYPEOFIMPORT" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="INCODVTERMS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="PAYMENTTRMREMARKS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="INCODVTERMSREMARKS" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="VALIDITYOFORDERDATE" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="INVNO" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="INVDATE" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="PARTYINVNO" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="PARTYINVDATE" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="PARTYORDNO" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="PARTYORDDATE" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="CREATEDBY" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.PARTYLEDGERPOSTING_REPORT" Member="PARTYLEDGERPOSTING_REPORTs">
@@ -4311,6 +4286,33 @@
       <Column Name="PARTICULARS" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
       <Column Name="PAYEE_INFO" Type="System.String" DbType="NVarChar(400)" CanBeNull="true" />
       <Column Name="HEADER_NARRATION" Type="System.String" DbType="NVarChar(400)" CanBeNull="true" />
+      <Column Name="PARTYINVOICENO" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PARTYINVOICEDATE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="OP_DEBIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="OP_CREDIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="PR_DEBIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="PR_CREDIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="CL_DEBIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="CL_CREDIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SUBLEDGERPOSTING_REPORT" Member="SUBLEDGERPOSTING_REPORTs">
+    <Type Name="SUBLEDGERPOSTING_REPORT">
+      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BRANCHID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="BRANCH_DESC" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="CODE" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="SUBLEDGER" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="LEDG_DESC" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="TRAN_DATE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="DOC_ID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="MODULE_TYPE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="DOCUMENT_NO" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Particulars" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="REC_PAYMODE" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Payee_Info" Type="System.String" DbType="NVarChar(400)" CanBeNull="true" />
+      <Column Name="Header_Narration" Type="System.String" DbType="NVarChar(400)" CanBeNull="true" />
       <Column Name="PARTYINVOICENO" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="PARTYINVOICEDATE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
       <Column Name="OP_DEBIT" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />

@@ -1,4 +1,4 @@
-﻿@*====================================================Revision History=========================================================================
+﻿`@*====================================================Revision History=========================================================================
     1.0  Priti   V2.0.36    24-01-2023  0025611:MRP tagging feature required for Issue for Production
     2.0  Priti   V2.0.37    29-03-2023  0025765:The Item Selection is slow and also not working properly in Issue for Production
     3.0  Priti   V2.0.39    25-04-2023  0025852:After selecting all products(pagination wise all products ) in Issue for Production, only few products are coming in the Grid
@@ -6,7 +6,8 @@
     5.0  Pallab  V2.0.38    31-05-2023  0026266: Issue for Production "Production Order No." dropdown issue fix
     6.0  Priti   V2.0.38    01-06-2023  0026257: Excess Qty for an Item to be Stock Transferred automatically to a specific Warehouse while making Issue for Prod
     7.0  Priti   V2.0.38    23-06-2023  0026426: Issue in Issue for Production Module at the time of Edit
-
+    8.0  Priti   V2.0.39    13-07-2023  0026425: Show valuation rate feature is required in Issue For Production module
+    9.0  Priti   V2.0.39    16-08-2023  0026683: In the Warehouse details of Issue for Production, Available Qty tab required to check the stock.
     ====================================================End Revision History=====================================================================*@
 
 
@@ -308,7 +309,6 @@
 
     }
 </script>
-
 <script>
     //REV 1.0
     function MRPStartCallback(s, e) {
@@ -671,7 +671,7 @@
         var AvlStk = gridProductionBOMProductList.batchEditApi.GetCellValue(globalrowindex, 'AvlStk');
         var NegStock = gridProductionBOMProductList.batchEditApi.GetCellValue(globalrowindex, 'Product_NegativeStock');
         gridProductionBOMProductList.batchEditApi.SetCellValue(globalrowindex, 'StkMsg', '1', '');
-        //gridProductionBOMProductList.GetEditor('StkMsg').SetText("1");
+       
         if (parseFloat(Qty) > parseFloat(AvlStk)) {
 
             if (NegStock.trim() == 'W') {
@@ -679,19 +679,16 @@
                     if (r == true) {
                         if (Price != "" && Qty != "") {
                             var amount = parseFloat((parseFloat(Qty).toFixed(4)) * (parseFloat(Price).toFixed(2))).toFixed(2);
-
                             gridProductionBOMProductList.batchEditApi.StartEdit(globalrowindex, 9);
                             gridProductionBOMProductList.GetEditor('Amount').SetText(amount);
                             BOMGridSetTotalAmount("", "");
                         }
                     }
                     else {
-                        gridProductionBOMProductList.batchEditApi.SetCellValue(globalrowindex, 'StkMsg', '0', '');
-                        //gridProductionBOMProductList.GetEditor('StkMsg').SetText("0");
+                        gridProductionBOMProductList.batchEditApi.SetCellValue(globalrowindex, 'StkMsg', '0', '');                       
                         gridProductionBOMProductList.GetEditor('ProductQty').SetText(parseFloat("0.0000").toFixed(4));
                         Qty = "0.0000";
                         var amount = parseFloat((parseFloat(Qty).toFixed(4)) * (parseFloat(Price).toFixed(2))).toFixed(2);
-
                         gridProductionBOMProductList.batchEditApi.StartEdit(globalrowindex, 9);
                         gridProductionBOMProductList.GetEditor('Amount').SetText(amount);
                         BOMGridSetTotalAmount("", "");
@@ -700,22 +697,18 @@
                 });
             }
             else if (NegStock.trim() == 'B') {
-                gridProductionBOMProductList.batchEditApi.SetCellValue(globalrowindex, 'StkMsg', '0', '');
-                //gridProductionBOMProductList.GetEditor('StkMsg').SetText("0");
+                gridProductionBOMProductList.batchEditApi.SetCellValue(globalrowindex, 'StkMsg', '0', '');                
                 jAlert('Product is going negative can not proceed');
                 gridProductionBOMProductList.batchEditApi.StartEdit(globalrowindex, 5);
                 gridProductionBOMProductList.GetEditor('ProductQty').SetText(parseFloat("0.0000").toFixed(4));
                 Qty = "0.0000";
                 var amount = parseFloat((parseFloat(Qty).toFixed(4)) * (parseFloat(Price).toFixed(2))).toFixed(2);
-
                 gridProductionBOMProductList.batchEditApi.StartEdit(globalrowindex, 9);
                 gridProductionBOMProductList.GetEditor('Amount').SetText(amount);
                 BOMGridSetTotalAmount("", "");
             }
             else {
-
                 var amount = parseFloat((parseFloat(Qty).toFixed(4)) * (parseFloat(Price).toFixed(2))).toFixed(2);
-
                 gridProductionBOMProductList.batchEditApi.StartEdit(globalrowindex, 9);
                 gridProductionBOMProductList.GetEditor('Amount').SetText(amount);
                 BOMGridSetTotalAmount("", "");
@@ -723,7 +716,6 @@
         }
         else {
             var amount = parseFloat((parseFloat(Qty).toFixed(4)) * (parseFloat(Price).toFixed(2))).toFixed(2);
-
             gridProductionBOMProductList.batchEditApi.StartEdit(globalrowindex, 9);
             gridProductionBOMProductList.GetEditor('Amount').SetText(amount);
             BOMGridSetTotalAmount("", "");
@@ -1264,7 +1256,7 @@
     }
     //Rev 7.0
      function DeleteWarehouseData() {
-        if (StockOfProduct.length > 0) {          
+        if (StockOfProduct.length > 0) {
             $.ajax({
                 type: "POST",
                 async: false,
@@ -1273,8 +1265,8 @@
                 success: function (response) {
                     var data = response;
                     if (data == "True") {
-                        StockOfProduct = [];                      
-                    }                    
+                        StockOfProduct = [];
+                    }
                     else {
                         jAlert("Please try again later!");
                     }
@@ -1639,7 +1631,7 @@
                 }
             });
 
-            $('#lblProductName').text(ProductName);
+            $('#lblProductNameWH').text(ProductName);           
             $('#txt_SalesAmount').text(QuantityValue);
             $('#txt_SalesUOM').text(UOM);
             $('#txt_StockAmount').text(QuantityValue);
@@ -1787,7 +1779,11 @@
 
 
     function ddlWarehouse_ValueChange() {
-        //var BankBranchID = $('#ddlBankBranch option:selected').val();
+
+        //Rev 9.0
+        var sl = gridProductionBOMProductList.GetEditor("SlNO").GetValue();
+        var branch = $('#ddlBankBranch option:selected').val();
+        //Rev 9.0 End
         var ProductsID = gridProductionBOMProductList.batchEditApi.GetCellValue(globalrowindex, 'ProductId');
         var WarehouseID = $('#WHddlWarehouse option:selected').val();
         $.ajax({
@@ -1801,14 +1797,39 @@
                     html = html + "<option value='" + response[i].BatchID + "'>" + response[i].BatchName + "</option>";
                 }
                 $('#ddlBatch').html(html);
-
-                //ddlWarehouse_ValueChange();
                 UpdateSerialNo();
+            }
+
+        });
+         //Rev 9.0
+            if (WarehouseID != null) {
+                getwirehousewiseaviablestock(sl, ProductsID, branch, WarehouseID)
+            }
+         //Rev 9.0 End
+    }
+     //Rev 9.0
+    function getwirehousewiseaviablestock(sl, strProductID, branch, WarehouseID) {
+        gridProductionBOMProductList.batchEditApi.StartEdit(globalrowindex);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("getWarehousewisestock", "ProductionIssue")",
+            data: JSON.stringify({ sl: sl, strProductID: strProductID, branch: branch, WarehouseID: WarehouseID }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function (msg) {
+                cpstockVal = msg;
+                divpopupAvailableStock.style.display = "block";
+                $('#lblAvailableStock').text(cpstockVal);
+                cpstockVal = null;
+                //gridProductionBOMProductList.batchEditApi.StartEdit(globalrowindex, 5);
+                return false;
+
 
             }
         });
     }
-
+     //Rev 9.0 End
     function PopulateProductWareHouseDetailsData() {
         var BankBranchID = $('#ddlBankBranch option:selected').val();
         var ProductsID = gridProductionBOMProductList.batchEditApi.GetCellValue(globalrowindex, 'ProductId');
@@ -1899,6 +1920,10 @@
         var MfgDate = $('#hdfMfgDate').val();
         var ExpiryDate = $('#hdfExpiryDate').val();
 
+        //Rev 9.0
+        var AVAILsTOCK = $("#lblAvailableStock").text();
+        //Rev 9.0 End
+
         if (StockType == "W" || StockType == "WS" || StockType == "WBS" || StockType == "WB" || StockType == "WC" || StockType == "WSC") {
             if (WarehouseName == null || WarehouseName == "") {
                 $("#rfvWarehouse").css("display", "block");
@@ -1947,9 +1972,39 @@
                 }
             }
         }
+        
 
+       //Rev 9.0
+        if (parseFloat(Qty, 4) > parseFloat(AVAILsTOCK, 4)) {
+            jAlert("Entered Quantity is more than Available Stock ");
+            return;
+        }
+      
+
+        if (Batch != "") {
+            var totalProductQtyBatch = 0;
+            var BatchWiseQty = [
+                { Field: "Product_SrlNo", Values: ProductSrlNo },
+                { Field: "ProductID", Values: ProductID },
+                { Field: "WarehouseID", Values: WarehouseID },
+                { Field: "Batch", Values: Batch }
+            ];
+            var tempStockOfProductBatch = flexFilter(StockOfProduct, BatchWiseQty);
+            for (var i = 0; i < tempStockOfProductBatch.length; i++) {
+                var objprod = {};
+                objprod = tempStockOfProductBatch[i];
+                if (objprod.Quantity != "") {
+                    totalProductQtyBatch = totalProductQtyBatch + parseFloat(objprod.Quantity);
+                }
+            }
+            totalProductQtyBatch = (parseFloat(totalProductQtyBatch) + parseFloat(Qty));
+            if (parseFloat(totalProductQtyBatch, 4) > parseFloat(AVAILsTOCK, 4)) {
+                jAlert("Entered Quantity is more than Available Stock ");
+                return;
+            }
+        }
+        //Rev 9.0 End
         var totalProductQty = 0;
-
         var serialCriteria = [{ Field: "Product_SrlNo", Values: "" + (globalrowindex + 1) + "" }];
         var tempStockOfProduct = flexFilter(StockOfProduct, serialCriteria);
 
@@ -1987,6 +2042,10 @@
             jAlert("Product quantity balance excess!");
             return false;
         }
+
+
+       
+
     }
 
 
@@ -2206,6 +2265,11 @@
     }
 
     function UpdateSerialNo() {
+
+        //Rev 9.0
+        var sl = gridProductionBOMProductList.GetEditor("SlNO").GetValue();
+        var branch = $('#ddlBankBranch option:selected').val();
+        //Rev 9.0 End
         var productid = gridProductionBOMProductList.batchEditApi.GetCellValue(globalrowindex, 'ProductId');
         var warehouse = $('#WHddlWarehouse').val();
         var Batch = $('#ddlBatch').val();
@@ -2227,7 +2291,11 @@
                 $('#hdfExpiryDate').val(ExpiryDate);
 
             }
-        });
+            });
+
+            //Rev 9.0
+            GetWirehouseBatchWiseAviableStock(sl, productid, branch, warehouse, Batch);
+            //Rev 9.0 End
     }
 
 
@@ -2246,7 +2314,28 @@
             }
         });
     }
+    //Rev 9.0
+    function GetWirehouseBatchWiseAviableStock(sl, productid, branch, warehouse, Batch) {
+        gridProductionBOMProductList.batchEditApi.StartEdit(globalrowindex);
 
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("getWarehouseBatchwisestock", "ProductionIssue")",           
+            data: JSON.stringify({ sl: sl, strProductID: productid, branch: branch, WarehouseID: warehouse, BatchID: Batch }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function (msg) {
+                cpstockVal = msg;
+                divpopupAvailableStock.style.display = "block";
+                $('#lblAvailableStock').text(cpstockVal);
+                cpstockVal = null;
+                //grid.batchEditApi.StartEdit(globalRowIndex, 5);
+                return false;
+            }
+        });
+    }
+    //Rev 9.0 End
     function UpdateText() {
         //var selectedItems = checkListBox.GetSelectedItems();
         //selectedChkValue = GetSelectedItemsText(selectedItems);
@@ -2645,6 +2734,81 @@
     }
 
 </script>
+<script>
+     //Rev 8.0
+    function GetServerDateFormat(today) {
+        if (today != "" && today != null) {
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            today = yyyy + '-' + mm + '-' + dd;
+        }
+        else {
+            today = "";
+        }
+        return today;
+    }
+    function ProductGotFocus() {
+        gridProductionBOMProductList.batchEditApi.EndEdit();
+        gridProductionBOMProductList.batchEditApi.StartEdit();
+        var ProductName = gridProductionBOMProductList.batchEditApi.GetCellValue(globalrowindex, 'ProductName');
+        var ProductsID = gridProductionBOMProductList.batchEditApi.GetCellValue(globalrowindex, 'ProductId');
+        var ProductQty = gridProductionBOMProductList.batchEditApi.GetCellValue(globalrowindex, 'ProductQty');
+        var BankBranch = $("#ddlBankBranch").val();
+        var ProductOrderDate = GetServerDateFormat(Issue_Date_dt.GetValue());
+        var Amount = '';
+        var Rate = '';
+        if ('@ViewBag.IsRateEditableinProductionIssue' == "Yes") {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetStockValuation", "ProductionIssue")",
+                data: JSON.stringify({ ProductId: ProductsID }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function (msg) {
+                    var ObjData = msg.StockValuation;
+                    if (ObjData.length > 0) {
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("GetStockValuationAmount", "ProductionIssue")",
+                            data: JSON.stringify({ Pro_Id: ProductsID, Qty: ProductQty, Valuationsign: ObjData, Fromdate: ProductOrderDate, BranchId: BankBranch }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            async: false,
+                            success: function (msg1) {
+                                var ObjData1 = msg1.ValuationAmount;
+                                $("#divValuationRate").attr('style', 'display:block');
+                                $("#divProductName").attr('style', 'display:block');
+                                if (ObjData1 != "0") {
+                                    pageheaderContent.style.display = "block";
+
+                                    Amount = (ObjData1 * 1);
+                                    Rate = Amount / ProductQty;
+                                    document.getElementById('lblValuationRate').innerHTML = parseFloat(Rate).toFixed(2);
+                                    document.getElementById('lblProductName').innerHTML = ProductName;
+                                }
+                                else {
+                                    document.getElementById('lblValuationRate').innerHTML = "0";
+                                    document.getElementById('lblProductName').innerHTML = ProductName;
+                                }
+                            }
+
+                        });
+                    }
+                }
+
+            });
+        }
+    }
+     //Rev 8.0 End
+</script>
 
 @*<link href="~/Views/FGReceived/ProductionReceiptEntry.css" rel="stylesheet" />*@
 <link href="~/assests/css/ManufacturingCSS/ProductionReceiptEntry.css" rel="stylesheet" />
@@ -2653,6 +2817,42 @@
         <label>Issue for Production</label>
     </h3>
     <div id="ApprovalCross" class="crossBtn"><a href="@Url.Action("ProductionIssueList", "ProductionIssue")"><i class="fa fa-times"></i></a></div>
+    @*REV 8.0*@
+    <div id="pageheaderContent" class="scrollHorizontal pull-right reverse wrapHolder content horizontal-images"  runat="server">
+        <div class="Top clearfix">
+            <ul>
+                <li>
+                    <div class="lblHolder" id="divProductName" style="display: none;" runat="server">
+                        <table>
+                            <tr>
+                                <td>Product Name</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Label ID="lblProductName" runat="server" Text="" CssClass="classout"></asp:Label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </li>
+                <li>
+                    <div class="lblHolder" id="divValuationRate" style="display: none;" runat="server">
+                        <table>
+                            <tr>
+                                <td>Valuation Rate</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Label ID="lblValuationRate" runat="server" Text="0.0" CssClass="classout"></asp:Label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    @*REV 8.0 END*@
 </div>
 <input type="hidden" value="@Model.PartNo" id="hdnPartNo" />
 <input type="hidden" value="0" id="hdnSchemaId" />
@@ -2667,8 +2867,6 @@
 @Html.HiddenFor(x => x.Issue_SchemaID, new { @id = "hdnIssue_SchemaID" })
 @Html.HiddenFor(x => x.FinishedItemID)
 @Html.HiddenFor(x => x.WarehouseID)
-
-
 <input type="hidden" id="hdnProductionIssueListPage" value="@Url.Action("ProductionIssueList", "ProductionIssue")" />
 @Html.HiddenFor(x => x.Issue_Qty, new { @id = "hdnProductQty" })
 @*Rev 7.0*@
@@ -2703,8 +2901,6 @@
 @*REV 1.0*@
 <input type="hidden" value="@Model.MRP_ID" id="hdnMRP_ID" />
 <input type="hidden" value="@Model.ProductionIssueID" id="hdnProductionIssueID" />
-
-
 @*END REV 1.0*@
 <div class="boxBorder">
     <div class="styledBox">
@@ -2979,7 +3175,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <asp:Label ID="lblProductName" runat="server"></asp:Label>
+                                                <asp:Label ID="lblProductNameWH" runat="server"></asp:Label>
                                             </td>
                                         </tr>
                                     </tbody>

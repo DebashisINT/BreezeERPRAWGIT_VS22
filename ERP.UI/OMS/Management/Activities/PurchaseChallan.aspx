@@ -28,7 +28,9 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
     <link href="CSS/SearchPopup.css" rel="stylesheet" />
     <%--  <script src="JS/SearchPopup.js"></script>--%>
     <script src="JS/ProductStockIN.js?v00000.007"></script>
-    <script src="JS/PurchaseChallan.js?v=9.1"></script>
+
+    <script src="JS/PurchaseChallan.js?v=9.2"></script>
+
     <link href="CSS/PurchaseChallan.css" rel="stylesheet" />
 
     <%--Use for set focus on UOM after press ok on UOM--%>
@@ -1888,7 +1890,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                     </div>
                                     <div class="Left_Content" style="">
                                        <%-- onchange="BatchNoUniqueCheck()"--%>
-                                        <input type="text" id="txtBatch" placeholder="Batch"  />
+                                        <input type="text" id="txtBatch" placeholder="Batch" onchange="BatchNoUniqueCheck()" />
                                         <span id="rfvBatch" title="Mandatory" class="tp2 fa fa-exclamation-circle iconRed" style="display: none;"></span>
                                     </div>
                                 </div>

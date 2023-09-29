@@ -1,6 +1,8 @@
 <%--================================================== Revision History =============================================
 Rev Number         DATE              VERSION          DEVELOPER           CHANGES
 1.0                29-03-2023        2.0.36           Pallab              25733 : Master pages design modification
+2.0                14-07-2023        2.0.39           Sanchita            Two Columns required in the Future Sales Tab of Sales Activity. Mantis : 26565   
+3.0                27-07-2023        2.0.39           Pallab              Sales Activity - Future Sales "Contact Details" column width issue fix. Mantis : 26622    
 ====================================================== Revision History =============================================--%>
 
 <%@ Page Title="Future Sales" Language="C#" AutoEventWireup="true" MasterPageFile="~/OMS/MasterPage/ERP.Master" Inherits="ERP.OMS.Management.Activities.management_Activities_futuresale" CodeBehind="futuresale.aspx.cs" %>
@@ -849,8 +851,10 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                                                 </dxe:GridViewDataTextColumn>
                                                                 <%--      <dxe:GridViewDataTextColumn FieldName="Address" Caption="Address" VisibleIndex="1" Width="18%">
                                                                 </dxe:GridViewDataTextColumn>--%>
-
-                                                                <dxe:GridViewDataTextColumn FieldName="ContactNumber" Caption="Contact Details" VisibleIndex="2" Width="18%">
+                                                                <%--Rev 3.0 : width change(18% to 150)--%>
+                                                                <%--<dxe:GridViewDataTextColumn FieldName="ContactNumber" Caption="Contact Details" VisibleIndex="2" Width="18%">--%>
+                                                                <dxe:GridViewDataTextColumn FieldName="ContactNumber" Caption="Contact Details" VisibleIndex="2" Width="200">
+                                                                <%--Rev end 3.0--%>
                                                                 </dxe:GridViewDataTextColumn>
                                                                 <dxe:GridViewDataTextColumn FieldName="sls_assignedBy" Caption="Assigned ID" VisibleIndex="0" Visible="false" Width="18%">
                                                                 </dxe:GridViewDataTextColumn>
@@ -912,8 +916,8 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
 
 
 
-
-                                                                <dxe:GridViewDataTextColumn FieldName="ExpectedTime" VisibleIndex="13" Caption="Date Of Completion" Settings-AllowAutoFilterTextInputTimer="False">
+                                                                 <%--Rev 2.0 [ Visible="False" added ]  --%>
+                                                                <dxe:GridViewDataTextColumn FieldName="ExpectedTime" VisibleIndex="13" Visible="False" Caption="Date Of Completion" Settings-AllowAutoFilterTextInputTimer="False">
                                                                     <CellStyle HorizontalAlign="Center">
                                                                     </CellStyle>
                                                                 </dxe:GridViewDataTextColumn>
@@ -948,7 +952,14 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                                                     </DataItemTemplate>
                                                                     <EditFormSettings Visible="False" />
                                                                 </dxe:GridViewDataTextColumn>
-                                                                <dxe:GridViewDataTextColumn VisibleIndex="20" Caption="History" Width="100px">
+                                                                 <%--Rev 2.0--%>
+                                                                <dxe:GridViewDataTextColumn FieldName="CITYNAME" VisibleIndex="20" Caption="District" Settings-AllowAutoFilterTextInputTimer="False">
+                                                                </dxe:GridViewDataTextColumn>
+
+                                                                <dxe:GridViewDataTextColumn FieldName="STATENAME" VisibleIndex="21" Caption="State" Settings-AllowAutoFilterTextInputTimer="False">
+                                                                </dxe:GridViewDataTextColumn>
+                                                                <%--End of Rev 2.0--%>
+                                                                <dxe:GridViewDataTextColumn VisibleIndex="22" Caption="History" Width="100px">
                                                                     <CellStyle HorizontalAlign="Center">
                                                                     </CellStyle>
                                                                     <HeaderStyle HorizontalAlign="Center" />
@@ -971,7 +982,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                                                     </DataItemTemplate>
                                                                     <EditFormSettings Visible="False" />
                                                                 </dxe:GridViewDataTextColumn>
-                                                                <dxe:GridViewDataTextColumn VisibleIndex="21" Caption="Actions" Width="160px">
+                                                                <dxe:GridViewDataTextColumn VisibleIndex="23" Caption="Actions" Width="160px">
                                                                     <CellStyle HorizontalAlign="Center">
                                                                     </CellStyle>
                                                                     <HeaderStyle HorizontalAlign="Center" />
