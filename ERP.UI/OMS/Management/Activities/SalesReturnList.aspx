@@ -2,12 +2,11 @@
  1.0   Priti    V2.0.36   18-01-2023     	0025311: Views to be converted to Procedures in the Listing Page of Transaction / Return-Sales / Sales Return
  2.0   Pallab   V2.0.37   12-04-2023     	0025990: Sales Return module design modification & check in small device
  3.0   Priti    V2.0.39   08-09-2023        0026793:Update Transporter Action Button required in Sales Return module
-
 ========================================== End Revision History =======================================================================================================--%>
 
 
-<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/OMS/MasterPage/ERP.Master" CodeBehind="SalesReturnList.aspx.cs" Inherits="ERP.OMS.Management.Activities.SalesReturnList" EnableEventValidation="false" %>
-
+<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/OMS/MasterPage/ERP.Master" CodeBehind="SalesReturnList.aspx.cs" 
+    Inherits="ERP.OMS.Management.Activities.SalesReturnList" EnableEventValidation="false" %>
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
     Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
 <%--Rev 3.0--%>
@@ -19,7 +18,7 @@
         $(document).ready(function () {
             $("#btntransporter").hide();
         });
-
+        
         function UpdateTransporter(values) {
             $("#hddnSalesReturnID").val(values);
             callTransporterControl(values, "SR");
@@ -415,12 +414,12 @@
 
                                     <a href="javascript:void(0);" onclick="onInfluencerCommissionReturn('<%#Eval("Return_Id")%>')" class="" title="">
                                         <span class='ico editSeven'><i class='fa fa-user-plus' aria-hidden='true'></i></span><span class='hidden-xs'>Influecer Return</span></a>
-                                    <%-- REV 3.0--%>
-                                    <%--<% if (rights.CanUpdateTransporter)
-                                        { %>--%>
+                                   <%-- REV 3.0--%>
+                                    <% if (rights.CanUpdateTransporter)
+                                        { %>
                                     <a href="javascript:void(0);" onclick="UpdateTransporter('<%#Eval("Return_Id")%>')" class="" title="">
                                         <span class='ico editColor'><i class='fa fa-pencil' aria-hidden='true'></i></span><span class='hidden-xs'>Update Transporter</span></a>
-                                    <%--<% } %>--%>
+                                    <% } %>
                                     <%-- REV 3.0 END--%>
                             </div>
                         </DataItemTemplate>

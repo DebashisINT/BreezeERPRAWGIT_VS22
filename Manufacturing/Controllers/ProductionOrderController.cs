@@ -1,5 +1,6 @@
 ﻿//==================================================== Revision History =========================================================================
-// 1.0  Priti V2.0.38    19-06-2023  0026367:In Production Order Qty:  1.A New field required in Production Order Module called 'BOMProductionQty'
+// 1.0  Priti  V2.0.38    19-06-2023  0026367:In Production Order Qty:  1.A New field required in Production Order Module called 'BOMProductionQty'
+// 2.0  Priti  V2.0.39    29-06-2023  0026384:Show valuation rate feature is required in Production Order module
 //====================================================End Revision History=====================================================================
 
 using BusinessLogicLayer;
@@ -18,6 +19,8 @@ using System.Web;
 using System.Web.Mvc;
 using UtilityLayer;
 using System.Reflection;
+using System.Web.Services;
+
 namespace Manufacturing.Controllers
 {
     public class ProductionOrderController : Controller
@@ -49,6 +52,10 @@ namespace Manufacturing.Controllers
             //Rev 1.0
             string IsConsiderProductPackagingQtyInProductionOrder = cSOrder.GetSystemSettingsResult("IsConsiderProductPackagingQtyInProductionOrder");
             //Rev 1.0 End
+            //Rev 2.0
+            string IsRateEditableinProductionOrder = cSOrder.GetSystemSettingsResult("IsRateEditableinProductionOrder");
+            //Rev 2.0 End
+
             string ProjectSelectInEntryModule = cSOrder.GetSystemSettingsResult("ProjectSelectInEntryModule");        
             try
             {
@@ -175,6 +182,11 @@ namespace Manufacturing.Controllers
             //Rev 1.0
             ViewBag.IsConsiderProductPackagingQtyInProductionOrder = IsConsiderProductPackagingQtyInProductionOrder;
             //Rev 1.0 End
+
+            //Rev 2.0
+            ViewBag.IsRateEditableinProductionOrder = IsRateEditableinProductionOrder;
+            //Rev 2.0 End
+            
 
             TempData["Count"] = 1;
             TempData.Keep();
@@ -464,6 +476,9 @@ namespace Manufacturing.Controllers
                             obj.BOMProductionQty = Convert.ToDecimal(item.BOMProductionQty);
                             obj.sProduct_packageqty = Convert.ToDecimal(item.sProduct_packageqty);
                             //Rev 1.0 End
+                            //Rev 2.0
+                            obj.Price = Convert.ToDecimal(item.Price);
+                            //Rev 2.0 End
                             udtlist.Add(obj);
                         }
                     }
@@ -1219,7 +1234,54 @@ namespace Manufacturing.Controllers
 
             return Json(list);
         }
-    }
 
+        //Rev 2.0
+        [WebMethod]
+        public JsonResult GetStockValuation(string ProductId)
+        {
+            StockValuationData obj = new StockValuationData();
+            CRMSalesOrderDtlBL objCRMSalesOrderDtlBL = new CRMSalesOrderDtlBL();
+            DataTable dt = objCRMSalesOrderDtlBL.GetProductFifoValuation(Convert.ToInt32(ProductId));
+            string Stock_Valuation = "";
+            if (dt.Rows.Count > 0)
+            {
+                Stock_Valuation = Convert.ToString(dt.Rows[0]["Stockvaluation"]);
+            }
+            obj.StockValuation = Stock_Valuation;
+            return Json(obj);
+        }
+        [WebMethod]
+        public JsonResult GetStockValuationAmount(string Pro_Id, string Qty, string Valuationsign, string Fromdate, string BranchId)
+        {
+            ValuationAmountData obj = new ValuationAmountData();
+            CRMSalesOrderDtlBL objCRMSalesOrderDtlBL = new CRMSalesOrderDtlBL();
+            DataTable dt = objCRMSalesOrderDtlBL.GetValueForProductFifoValuation(Convert.ToInt32(Pro_Id),
+                                                Convert.ToDecimal(Qty), Valuationsign, Fromdate,
+                                                Fromdate, BranchId);
+            Decimal ValuationAmount =0;
+            if (dt != null)
+            {
+                if (dt.Rows.Count > 0)
+                {
+                    ValuationAmount = Convert.ToDecimal(dt.Rows[0]["VALUE"]);
+                }
+            }
+
+            obj.ValuationAmount = Math.Round(ValuationAmount,2);
+            return Json(obj);
+        }
+
+        //Rev 2.0 End
+    }
+    //Rev 2.0
+    public class StockValuationData
+    {  
+        public String StockValuation { get; set; }
+    }
+    public class ValuationAmountData
+    {
+        public Decimal ValuationAmount { get; set; }
+    }
+    //Rev 2.0 End
 
 }

@@ -2,7 +2,7 @@
 Rev Number         DATE              VERSION          DEVELOPER           CHANGES
 1.0                22-03-2023        2.0.36           Pallab              25733 : Master pages design modification
 2.0                16-05-2023        2.0.38           Priti               0025893 : Import Module Required for Importing Ledger/Subledger Opening
-
+3.0                30-05-2023        2.0.39           Priti               0026462: Unable to enter Ledger Opening
 ====================================================== Revision History =============================================--%>
 
 <%@ Page Title="Opening Balance" Language="C#" AutoEventWireup="true" MasterPageFile="~/OMS/MasterPage/Erp.Master"
@@ -1101,6 +1101,42 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                         </PropertiesTextEdit>
                     </dxe:GridViewDataTextColumn>
 
+                     <dxe:GridViewDataTextColumn Caption="Entered By" FieldName="CreateUser" 
+                        VisibleIndex="0">
+                        <CellStyle CssClass="gridcellleft" Wrap="true">
+                        </CellStyle>
+                        <Settings AllowAutoFilterTextInputTimer="False" />
+                        <Settings AutoFilterCondition="Contains" />
+                    </dxe:GridViewDataTextColumn>
+
+                    
+                     <dxe:GridViewDataDateColumn Caption="Entered On" FieldName="CreateDate" 
+                        VisibleIndex="0" PropertiesDateEdit-DisplayFormatString="dd/MM/yyyy">
+                        <CellStyle CssClass="gridcellleft" Wrap="true">
+                        </CellStyle>
+                        <Settings AllowAutoFilterTextInputTimer="False" />
+                        <Settings AutoFilterCondition="Contains" />
+                    </dxe:GridViewDataDateColumn>
+
+
+
+                     <dxe:GridViewDataTextColumn Caption="Updated By" FieldName="ModifyUser" 
+                        VisibleIndex="0">
+                        <CellStyle CssClass="gridcellleft" Wrap="true">
+                        </CellStyle>
+                        <Settings AllowAutoFilterTextInputTimer="False" />
+                        <Settings AutoFilterCondition="Contains" />
+                    </dxe:GridViewDataTextColumn>
+
+                    <dxe:GridViewDataDateColumn Caption="Updated On" FieldName="ModifyDate" 
+                        VisibleIndex="0" PropertiesDateEdit-DisplayFormatString="dd/MM/yyyy">
+                        <CellStyle CssClass="gridcellleft" Wrap="true">
+                        </CellStyle>
+                        <Settings AllowAutoFilterTextInputTimer="False" />
+                        <Settings AutoFilterCondition="Contains" />
+                    </dxe:GridViewDataDateColumn>
+                   
+
                     <dxe:GridViewDataTextColumn ReadOnly="True" Width="0" CellStyle-HorizontalAlign="Center">
                         <Settings AllowAutoFilterTextInputTimer="False" />
                         <HeaderStyle HorizontalAlign="Center" />
@@ -1231,7 +1267,10 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                             <div>
                                 <asp:FileUpload ID="OFDBankSelect" accept=".xls,.xlsx" runat="server" Width="100%" />
                                 <div class="pTop10  mTop5">
-                                    <asp:Button ID="BtnSaveexcel" runat="server" Text="Import(Add/Update)"  OnClick="BtnSaveexcel_Click" CssClass="btn btn-primary" />
+                                   <%-- Rev 3.0--%>
+                                     <asp:Button ID="BtnSaveexcel" runat="server" Text="Import(Add/Update)"  OnClick="BtnSaveexcel_Click" CssClass="btn btn-primary" UseSubmitBehavior="false"/>
+                                   <%-- <asp:Button ID="BtnSaveexcel" runat="server" Text="Import(Add/Update)"  OnClick="BtnSaveexcel_Click" CssClass="btn btn-primary"  />--%>
+                                   <%-- Rev 3.0 End--%>
                                 </div>
                             </div>
                         </div>

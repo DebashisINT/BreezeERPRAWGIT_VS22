@@ -1,14 +1,19 @@
-﻿<%--================================================== Revision History =============================================
-1.0   Pallab    V2.0.38      18-05-2023          0026169: Add Adjustment of Documents - Advance With Invoice module design modification & check in small device
-====================================================== Revision History =============================================--%>
+﻿<%--================================================== Revision History ================================================================================================
+1.0   Pallab    V2.0.38      18-05-2023    0026169: Add Adjustment of Documents - Advance With Invoice module design modification & check in small device
+2.0   Priti     v2.0.39	 	 27-06-2023	   0026412: Auto calculation of Adjusted amount during Adjustment of Document Entries-Advance with Invoice for Vendor
+3.0   Pallab    V2.0.39      28-07-2023    0026633: Add Adjustment of Documents - Advance With Invoice module all bootstrap modal outside click event disable
+====================================================== Revision History ================================================================================================--%>
 
 <%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="VendorPaymentAdjustment.aspx.cs" Inherits="ERP.OMS.Management.Activities.VendorPaymentAdjustment" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="CSS/SearchPopup.css" rel="stylesheet" />
-    <script src="JS/SearchPopup.js?v=0.01"></script>
+   <%-- <script src="JS/SearchPopup.js?v=0.01"></script>--%>
     <link href="CSS/VendorPaymentAdjustment.css" rel="stylesheet" />
-
+    <script src="JS/SearchPopupDatatable.js"></script>
+     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
     <%--Rev 1.0--%>
     <link href="/assests/css/custom/newcustomstyle.css" rel="stylesheet" />
     
@@ -205,10 +210,7 @@
     <%--Rev end 1.0--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-
-    <script src="JS/VendorPaymentAdjustment.js?v=1.8"></script>
-
-
+    <script src="JS/VendorPaymentAdjustment.js?v=1.9"></script>
     <dxe:ASPxGlobalEvents ID="GlobalEvents" runat="server">
         <ClientSideEvents ControlsInitialized="AllControlInitilize" />
     </dxe:ASPxGlobalEvents>
@@ -546,7 +548,10 @@
     </div>
     </div>
     <!--Vendor Modal -->
-    <div class="modal fade" id="VendModel" role="dialog">
+    <%--Rev 3.0--%>
+    <%--<div class="modal fade" id="VendModel" role="dialog">--%>
+    <div class="modal fade" id="VendModel" role="dialog" data-backdrop="static" data-keyboard="false">
+        <%--Rev end 3.0--%>
         <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -579,7 +584,10 @@
 
 
     <%--Advance Receipt Selection Model--%>
-    <div class="modal fade" id="AdvanceModel" role="dialog">
+    <%--Rev 3.0--%>
+    <%--<div class="modal fade" id="AdvanceModel" role="dialog">--%>
+    <div class="modal fade" id="AdvanceModel" role="dialog" data-backdrop="static" data-keyboard="false">
+        <%--Rev end 3.0--%>
         <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -614,7 +622,10 @@
 
 
     <%--Document Selection Model--%>
-    <div class="modal fade" id="DocumentModel" role="dialog">
+    <%--Rev 3.0--%>
+    <%--<div class="modal fade" id="DocumentModel" role="dialog">--%>
+    <div class="modal fade" id="DocumentModel" role="dialog" data-backdrop="static" data-keyboard="false">
+        <%--Rev end 3.0--%>
         <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -658,6 +669,7 @@
     <asp:HiddenField ID="hdAdjustmentType" runat="server" />
      <asp:HiddenField ID="hddnProjectId" runat="server" />
     <asp:HiddenField ID="hdnProjectSelectInEntryModule" runat="server" />
-
-
+   <%-- Rev 2.0--%>
+    <asp:HiddenField ID="hdnAutocalculationAdjustmentInvoice" runat="server" />
+   <%-- Rev 2.0 End--%>
 </asp:Content>

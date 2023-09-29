@@ -1,5 +1,7 @@
 ﻿@*====================================================Revision History=========================================================================
-1.0  Priti   V2.0.38    21-06-2023  0026372:Manufacturing > Stock Receipt Module, document shall not be saved with 'Fresh' 'Reject' Qty - Warehouse'.
+        1.0  Priti   V2.0.38    21-06-2023  0026372:Manufacturing > Stock Receipt Module, document shall not be saved with 'Fresh' 'Reject' Qty - Warehouse'.
+        2.0	 Priti	 V2.0.39    28-08-2023  0026763:Reject Qty is not saving as per warehouse wise while doing Stock Receipt
+        3.0  Priti   V2.0.39    28-08-2023  0026870:Warehouse related table is updated with current date while making manufacturing Stock Receipt
 ====================================================End Revision History=====================================================================*@
 
 @using System.Web.UI.WebControls
@@ -1047,7 +1049,7 @@
                             $('#hdnStkMsg').val(0);
                         }
                         if (data[0] == "True") {
-                            $('#hdnStkMsg').val(1);                            
+                            $('#hdnStkMsg').val(1);
                             $('#WarehouseDetailsModal').modal('hide');
                         }
                         else {
@@ -1400,15 +1402,29 @@
 
     function Scheme_ValueChange() {
         var val = $('#ddlSchema option:selected').val();
-        var schemetypeValue = val;
+        var schemetypeValue = val;        
         var schemetype = schemetypeValue.toString().split('~')[1];
         var schemelength = schemetypeValue.toString().split('~')[2];
         var branchID = (schemetypeValue.toString().split('~')[3] != null) ? schemetypeValue.toString().split('~')[3] : "";
         var SchemaID = schemetypeValue.toString().split('~')[0];
         $('#hdnSchemaId').val(SchemaID);
         $('#ddlBankBranch').val(branchID);
-        // var fromdate = (schemetypeValue.toString().split('~')[4] != null) ? schemetypeValue.toString().split('~')[4] : "";
-        //var todate = (schemetypeValue.toString().split('~')[5] != null) ? schemetypeValue.toString().split('~')[5] : "";
+
+        //REV 3.0
+        var fromdate = (schemetypeValue.toString().split('~')[5] != null) ? schemetypeValue.toString().split('~')[5] : "";
+        var todate = (schemetypeValue.toString().split('~')[6] != null) ? schemetypeValue.toString().split('~')[6] : "";
+        var dt = new Date();
+        SR_Date_dt.SetDate(dt);
+        if (dt < new Date(fromdate)) {
+            SR_Date_dt.SetDate(new Date(fromdate));
+        }
+        if (dt > new Date(todate)) {
+            SR_Date_dt.SetDate(new Date(todate));
+        }
+        SR_Date_dt.SetMinDate(new Date(fromdate));
+        SR_Date_dt.SetMaxDate(new Date(todate));
+        //REV 3.0 END
+
         document.getElementById("StockReceipt_No").maxLength = schemelength;
         if (schemetype == '0') {
             $('#StockReceipt_No').removeAttr("disabled");
@@ -1560,19 +1576,28 @@
                 url: "@Url.Action("setStockWarehouseTempDataList", "StockReceipt")",
                 data: { items: StockOfProduct },
                 success: function (response) {
-                    //var data = response;
-                    //if (data[1] == "False") {
-                    //    $('#hdnStkMsg').val(0);
-                    //    // gridProductionBOMProductList.batchEditApi.SetCellValue(tempindex, 'StkMsg', '0', '');
-                    //}
+                    var data = response;
+                    //Rev 2.0
+                    if (data== "True") {
+                        $('#hdnStkMsg').val(1);
+                        $('#WarehouseDetailsModal').modal('hide');
 
-                    //if (data[0] == "True") {
-                    //    $('#hdnStkMsg').val(1);
-                    //    $('#WarehouseDetailsModal').modal('hide');
-                    //}
-                    //else {
-                    //    jAlert("Please try again later!");
-                    //}
+                        var serialCriteria = [{ Field: "Product_SrlNo", Values: "" + ("0") + "" }];
+                        var tempStockOfProductFresh = flexFilter(StockOfProduct, serialCriteria);
+                        if (tempStockOfProductFresh.length > 0) {
+                            $('#hdnWarehouseDataFresh').val("1");
+                        }
+                        var serialCriteria1 = [{ Field: "Product_SrlNo", Values: "" + ("1") + "" }];
+                        var tempStockOfProductReject = flexFilter(StockOfProduct, serialCriteria1);
+                        if (tempStockOfProductReject.length > 0) {
+                            $('#hdnWarehouseDataReject').val("2");
+                        }
+
+                    }
+                    else {
+                        jAlert("Please try again later!");
+                    }
+                    //Rev 2.0 End
                 }
             });
 
@@ -1766,8 +1791,8 @@
         }
         //Rev 1.0
         var hdnWarehouseDataFresh = $('#hdnWarehouseDataFresh').val();
-        if ($('#FreshQuantity').val() != "0") {
-            if (hdnWarehouseDataFresh == "0") {
+        if (parseFloat($('#FreshQuantity').val() )!= 0) {
+            if (parseFloat(hdnWarehouseDataFresh) == 0) {
                 jAlert("Please Enter Fresh Warehouse !");
                 isprocess = 0;
             }
@@ -1775,8 +1800,8 @@
 
 
         var hdnWarehouseDataReject = $('#hdnWarehouseDataReject').val();
-        if ($('#RejectedQuantity').val() != "0") {
-            if (hdnWarehouseDataReject == "0") {
+        if (parseFloat($('#RejectedQuantity').val()) != 0) {
+            if (parseFloat(hdnWarehouseDataReject) == 0){
                 jAlert("Please Enter Reject Warehouse !");
                 isprocess = 0;
             }
@@ -2028,9 +2053,9 @@
                                          settings.Properties.DisplayFormatString = "dd-MM-yyyy";
                                          settings.Properties.EditFormatString = "dd-MM-yyyy";
                                          settings.Width = Unit.Percentage(100);
-                                         settings.Date = DateTime.Now;
+                                         //settings.Date = DateTime.Now;
                                          settings.Date = Convert.ToDateTime(@Model.dtStockReceiptDate);
-                                         settings.Properties.ClientSideEvents.Init = "SetDefaultDate";
+                                         //settings.Properties.ClientSideEvents.Init = "SetDefaultDate";
 
                                      }
                             ).GetHtml()

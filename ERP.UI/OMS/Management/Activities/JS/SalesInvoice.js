@@ -1,8 +1,11 @@
-﻿/*********************************************************************************************************
- * Rev 1.0      Sanchita      V2.0.37       Tolerance feature required in Sales Order Module 
- *                                          Refer: 25223   -- WORK REVERTED 
- * Rev 2.0      Sanchita      V2.0.38       Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
- **********************************************************************************************************/
+﻿/****************************************************************************************************************************
+ * Rev 1.0      Sanchita      V2.0.37                    Tolerance feature required in Sales Order Module 
+ *                                                       Refer: 25223   -- WORK REVERTED 
+ * Rev 2.0      Sanchita      V2.0.38                    Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
+ * Rev 3.0      Priti         V2.0.39                    The place of Supply should be intact in the Sales Order is being tagged with an Invoice. Mantis :0026820
+ * Rev 4.0      Priti         V2.0.39     15-09-2023     Product wise  MultiUOM calculated Amount check.Mantis : 0026821
+
+  ******************************************************************************************************************************/
 
 $(document).ready(function () {
     var mode = $('#hdAddOrEdit').val();
@@ -610,23 +613,27 @@ function AfterSaveBillingShipiing(validate) {
 //End
 
 function GetPosForGstValue() {
+    //Rev 3.0
+    if (gridquotationLookup.GetValue() == null) {
+    //Rev 3.0 End
     cddl_PosGst.ClearItems();
     if (cddl_PosGst.GetItemCount() == 0) {
         cddl_PosGst.AddItem(GetShippingStateName() + '[Shipping]', "S");
         cddl_PosGst.AddItem(GetBillingStateName() + '[Billing]', "B");
     }
     else if (cddl_PosGst.GetItemCount() > 2) {
-        cddl_PosGst.ClearItems();
-        //cddl_PosGst.RemoveItem(0);
-        //cddl_PosGst.RemoveItem(0);
+        cddl_PosGst.ClearItems();       
     }
-
-    if (PosGstId == "" || PosGstId == null) {
-        cddl_PosGst.SetValue("S");
+   
+        if (PosGstId == "" || PosGstId == null) {
+            cddl_PosGst.SetValue("S");
+        }
+        else {
+            cddl_PosGst.SetValue(PosGstId);
+        }
+    //Rev 3.0
     }
-    else {
-        cddl_PosGst.SetValue(PosGstId);
-    }
+    //Rev 3.0 End
 }
 
 
@@ -696,6 +703,10 @@ function PopulateBillingShippingAddress(ReturnDetails) {
         GetPosForGstValue();
         cddl_PosGst.SetValue(BillingDetails[0].PosForGst);
         // clookup_Project.gridView.SelectItemsByKey(BillingDetails[0].ProjectCode);
+        //REV 4.0
+        ctxtConPerson.SetText(BillingDetails[0].ContactName);
+        $('#Salesbillingphone').val(BillingDetails[0].Phone);
+        //REV 4.0 END
     }
     else {
         ctxtAddress1.SetText('');
@@ -720,6 +731,10 @@ function PopulateBillingShippingAddress(ReturnDetails) {
         //chinmoy commeneted
         // GetPosForGstValue();
         // cddl_PosGst.SetText('');
+        //REV 4.0
+        ctxtConPerson.SetText("");
+        $('#Salesbillingphone').val("");
+        //REV 4.0 END
     }
 
     //Shipping Address Details
@@ -755,6 +770,11 @@ function PopulateBillingShippingAddress(ReturnDetails) {
         GetPosForGstValue();
         cddl_PosGst.SetValue(ShippingDetails[0].PosForGst);
         //clookup_Project.gridView.SelectItemsByKey(ShippingDetails[0].ProjectCode);
+
+        //REV 4.0
+        ctxtShipConPerson.SetText(ShippingDetails[0].ContactName);
+        ctxtShipPhone.SetText(ShippingDetails[0].Phone);
+        //REV 4.0 END
     }
     else {
         ctxtsAddress1.SetText('');
@@ -781,6 +801,11 @@ function PopulateBillingShippingAddress(ReturnDetails) {
         //chinmoy commented
         // GetPosForGstValue();
         // cddl_PosGst.SetText('');
+
+        //REV 4.0
+        ctxtShipConPerson.SetText('');
+        ctxtShipPhone.SetText('');
+        //REV 4.0 END
 
     }
 
@@ -3076,7 +3101,12 @@ function OnMultiUOMEndCallback(s, e) {
         
         grid.GetEditor("Quantity").SetValue(BaseQty);
         grid.GetEditor("SalePrice").SetValue(BaseRate);
-        grid.GetEditor("Amount").SetValue(BaseQty * BaseRate);
+        //Rev 4.0
+        //grid.GetEditor("Amount").SetValue(BaseQty * BaseRate);
+        
+        var Amount = BaseQty * BaseRate;
+        grid.GetEditor("Amount").SetValue(DecimalRoundoff(Amount, 2));
+         //Rev 4.0 End
         grid.GetEditor("InvoiceDetails_AltQuantity").SetValue(AltQuantity);
         grid.GetEditor("InvoiceDetails_AltUOM").SetValue(AltUOM);
 
@@ -3449,7 +3479,7 @@ function SalePriceTextChange(s, e) {
         if (ProductID != null) {
             var SpliteDetails = ProductID.split("||@||");
 
-            console.log(SpliteDetails);
+            //console.log(SpliteDetails);
             // Rev Sanchita 
             //if (parseFloat(s.GetValue()) < parseFloat(SpliteDetails[17])) {
             if (parseFloat(grid.GetEditor('SalePrice').GetValue()) < parseFloat(SpliteDetails[17])) {
@@ -3458,7 +3488,9 @@ function SalePriceTextChange(s, e) {
                     grid.batchEditApi.StartEdit(globalRowIndex, 10);
                     return;
                 });
-                s.SetValue(parseFloat(SpliteDetails[6]));
+               
+                grid.GetEditor("SalePrice").SetValue(parseFloat(SpliteDetails[6]));
+                //s.SetValue(parseFloat(SpliteDetails[6]));
                 return;
             }
 
@@ -3470,7 +3502,9 @@ function SalePriceTextChange(s, e) {
                     grid.batchEditApi.StartEdit(globalRowIndex, 10);
                     return;
                 });
-                s.SetValue(parseFloat(SpliteDetails[6]));
+                
+                grid.GetEditor("SalePrice").SetValue(parseFloat(SpliteDetails[6]));
+               // s.SetValue(parseFloat(SpliteDetails[6]));
                 return;
             }
 
@@ -3496,7 +3530,7 @@ function SalePriceTextChange(s, e) {
             var Discount = (grid.GetEditor('Discount').GetValue() != null) ? grid.GetEditor('Discount').GetValue() : "0";
 
             var Amount = QuantityValue * strFactor * (Saleprice / strRate);
-
+            
             var IsDiscountPercentage = document.getElementById('IsDiscountPercentage').value;
             var amountAfterDiscount = "0";
 
@@ -3810,8 +3844,8 @@ function DiscountTextChange(s, e) {
         grid.GetEditor('ProductID').Focus();
     }
 
-
-    if (parseFloat(Amount) != parseFloat(Pre_TotalAmt)) {
+    var AmountValue = DecimalRoundoff(Amount, 2)
+    if (parseFloat(AmountValue) != parseFloat(Pre_TotalAmt)) {
         // ctaxUpdatePanel.PerformCallback('DelProdbySl~' + grid.GetEditor("SrlNo").GetValue());
 
         var SrlNo = grid.GetEditor("SrlNo").GetValue();

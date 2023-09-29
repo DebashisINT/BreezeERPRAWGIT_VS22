@@ -1,7 +1,10 @@
 ﻿<%--=======================================================Revision History=========================================================================
     1.0 Rev Work start: Copy Feature required for Journal Vouchers Date:-27.05.2022 Mantise no:24911
-    2.0 Priti    V2.0.36  02-02-2023     0025253: listing view upgradation required of Journals of Accounts & Finance
-    3.0 Pallab   V2.0.37  04-04-2023     0025830: Journal Voucher module design modification
+    2.0     Priti       V2.0.36  02-02-2023     0025253: listing view upgradation required of Journals of Accounts & Finance
+    3.0     Pallab      V2.0.37  04-04-2023     0025830: Journal Voucher module design modification
+    4.0     Sanchita    V2.0.43  08-02-2023     26801 : Entered On, Entered By, Modified On, Modified By column required
+                                                in the Journal Details list view 
+    5.0     Sanchita    V2.0.43  21-09-2023     26831 : Data Freeze is not working properly for Journal   
 =========================================================End Revision History========================================================================--%>
 
 <%@ Page Title="Journal Entry" EnableEventValidation="false" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="JournalEntry.aspx.cs" Inherits="ERP.OMS.Management.DailyTask.JournalVoucherEntry" %>
@@ -13,7 +16,18 @@
     <script type="text/javascript" src="../Activities/JS/SearchPopup.js"></script>
     <link href="../Activities/CSS/SearchPopup.css" rel="stylesheet" />
     <script>
-
+        // Rev 5.0
+        function SetLostFocusonDemand(e) {
+            if ((new Date($("#hdnLockFromDate").val()) <= tDate.GetDate()) && (tDate.GetDate() <= new Date($("#hdnLockToDate").val()))) {
+                jAlert("DATA is Freezed between   " + $("#hdnLockFromDateCon").val() + " to " + $("#hdnLockToDateCon").val() + " for Add.");
+            }
+        }
+        function SetTDSLostFocusonDemand(e) {
+            if ((new Date($("#hdnLockFromDate").val()) <= tDateTDS.GetDate()) && (tDateTDS.GetDate() <= new Date($("#hdnLockToDate").val()))) {
+                jAlert("DATA is Freezed between   " + $("#hdnLockFromDateCon").val() + " to " + $("#hdnLockToDateCon").val() + " for Add.");
+            }
+        }
+        // End of Rev 5.0
         function componentEndCallBack(s, e) {
             // clookup_GRNOverhead.gridView.Refresh();
         }
@@ -4246,19 +4260,46 @@
             }
         }
 
+        // Rev 5.0
+        function AddContraLockStatus(LockDate) {
+            //var LockDate = tDate.GetDate();
+            $.ajax({
+                type: "POST",
+                url: "JournalEntry.aspx/GetAddLock",
+                data: JSON.stringify({ LockDate: LockDate }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function (msg) {
+                    var currentRate = msg.d;
+                    if (currentRate != null && currentRate == "-9") {
+                        $("#hdnValAfterLock").val("-9");
+                    }
+                    else {
+                        $("#hdnValAfterLock").val("1");
+                    }
 
-
+                }
+            });
+        }
+        // End of Rev 5.0
 
         function SaveButtonClick() {
 
             var ProjectCode = clookup_Project.GetText();
+
+            // Rev 5.0
+            AddContraLockStatus(tDate.GetDate());
+            // End of Rev 5.0
+
             if ($("#hdnProjectSelectInEntryModule").val() == "1" && $("#hdnProjectMandatory").val() == "1" && ProjectCode == "") {
                 jAlert("Please Select Project.");
                 return false;
             }
 
 
-            if (cbtnSaveRecords.IsVisible() == true) {
+            if (cbtnSaveRecords.IsVisible() == true)
+            {
                 ValidGrid = true;
                 ValidateGrid();
 
@@ -4270,32 +4311,37 @@
             //jAlert('Enter Journal No');
             $("#MandatoryBillNo").show();
             document.getElementById('<%= txtBillNo.ClientID %>').focus();
-        }
-        else if (Branchval == "0") {
-            document.getElementById('<%= ddlBranch.ClientID %>').focus();
-            jAlert('Enter Branch');
-        }
-        else if (ValidGrid == false) {
-            jAlert('Sub Account Set as Mandatory. please select sub account to proceed.');
-        }
-        else {
-            grid.batchEditApi.EndEdit();
-
-            var frontRow = 0;
-            var backRow = -1;
-            var IsJournal = "";
-            for (var i = 0; i <= grid.GetVisibleRowsOnPage(); i++) {
-                var frontProduct = (grid.batchEditApi.GetCellValue(backRow, 'gvColMainAccount') != null) ? (grid.batchEditApi.GetCellValue(backRow, 'gvColMainAccount')) : "";
-                var backProduct = (grid.batchEditApi.GetCellValue(frontRow, 'gvColMainAccount') != null) ? (grid.batchEditApi.GetCellValue(frontRow, 'gvColMainAccount')) : "";
-
-                if (frontProduct != "" || backProduct != "") {
-                    IsJournal = "Y";
-                    break;
-                }
-
-                backRow--;
-                frontRow++;
             }
+            else if (Branchval == "0") {
+                document.getElementById('<%= ddlBranch.ClientID %>').focus();
+                jAlert('Enter Branch');
+            }
+            else if (ValidGrid == false) {
+                jAlert('Sub Account Set as Mandatory. please select sub account to proceed.');
+            }
+            // Rev 5.0
+            else if ($("#hdnValAfterLock").val() == "-9") {
+                jAlert("DATA is Freezed between   " + $("#hdnLockFromDateCon").val() + " to " + $("#hdnLockToDateCon").val() + " for Add.");
+            }
+            // End of Rev 5.0
+            else {
+                grid.batchEditApi.EndEdit();
+
+                var frontRow = 0;
+                var backRow = -1;
+                var IsJournal = "";
+                for (var i = 0; i <= grid.GetVisibleRowsOnPage(); i++) {
+                    var frontProduct = (grid.batchEditApi.GetCellValue(backRow, 'gvColMainAccount') != null) ? (grid.batchEditApi.GetCellValue(backRow, 'gvColMainAccount')) : "";
+                    var backProduct = (grid.batchEditApi.GetCellValue(frontRow, 'gvColMainAccount') != null) ? (grid.batchEditApi.GetCellValue(frontRow, 'gvColMainAccount')) : "";
+
+                    if (frontProduct != "" || backProduct != "") {
+                        IsJournal = "Y";
+                        break;
+                    }
+
+                    backRow--;
+                    frontRow++;
+                }
 
             if (IsJournal == "Y") {
 
@@ -4325,7 +4371,9 @@
                 return false;
             }
 
-
+            // Rev 5.0
+            AddContraLockStatus(tDateTDS.GetDate());
+            // End of Rev 5.0
 
             if (cbtnSaveRecordsTDS.IsVisible() == true) {
                 ValidGrid = true;
@@ -4359,6 +4407,11 @@
         else if (chkTDSJournal.GetChecked() && (ccmbtds.GetValue() == 0 || ccmbtds.GetValue() == null || ccmbtds.GetValue() == "")) {
             jAlert('You must select TDS Section as TDS checkbox tick.');
         }
+        // Rev 5.0
+        else if ($("#hdnValAfterLock").val() == "-9") {
+            jAlert("DATA is Freezed between   " + $("#hdnLockFromDateCon").val() + " to " + $("#hdnLockToDateCon").val() + " for Add.");
+        }
+        // End of Rev 5.0
         else {
             gridTDS.batchEditApi.EndEdit();
 
@@ -4399,11 +4452,20 @@
             grid.AddNewRow();
 
             var ProjectCode = clookup_Project.GetText();
+            // Rev 5.0
+            AddContraLockStatus(tDate.GetDate());
+            // End of Rev 5.0
+
             if ($("#hdnProjectSelectInEntryModule").val() == "1" && $("#hdnProjectMandatory").val() == "1" && ProjectCode == "") {
                 jAlert("Please Select Project.");
                 return false;
             }
-
+            // Rev 5.0
+            else if ($("#hdnValAfterLock").val() == "-9") {
+                jAlert("DATA is Freezed between   " + $("#hdnLockFromDateCon").val() + " to " + $("#hdnLockToDateCon").val() + " for Add.");
+                return false;
+            }
+            // End of Rev 5.0
             if (cbtn_SaveRecords.IsVisible() == true) {
                 var val = document.getElementById("CmbScheme").value;
                 var Branchval = $("#ddlBranch").val();
@@ -4466,6 +4528,10 @@
                 return false;
             }
 
+            // Rev 5.0
+            AddContraLockStatus(tDateTDS.GetDate());
+            // End of Rev 5.0
+
             if (cbtn_SaveRecordsTDS.IsVisible() == true) {
                 var val = document.getElementById("CmbSchemeTDS").value;
                 var Branchval = $("#ddlBranchTDS").val();
@@ -4494,6 +4560,11 @@
         else if (chkTDSJournal.GetChecked() && (ccmbtds.GetValue() == 0 || ccmbtds.GetValue() == null || ccmbtds.GetValue() == "")) {
             jAlert('You must select TDS Section as TDS checkbox tick.');
         }
+        // Rev 5.0
+        else if ($("#hdnValAfterLock").val() == "-9") {
+            jAlert("DATA is Freezed between   " + $("#hdnLockFromDateCon").val() + " to " + $("#hdnLockToDateCon").val() + " for Add.");
+        }
+        // End of Rev 5.0
         else {
             gridTDS.batchEditApi.EndEdit();
 
@@ -5877,6 +5948,10 @@
                                         <span class="makeFullscreen-icon half hovered " data-instance="cGvJvSearch" title="Maximize Grid" id="expandcGvJvSearch">
                                             <i class="fa fa-expand"></i>
                                         </span>
+                                        <%--Rev 5.0--%>
+                                        <div id="spnEditLock" runat="server" style="display:none; color:red;text-align:center"></div>
+                                        <div id="spnDeleteLock" runat="server" style="display:none; color:red;text-align:center"></div>
+                                        <%--End of Rev 5.0--%>
                                         <dxe:ASPxGridView ID="GvJvSearch" SettingsBehavior-AllowFocusedRow="true" runat="server" AutoGenerateColumns="False" SettingsBehavior-AllowSort="true"
                                             ClientInstanceName="cGvJvSearch" KeyFieldName="VoucherNumber" Width="100%"
                                             OnCustomCallback="GvJvSearch_CustomCallback" OnCustomButtonInitialize="GvJvSearch_CustomButtonInitialize" DataSourceID="EntityServerModeDataSource">
@@ -5989,9 +6064,11 @@
                                                             <a href="javascript:void(0);" onclick="OnView('<%# Container.VisibleIndex %>')" class="">
                                                                 <span class='ico ColorThree'><i class='fa fa-eye'></i></span><span class='hidden-xs'>View</span></a>
                                                             <%} %>
+                                                            <%--Rev 5.0 [ style='<%#Eval("Editlock")%>' added ]--%>
                                                             <% if (rights.CanEdit)
                                                                 { %>
-                                                            <a href="javascript:void(0);" onclick="OnEdit('<%# Container.VisibleIndex %>','<%#Eval("IsTDS") %>','<%#Eval("visible") %>','<%#Eval("visible_RETENTION") %>','<%#Eval("JvID") %>')" class="">
+                                                            <a href="javascript:void(0);" onclick="OnEdit('<%# Container.VisibleIndex %>','<%#Eval("IsTDS") %>','<%#Eval("visible") %>','<%#Eval("visible_RETENTION") %>','<%#Eval("JvID") %>')" class=""
+                                                                style='<%#Eval("Editlock")%>' >
                                                                 <span class='ico editColor'><i class='fa fa-pencil' aria-hidden='true'></i></span><span class='hidden-xs'>Edit</span></a>
                                                             <%} %>
                                                             <%--Rev Work start: Copy Feature required for Journal Vouchers Date:-27.05.2022 Mantise no:24911--%>
@@ -6000,11 +6077,12 @@
                                                             <a href="javascript:void(0);" onclick="OnCopy('<%# Container.VisibleIndex %>','<%#Eval("IsTDS") %>','<%#Eval("visible") %>','<%#Eval("visible_RETENTION") %>','<%#Eval("JvID") %>')" class="">
                                                                 <span class='ico editColor'><i class='fa fa-pencil' aria-hidden='true'></i></span><span class='hidden-xs'>Copy</span></a>
                                                             <%} %>
+                                                            <%--Rev 5.0 [ style='<%#Eval("Deletelock")%>'> added ]  --%>
                                                             <%--Rev Work close: Copy Feature required for Journal Vouchers Date:-27.05.2022 Mantise no:24911--%>
                                                             <% if (rights.CanDelete)
                                                                 { %>
                                                             <a href="javascript:void(0);" onclick="OnGetRowValuesOnDelete('<%# Container.VisibleIndex %>','<%#Eval("IsTDS") %>','<%#Eval("visible_RETENTION") %>','<%#Eval("JvID") %>')"
-                                                                class="">
+                                                                class="" style='<%#Eval("Deletelock")%>' >
                                                                 <span class='ico deleteColor'><i class='fa fa-trash' aria-hidden='true'></i></span><span class='hidden-xs'>Delete</span></a>
                                                             <%} %>
                                                             <% if (rights.CanPrint)
@@ -6140,6 +6218,16 @@
                                             <dxe:GridViewDataTextColumn VisibleIndex="17" FieldName="ITC" Caption="ITC">
                                                 <CellStyle Wrap="False" CssClass="gridcellleft"></CellStyle>
                                             </dxe:GridViewDataTextColumn>
+                                            <%--Rev 4.0--%>
+                                            <dxe:GridViewDataTextColumn VisibleIndex="18" FieldName="EnteredOn" Caption="Entered On">
+                                            </dxe:GridViewDataTextColumn>
+                                            <dxe:GridViewDataTextColumn VisibleIndex="19" FieldName="EnteredBy" Caption="Entered By">
+                                            </dxe:GridViewDataTextColumn>
+                                            <dxe:GridViewDataTextColumn VisibleIndex="20" FieldName="ModifiedOn" Caption="Modified On">
+                                            </dxe:GridViewDataTextColumn>
+                                            <dxe:GridViewDataTextColumn VisibleIndex="21" FieldName="ModifiedBy" Caption="Modified By">
+                                            </dxe:GridViewDataTextColumn>
+                                            <%--End of Rev 4.0--%>
 
                                         </Columns>
                                         <Settings ShowFooter="true" ShowColumnHeaders="true" ShowFilterRow="true" ShowGroupFooter="VisibleIfExpanded" />
@@ -6203,9 +6291,10 @@
                 <div class="col-md-3">
                     <label style="">Posting Date</label>
                     <div>
+                        <%--Rev 5.0 [ LostFocus="function(s, e) { SetLostFocusonDemand(e)}" added ]--%>
                         <dxe:ASPxDateEdit ID="tDate" runat="server" EditFormat="Custom" ClientInstanceName="tDate"
                             UseMaskBehavior="True" Width="100%" meta:resourcekey="tDateResource1">
-                            <ClientSideEvents DateChanged="function(s,e){DateChange()}" />
+                            <ClientSideEvents DateChanged="function(s,e){DateChange()}" LostFocus="function(s, e) { SetLostFocusonDemand(e)}" />
                         </dxe:ASPxDateEdit>
                         <%--Rev 3.0--%>
                         <img src="/assests/images/calendar-icon.png" class="calendar-icon right-20"/>
@@ -6620,9 +6709,10 @@
                     <div class="col-md-3">
                         <label style="">Posting Date</label>
                         <div>
+                            <%--Rev 5.0 [ LostFocus="function(s, e) { SetTDSLostFocusonDemand(e)}" added ]--%>
                             <dxe:ASPxDateEdit ID="tDateTDS" runat="server" EditFormat="Custom" ClientInstanceName="tDateTDS" DisplayFormatString="dd-MM-yyyy" EditFormatString="dd-MM-yyyy"
                                 UseMaskBehavior="True" Width="100%" meta:resourcekey="tDateResource1">
-                                <ClientSideEvents DateChanged="function(s,e){TDSDateChange()}" />
+                                <ClientSideEvents DateChanged="function(s,e){TDSDateChange()}" LostFocus="function(s, e) { SetTDSLostFocusonDemand(e)}" />
                             </dxe:ASPxDateEdit>
                         </div>
                     </div>
@@ -7097,6 +7187,19 @@
         <asp:HiddenField ID="hdnVal" runat="server" />
         <asp:HiddenField ID="hdnSchemeVal" runat="server" />
         <%--Rev Work close: Copy Feature required for Journal Vouchers Date:-27.05.2022 Mantise no:24911--%>
+
+        <%--Rev 5.0--%>
+        <asp:HiddenField ID="hdnLockFromDate" runat="server" />
+        <asp:HiddenField ID="hdnLockToDate" runat="server" />
+        <asp:HiddenField ID="hdnLockFromDateCon" runat="server" />
+        <asp:HiddenField ID="hdnLockToDateCon" runat="server" />
+        <asp:HiddenField ID="hdnValAfterLock" runat="server" />
+        <asp:HiddenField ID="hdnValAfterLockMSG" runat="server" />
+        <asp:HiddenField ID="hdnLockFromDateedit" runat="server" />
+        <asp:HiddenField ID="hdnLockToDateedit" runat="server" /> 
+        <asp:HiddenField ID="hdnLockFromDatedelete" runat="server" />
+        <asp:HiddenField ID="hdnLockToDatedelete" runat="server" />
+        <%--End of Rev 5.0--%>
     </div>
 
     <div style="display: none">
