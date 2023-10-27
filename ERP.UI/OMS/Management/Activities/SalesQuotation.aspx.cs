@@ -1,7 +1,16 @@
 ﻿/***************************************************************************************************************************************
- * Rev 1.0      Sanchita      V2.0.38       Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
- * Rev 2.0      Sanchita      V2.0.38       Tax amount is not calculating automatically while modifying PI/Quotation. Mantis : 26411
- * Rev 3.0      Sanchita      V2.0.39       An error is appearing while making a quotation. Mantis: 26613  
+ * Rev 1.0      Sanchita      V2.0.38               Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
+ * Rev 2.0      Sanchita      V2.0.38               Tax amount is not calculating automatically while modifying PI/Quotation. Mantis : 26411
+ * Rev 3.0      Sanchita      V2.0.39               An error is appearing while making a quotation. Mantis: 26613 
+ * Rev 4.0      Sanchita      V2.0.40   04-10-2023  Few Fields required in the Quotation Entry Module for the Purpose of Quotation Print from ERP
+                                                    New button "Other Condiion" to show instead of "Terms & Condition" Button 
+                                                    if the settings "Show Other Condition" is set as "Yes". Mantis: 0026868
+ * Rev 5.0      Sanchita      V2.0.40   06-10-2023  New Fields required in Sales Quotation - RFQ Number, RFQ Date, Project/Site
+                                                    Mantis : 26871
+ * Rev 6.0      Sanchita      V2.0.40   19-10-2023  Coordinator data not showing in the following screen while linking Quotation / Inquiry Entries
+                                                    Mantis: 26924
+* Rev 7.0       Priti         V2.0.40   19-10-2023  Edit and Save a Quotation updating the Revision Date
+                                                    Mantis: 0026936
  ***************************************************************************************************************************************/
 using System;
 using System.Configuration;
@@ -237,6 +246,42 @@ namespace ERP.OMS.Management.Activities
             bindHierarchy();
             ddlHierarchy.Enabled = false;
             //End
+
+            // Rev 5.0
+            string ShowRFQ = ComBL.GetSystemSettingsResult("ShowRFQ");
+            if (!String.IsNullOrEmpty(ShowRFQ))
+            {
+                if (ShowRFQ.ToUpper().Trim() == "YES")
+                {
+                    hdnShowRFQ.Value = "1";
+                    divRFQNumber.Style.Add("display", "block");
+                    divRFQDate.Style.Add("display", "block");
+                }
+                else if (ShowRFQ.ToUpper().Trim() == "NO")
+                {
+                    hdnShowRFQ.Value = "0";
+                    divRFQNumber.Style.Add("display", "none");
+                    divRFQDate.Style.Add("display", "none");
+
+                }
+            }
+
+            string ShowProject = ComBL.GetSystemSettingsResult("ShowProject");
+            if (!String.IsNullOrEmpty(ShowProject))
+            {
+                if (ShowProject.ToUpper().Trim() == "YES")
+                {
+                    hdnShowProject.Value = "1";
+                    divProjectSite.Style.Add("display", "block");
+                }
+                else if (ShowProject.ToUpper().Trim() == "NO")
+                {
+                    hdnShowProject.Value = "0";
+                    divProjectSite.Style.Add("display", "none");
+                }
+            }
+            // End of Rev 5.0
+
             if (!IsPostBack)
             {
                 Session["SO_ProductDetails"] = null;
@@ -842,7 +887,7 @@ namespace ERP.OMS.Management.Activities
                 string IsUsed = Convert.ToString(QuotationEditdt.Rows[0]["IsUsed"]);
                 string IsInventory = Convert.ToString(QuotationEditdt.Rows[0]["IsInventory"]);
                 string Inquiry_DocIds_Date = Convert.ToString(QuotationEditdt.Rows[0]["Inquiry_DocIds_Date"]);
-
+                
                 BillingShippingControl.SetBillingShippingTable(dsSalesQuotatioDetails.Tables[1]);
                 //REV rAJDIP
                 Opttype.SelectedValue = Convert.ToString(QuotationEditdt.Rows[0]["Type"]);
@@ -896,8 +941,10 @@ namespace ERP.OMS.Management.Activities
                 }
                 else
                 {
-                    txtRevisionDate.Date = Convert.ToDateTime(Quote_Date);
-                    txtRevisionDate.MinDate = Convert.ToDateTime(Convert.ToDateTime(Quote_Date).ToShortDateString());
+                    //Rev 7.0
+                    //txtRevisionDate.Date = Convert.ToDateTime(Quote_Date);
+                    //txtRevisionDate.MinDate = Convert.ToDateTime(Convert.ToDateTime(Quote_Date).ToShortDateString());
+                    //Rev 7.0 End
                 }
 
 
@@ -955,7 +1002,14 @@ namespace ERP.OMS.Management.Activities
                     dt_PLQuote.ClientEnabled = true;
                     //lookup_Customer.ClientEnabled = true; // Abhisek
                 }
-
+                // Rev 5.0
+                txtRFQNumber.Text = Convert.ToString(QuotationEditdt.Rows[0]["Quote_RFQNumber"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(QuotationEditdt.Rows[0]["Quote_RFQDate"])))
+                {
+                    dtRFQDate.Date = Convert.ToDateTime(QuotationEditdt.Rows[0]["Quote_RFQDate"]);
+                }
+                txtProjectSite.Text = Convert.ToString(QuotationEditdt.Rows[0]["Quote_ProjectSite"]);
+                // End of Rev 5.0
 
                 DataTable dtt = GetProjectEditData(Convert.ToString(Session["QuotationID"]));
                 if (dtt != null)
@@ -1973,7 +2027,6 @@ namespace ERP.OMS.Management.Activities
 
                         dt_Quotation.Text = Convert.ToString(quotationdate);
 
-
                     }
                 }
             }
@@ -2509,6 +2562,21 @@ namespace ERP.OMS.Management.Activities
                 //Rev work start 06.07.2022 mantise no:25008
                 string PosForGst = Convert.ToString(ddl_PosGstSalesOrder.Value);
                 //Rev work close 06.07.2022 mantise no:25008
+                // Rev 5.0
+                string strRFQNumber = "";
+                string strRFQDate = null;
+                string strProjectSite = "";
+                if (hdnShowRFQ.Value == "1")
+                {
+                    strRFQNumber = Convert.ToString(txtRFQNumber.Text);
+                    strRFQDate = Convert.ToString(dtRFQDate.Date);
+                }
+                if (hdnShowProject.Value == "1")
+                {
+                    strProjectSite = Convert.ToString(txtProjectSite.Text);
+                }
+                // End of Rev 5.0
+
                 DataTable tempQuotation = Quotationdt.Copy();
 
                 foreach (DataRow dr in tempQuotation.Rows)
@@ -2965,27 +3033,39 @@ namespace ERP.OMS.Management.Activities
 
                 //################# Added By : Sayan Dutta -- 10/07/2017 -- To check TC Mandatory Control
                 //#region TC
-                DataTable DT_TC = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='TC_QOMandatory' AND IsActive=1");
-                if (DT_TC != null && DT_TC.Rows.Count > 0)
+                // Rev 4.0
+                DataTable DT_TCOth = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='Show_Other_Condition' AND IsActive=1");
+                if (DT_TCOth != null && DT_TCOth.Rows.Count > 0 && Convert.ToString(DT_TCOth.Rows[0]["Variable_Value"]).Trim() == "Yes")
                 {
-                    string IsMandatory = Convert.ToString(DT_TC.Rows[0]["Variable_Value"]).Trim();
-
-                    //  objEngine = new BusinessLogicLayer.DBEngine(ConfigurationManager.AppSettings["DBConnectionDefault"]);
-
-                    objEngine = new BusinessLogicLayer.DBEngine();
-
-                    DataTable DTVisible = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='Show_TC_QO' AND IsActive=1");
-                    if (Convert.ToString(DTVisible.Rows[0]["Variable_Value"]).Trim() == "Yes")
+                    // Do nothing
+                }
+                else
+                {
+                    // End of Rev 4.0
+                    DataTable DT_TC = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='TC_QOMandatory' AND IsActive=1");
+                    if (DT_TC != null && DT_TC.Rows.Count > 0)
                     {
-                        if (IsMandatory == "Yes")
+                        string IsMandatory = Convert.ToString(DT_TC.Rows[0]["Variable_Value"]).Trim();
+
+                        //  objEngine = new BusinessLogicLayer.DBEngine(ConfigurationManager.AppSettings["DBConnectionDefault"]);
+
+                        objEngine = new BusinessLogicLayer.DBEngine();
+
+                        DataTable DTVisible = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='Show_TC_QO' AND IsActive=1");
+                        if (Convert.ToString(DTVisible.Rows[0]["Variable_Value"]).Trim() == "Yes")
                         {
-                            if (TermsConditionsControl.GetControlValue("dtDeliveryDate") == "" || TermsConditionsControl.GetControlValue("dtDeliveryDate") == "@")
+                            if (IsMandatory == "Yes")
                             {
-                                validate = "TCMandatory";
+                                if (TermsConditionsControl.GetControlValue("dtDeliveryDate") == "" || TermsConditionsControl.GetControlValue("dtDeliveryDate") == "@")
+                                {
+                                    validate = "TCMandatory";
+                                }
                             }
                         }
                     }
+                    // Rev 4.0
                 }
+                // End of Rev 4.0
                 //#endregion
                 //################# Added By : Sayan Dutta -- 10/07/2017 -- To check TC Mandatory Control
 
@@ -3135,13 +3215,15 @@ namespace ERP.OMS.Management.Activities
                     addrDesc = (DataTable)Session["InlineRemarks"];
                     string docdate = Convert.ToString(dt_Quotation.Text);
 
-                  ModifyQuatation(type, MainQuotationID, strSchemeType, UniqueQuotation, strQuoteDate, strQuoteExpiry, strCustomer, strContactName,docdate,ProjId,
+                    // Rev 5.0 [,strRFQNumber, strRFQDate, strProjectSite added]
+                    ModifyQuatation(type, MainQuotationID, strSchemeType, UniqueQuotation, strQuoteDate, strQuoteExpiry, strCustomer, strContactName,docdate,ProjId,
                                     Reference, strBranch, strAgents, strCurrency, strRate, strTaxType, strTaxCode, tempQuotation, addrDesc, TaxDetailTable,
                                     tempWarehousedt, tempTaxDetailsdt, tempBillAddress, approveStatus, ActionType, ref strIsComplete, ref strQuoteID, strIsInventory,
                                     duplicatedt2, MultiUOMDetails, projectValidFrom, projectValidUpto, ProjRemarks, ApproveRejectstatus, AppRejRemarks, RevisionDate, RevisionNo
                                     //Rev work start 06.07.2022 mantise no:25008
                                     , PosForGst
                                     //Rev work close 06.07.2022 mantise no:25008
+                                    , strRFQNumber, strRFQDate, strProjectSite
                                     );
 
                     if (strIsComplete == 1)
@@ -3595,6 +3677,7 @@ namespace ERP.OMS.Management.Activities
 
         }
 
+        // Rev 5.0 [,strRFQNumber, strRFQDate, strProjectSite added]
         public void ModifyQuatation(string type, string QuotationID, string strSchemeType, string strQuoteNo, string strQuoteDate, string strQuoteExpiry, string strCustomer, string strContactName,string Docdate,Int64 ProjId,
                                     string Reference, string strBranch, string strAgents, string strCurrency, string strRate, string strTaxType, string strTaxCode, DataTable Quotationdt,DataTable addrDesc,
                                     DataTable TaxDetailTable, DataTable Warehousedt, DataTable QuotationTaxdt, DataTable BillAddressdt, string approveStatus, string ActionType,
@@ -3603,6 +3686,7 @@ namespace ERP.OMS.Management.Activities
             //Rev work start 06.07.2022 mantise no:25008
             , string PosForGst
             //Rev work close 06.07.2022 mantise no:25008
+            , string strRFQNumber, string strRFQDate, string strProjectSite
             )
         {
             try
@@ -3706,6 +3790,14 @@ namespace ERP.OMS.Management.Activities
 
                 cmd.Parameters.Add("@ReturnValue", SqlDbType.VarChar, 50);
                 cmd.Parameters.Add("@ReturnQuoteID", SqlDbType.VarChar, 50);
+                // Rev 5.0
+                cmd.Parameters.AddWithValue("@RFQNumber", strRFQNumber);
+                if (strRFQDate != "1/1/0001 12:00:00 AM")
+                {
+                    cmd.Parameters.AddWithValue("@RFQDate", strRFQDate);
+                }
+                cmd.Parameters.AddWithValue("@ProjectSite", strProjectSite);
+                // End of Rev 5.0
 
 
                 cmd.Parameters["@ReturnValue"].Direction = ParameterDirection.Output;
@@ -3730,10 +3822,26 @@ namespace ERP.OMS.Management.Activities
                 if (strQuoteID > 0)
                 {
                     //####### Coded By Sayan Dutta  For Custom Control Data Process #########
-                    if (!string.IsNullOrEmpty(hfTermsConditionData.Value))
+                    // Rev 4.0
+                    DataTable DT_TCOth = oDBEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='Show_Other_Condition' AND IsActive=1");
+                    if (DT_TCOth != null && DT_TCOth.Rows.Count > 0 && Convert.ToString(DT_TCOth.Rows[0]["Variable_Value"]).Trim() == "Yes")
                     {
-                        TermsConditionsControl.SaveTC(hfTermsConditionData.Value, Convert.ToString(strQuoteID), "QO");
+                        if (!string.IsNullOrEmpty(hfOtherConditionData.Value))
+                        {
+                            uctrlOtherCondition.SaveOC(hfOtherConditionData.Value, Convert.ToString(strQuoteID), "QO");
+                        }
                     }
+                    else
+                    {
+                        // End of Rev 4.0
+                        if (!string.IsNullOrEmpty(hfTermsConditionData.Value))
+                        {
+                            TermsConditionsControl.SaveTC(hfTermsConditionData.Value, Convert.ToString(strQuoteID), "QO");
+                        }
+                        // Rev 4.0
+                    }
+                    // End of Rev 4.0
+                    
                 }
 
 
@@ -6318,6 +6426,40 @@ namespace ERP.OMS.Management.Activities
             //return packing_quantity + '~' + sProduct_quantity;
             return RateLists;
         }
+
+        // Rev 5.0
+        [WebMethod]
+        public static String GetRFQHeaderReference(string KeyVal, string type)
+        {
+            SlaesActivitiesBL objSlaesActivitiesBL = new SlaesActivitiesBL();
+            string strRFQNumber = "";
+            string strRFQDate = "";
+            string strProjectSite = "";
+            string ResultString = "";
+            // Rev 6.0
+            string strSalesmanId = "";
+            string strSalesmanName = "";
+            // End of Rev 6.0
+
+            DataTable dt_Head = objSlaesActivitiesBL.GetInquiryDate(KeyVal);
+            if (dt_Head != null && dt_Head.Rows.Count > 0)
+            {
+                strRFQNumber = Convert.ToString(dt_Head.Rows[0]["Inquiry_RFQNumber"]);
+                strRFQDate = Convert.ToString(dt_Head.Rows[0]["Inq_RFQDate"]);
+                strProjectSite = Convert.ToString(dt_Head.Rows[0]["Inquiry_ProjectSite"]);
+
+                // Rev 6.0
+                //ResultString = Convert.ToString(strRFQNumber + "~" + strRFQDate + "~" + strProjectSite);
+                strSalesmanId = Convert.ToString(dt_Head.Rows[0]["SalesmanId"]);
+                strSalesmanName = Convert.ToString(dt_Head.Rows[0]["SalesmanName"]);
+
+                ResultString = Convert.ToString(strRFQNumber + "~" + strRFQDate + "~" + strProjectSite+ "~" + strSalesmanId + "~" + strSalesmanName);
+                // End of Rev 6.0
+            }
+
+            return ResultString;
+        }
+        // End of Rev 5.0
         public void GetQuantityBaseOnProduct(string strProductSrlNo, ref decimal WarehouseQty)
         {
             decimal sum = 0;

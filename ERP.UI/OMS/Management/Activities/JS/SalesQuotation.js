@@ -1,7 +1,12 @@
 ﻿/*********************************************************************************************************
- * Rev 1.0      Sanchita      V2.0.38       Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
- * Rev 2.0      Sanchita      V2.0.38       Tax amount is not calculating automatically while modifying PI/Quotation. Mantis : 26411   
-**********************************************************************************************************/
+ * Rev 1.0      Sanchita      V2.0.38                   Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
+ * Rev 2.0      Sanchita      V2.0.38                   Tax amount is not calculating automatically while modifying PI/Quotation. Mantis : 26411 
+ * Rev 3.0      Priti         V2.0.40                   0026881: The Expiry Date of the Proforma/Quotation is not accepting any date within the Month but taking the Last Date of any Month whiln
+ * Rev 4.0      Sanchita      V2.0.40       06-10-2023  New Fields required in Sales Quotation - RFQ Number, RFQ Date, Project/Site
+                                                        Mantis : 26871 
+ * Rev 5.0      Sanchita      V2.0.40       19-10-2023  Coordinator data not showing in the following screen while linking Quotation / Inquiry Entries
+                                                        Mantis: 26924
+ **********************************************************************************************************/
 (function (global) {
     if (typeof (global) === "undefined") {
         throw new Error("window is undefined");
@@ -2035,8 +2040,11 @@ function Approve_ButtonClick() {
     }
     else {
         $('#MandatoryEDate').attr('style', 'display:none');
-        //if (startDate > endDate) {	
-        if (tstartdate.GetText() > tenddate.GetText()) {
+        //Rev 3.0
+       // if (startDate > endDate) {
+        /* if (tstartdate.GetText() > tenddate.GetText()) {*/
+        if (startDate > endDate) {
+        //Rev 3.0 End
             flag = false;
             $('#MandatoryEgSDate').attr('style', 'display:block');
         }
@@ -5482,6 +5490,42 @@ function QuotationNumberChanged() {
                 if (arr.length == 1) {
                     cComponentDatePanel.PerformCallback('BindQuotationDate' + '~' + quote_Id);
 
+                    // Rev 4.0
+                    var type = "SINQ"
+                    var Key = quote_Id.split(',')[0];
+                    $.ajax({
+                        type: "POST",
+                        url: "SalesQuotation.aspx/GetRFQHeaderReference",
+                        data: JSON.stringify({ KeyVal: Key, type: type }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        async: false,
+                        success: function (msg) {
+
+                            var currentString = msg.d;
+                            
+                            var RFQNumber = currentString.split('~')[0];
+                            var RFQDate = currentString.split('~')[1];
+                            var ProjectSite = currentString.split('~')[2];
+
+                            ctxtRFQNumber.SetText(RFQNumber);
+                            if (RFQDate != "") {
+                                cdtRFQDate.SetDate(new Date(RFQDate));
+                            }
+                            ctxtProjectSite.SetText(ProjectSite);
+
+                            // Rev 5.0
+                            var Quote_SalesmanId = currentString.split('~')[3];
+                            var Quote_SalesmanName = currentString.split('~')[4];
+
+                            $("#hdnSalesManAgentId").val(Quote_SalesmanId);
+                            ctxtSalesManAgent.SetText(Quote_SalesmanName);
+                            // End of Rev 5.0
+                            
+                        }
+
+                    });
+                    // End of Rev 4.0
 
                 }
                 else {

@@ -5,6 +5,13 @@
  * Rev 4.0      Priti         V2.0.39   25-09-2023  The Shipping Contact Person & Shipping Phone is not carried forward from Sales Order to Sales Invoice
  * Rev 5.0      Sanchita      V2.0.39   26/09/2023  The calculated on field is calculating wrong amount in Sales Invoice 
  *                                                  when Price Inclusive of GST selected. Mantis: 26860
+ * Rev 6.0      Sanchita      V2.0.40   04-10-2023  Few Fields required in the Quotation Entry Module for the Purpose of Quotation Print from ERP
+                                                    New button "Other Condiion" to show instead of "Terms & Condition" Button 
+                                                    if the settings "Show Other Condition" is set as "Yes". Mantis: 0026868
+* Rev 7.0      Sanchita      V2.0.40   06-10-2023  New Fields required in Sales Quotation - RFQ Number, RFQ Date, Project/Site
+                                                    Mantis : 26871
+* Rev 8.0      Sanchita      V2.0.40     19-10-2023     Coordinator data not showing in the following screen while linking Quotation/Inquiry Entries
+                                                         Mantis : 26924
  ****************************************************************************************************************************************************************************/
 using System;
 using System.Configuration;
@@ -314,6 +321,41 @@ namespace ERP.OMS.Management.Activities
             //    }
             //}
             // End of Rev 1.0
+
+            // Rev 7.0
+            string ShowRFQ = ComBL.GetSystemSettingsResult("ShowRFQ");
+            if (!String.IsNullOrEmpty(ShowRFQ))
+            {
+                if (ShowRFQ.ToUpper().Trim() == "YES")
+                {
+                    hdnShowRFQ.Value = "1";
+                    divRFQNumber.Style.Add("display", "block");
+                    divRFQDate.Style.Add("display", "block");
+                }
+                else if (ShowRFQ.ToUpper().Trim() == "NO")
+                {
+                    hdnShowRFQ.Value = "0";
+                    divRFQNumber.Style.Add("display", "none");
+                    divRFQDate.Style.Add("display", "none");
+
+                }
+            }
+
+            string ShowProject = ComBL.GetSystemSettingsResult("ShowProject");
+            if (!String.IsNullOrEmpty(ShowProject))
+            {
+                if (ShowProject.ToUpper().Trim() == "YES")
+                {
+                    hdnShowProject.Value = "1";
+                    divProjectSite.Style.Add("display", "block");
+                }
+                else if (ShowProject.ToUpper().Trim() == "NO")
+                {
+                    hdnShowProject.Value = "0";
+                    divProjectSite.Style.Add("display", "none");
+                }
+            }
+            // End of Rev 7.0
 
             if (!IsPostBack)
             {
@@ -1099,6 +1141,71 @@ namespace ERP.OMS.Management.Activities
             return RateLists;
         }
 
+        // Rev 7.0
+        [WebMethod]
+        public static String GetRFQHeaderReference(string KeyVal, string type)
+        {
+            SlaesActivitiesBL objSlaesActivitiesBL = new SlaesActivitiesBL();
+            string strRFQNumber = "";
+            string strRFQDate = "";
+            string strProjectSite = "";
+            string ResultString = "";
+            // Rev 8.0
+            string strSalesmanId = "";
+            string strSalesmanName = "";
+            // End of Rev 8.0
+
+            DataTable dt_Head = new DataTable();
+            ProcedureExecute proc = new ProcedureExecute("prc_CRMSalesInvoice_Details");
+            proc.AddVarcharPara("@SelectedComponentList", 100, KeyVal);
+            proc.AddVarcharPara("@ComponentType", 100, type);
+            proc.AddVarcharPara("@Action", 100, "GetComponentDateAddEdit");
+            dt_Head= proc.GetTable();
+
+            if (dt_Head != null && dt_Head.Rows.Count > 0)
+            {
+                if (type == "QO")
+                {
+                    strRFQNumber = Convert.ToString(dt_Head.Rows[0]["Quote_RFQNumber"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(dt_Head.Rows[0]["Quot_RFQDate"])))
+                    {
+                        strRFQDate = Convert.ToString(dt_Head.Rows[0]["Quot_RFQDate"]);
+                    }
+                    strProjectSite = Convert.ToString(dt_Head.Rows[0]["Quote_ProjectSite"]);
+                }
+                else if (type == "SO")
+                {
+                    strRFQNumber = Convert.ToString(dt_Head.Rows[0]["Order_RFQNumber"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(dt_Head.Rows[0]["Ord_RFQDate"])))
+                    {
+                        strRFQDate = Convert.ToString(dt_Head.Rows[0]["Ord_RFQDate"]);
+                    }
+                    strProjectSite = Convert.ToString(dt_Head.Rows[0]["Order_ProjectSite"]);
+                }
+                else if (type == "SC")
+                {
+                    strRFQNumber = Convert.ToString(dt_Head.Rows[0]["Challan_RFQNumber"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(dt_Head.Rows[0]["Chal_RFQDate"])))
+                    {
+                        strRFQDate = Convert.ToString(dt_Head.Rows[0]["Chal_RFQDate"]);
+                    }
+                    strProjectSite = Convert.ToString(dt_Head.Rows[0]["Challan_ProjectSite"]);
+                }
+                // Rev 8.0
+                strSalesmanId = Convert.ToString(dt_Head.Rows[0]["SalesmanId"]);
+                strSalesmanName = Convert.ToString(dt_Head.Rows[0]["SalesmanName"]);
+                // End of Rev 8.0
+
+                // Rev 8.0
+                //ResultString = Convert.ToString(strRFQNumber + "~" + strRFQDate + "~" + strProjectSite);
+                ResultString = Convert.ToString(strRFQNumber + "~" + strRFQDate + "~" + strProjectSite + "~" + strSalesmanId + "~" + strSalesmanName);
+                // End of Rev 8.0
+            }
+
+            return ResultString;
+        }
+        // End of Rev 7.0
+
         // Rev 1.0
         //[WebMethod]
         //public static decimal CheckSOQty(String SODoc_ID, String SODocDetailsID, int SLNo, string IsToleranceInSalesOrder)
@@ -1156,7 +1263,7 @@ namespace ERP.OMS.Management.Activities
         //            qtyCheck = 0;
         //        }
         //    }
-           
+
 
         //    return qtyCheck;
         //}
@@ -1501,6 +1608,16 @@ namespace ERP.OMS.Management.Activities
                 ddl_Currency.SelectedValue = Currency_Id;
                 txt_Rate.Value = Currency_Conversion_Rate;
                 txt_Rate.Text = Currency_Conversion_Rate;
+
+                // Rev 7.0
+                txtRFQNumber.Text = Convert.ToString(QuotationEditdt.Rows[0]["Invoice_RFQNumber"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(QuotationEditdt.Rows[0]["Invoice_RFQDate"])))
+                {
+                    dtRFQDate.Date = Convert.ToDateTime(QuotationEditdt.Rows[0]["Invoice_RFQDate"]);
+                }
+                txtProjectSite.Text = Convert.ToString(QuotationEditdt.Rows[0]["Invoice_ProjectSite"]);
+                // End of Rev 7.0
+
                 if (Tax_Option != "0") ddl_AmountAre.Value = Tax_Option;
                 if (Tax_Code != "0")
                 {
@@ -2678,7 +2795,20 @@ namespace ERP.OMS.Management.Activities
                 string[] ActCurrency = currency.Split('~');
                 int BaseCurrencyId = Convert.ToInt32(ActCurrency[0]);
                 int ConvertedCurrencyId = Convert.ToInt32(strCurrency);
-
+                // Rev 7.0
+                string strRFQNumber = "";
+                string strRFQDate = null;
+                string strProjectSite = "";
+                if (hdnShowRFQ.Value == "1")
+                {
+                    strRFQNumber = Convert.ToString(txtRFQNumber.Text);
+                    strRFQDate = Convert.ToString(dtRFQDate.Date);
+                }
+                if (hdnShowProject.Value == "1")
+                {
+                    strProjectSite = Convert.ToString(txtProjectSite.Text);
+                }
+                // End of Rev 7.0
 
 
                 //////////////////  TCS section  /////////////////////////
@@ -3193,32 +3323,42 @@ namespace ERP.OMS.Management.Activities
                 //Data: 31-05-2017 Author: Sayan Dutta
                 //Details:To check T&C Mandatory Control
                 #region TC
-
-                if (ddlInventory.SelectedValue != "N" && ddlInventory.SelectedValue != "S")
+                // Rev 6.0
+                DataTable DT_TCOth = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='Show_Other_Condition' AND IsActive=1");
+                if (DT_TCOth != null && DT_TCOth.Rows.Count > 0 && Convert.ToString(DT_TCOth.Rows[0]["Variable_Value"]).Trim() == "Yes")
                 {
-                    DataTable DT_TC = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='TC_SIMandatory' AND IsActive=1");
-                    if (DT_TC != null && DT_TC.Rows.Count > 0)
+                    // Do nothing
+                }
+                else
+                {
+                    // End of Rev 6.0
+                    if (ddlInventory.SelectedValue != "N" && ddlInventory.SelectedValue != "S")
                     {
-                        string IsMandatory = Convert.ToString(DT_TC.Rows[0]["Variable_Value"]).Trim();
-
-                        // objEngine = new BusinessLogicLayer.DBEngine(ConfigurationManager.AppSettings["DBConnectionDefault"]);
-
-                        objEngine = new BusinessLogicLayer.DBEngine();
-
-                        DataTable DTVisible = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='Show_TC_SI' AND IsActive=1");
-                        if (Convert.ToString(DTVisible.Rows[0]["Variable_Value"]).Trim() == "Yes")
+                        DataTable DT_TC = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='TC_SIMandatory' AND IsActive=1");
+                        if (DT_TC != null && DT_TC.Rows.Count > 0)
                         {
-                            if (IsMandatory == "Yes")
+                            string IsMandatory = Convert.ToString(DT_TC.Rows[0]["Variable_Value"]).Trim();
+
+                            // objEngine = new BusinessLogicLayer.DBEngine(ConfigurationManager.AppSettings["DBConnectionDefault"]);
+
+                            objEngine = new BusinessLogicLayer.DBEngine();
+
+                            DataTable DTVisible = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='Show_TC_SI' AND IsActive=1");
+                            if (Convert.ToString(DTVisible.Rows[0]["Variable_Value"]).Trim() == "Yes")
                             {
-                                if (TermsConditionsControl.GetControlValue("dtDeliveryDate") == "" || TermsConditionsControl.GetControlValue("dtDeliveryDate") == "@")
+                                if (IsMandatory == "Yes")
                                 {
-                                    validate = "TCMandatory";
+                                    if (TermsConditionsControl.GetControlValue("dtDeliveryDate") == "" || TermsConditionsControl.GetControlValue("dtDeliveryDate") == "@")
+                                    {
+                                        validate = "TCMandatory";
+                                    }
                                 }
                             }
                         }
                     }
+                    // Rev 6.0
                 }
-
+                // End of Rev 6.0
                 #endregion
                 //----------End-------------------------
 
@@ -3583,13 +3723,16 @@ namespace ERP.OMS.Management.Activities
                         dtDetailscheck.Remove("SONetAmount");
                     }
                     DataTable dtAddlDesc = (DataTable)Session["InlineRemarks"];
+                    // Rev 5.0 [,strRFQNumber, strRFQDate, strProjectSite added]
                     ModifyQuatation(strIsInventory, MainInvoiceID, strSchemeType, UniqueQuotation, strInvoiceDate, strCustomer, strContactName, ProjId,
                                     Reference, strBranch, strAgents, strCurrency, strRate, strTaxType, strTaxCode, dtAddlDesc,
                                     strComponenyType, InvoiceComponent, InvoiceComponentDate, strCashBank, strDueDate,
                                     tempQuotation, TaxDetailTable, tempWarehousedt, tempTaxDetailsdt, tempBillAddress, SchemeID,
                                     approveStatus, ActionType, PosForGst, ref strIsComplete, ref strQuoteID, ref strInvoiceNumber, duplicatedt2, MultiUOMDetails, strTCScode, strTCSappl
                                     , strTCSpercentage, strTCSamout, drdTransCategory.SelectedValue, _ReverseCharge
-                                    , Segment1, Segment2, Segment3, Segment4, Segment5, BillDespatch);
+                                    , Segment1, Segment2, Segment3, Segment4, Segment5, BillDespatch
+                                    , strRFQNumber, strRFQDate, strProjectSite
+                                    );
 
                     //Chinmoy added Below Line
 
@@ -6238,7 +6381,7 @@ namespace ERP.OMS.Management.Activities
             return validate;
         }
 
-
+        // Rev 7.0 [,strRFQNumber, strRFQDate, strProjectSite added]
         public void ModifyQuatation(string strIsInventory, string QuotationID, string strSchemeType, string strQuoteNo, string strQuoteDate, string strCustomer, string strContactName, Int64 ProjId,
                                     string Reference, string strBranch, string strAgents, string strCurrency, string strRate, string strTaxType, string strTaxCode, DataTable dtAddlDesc,
                                     string strComponenyType, string strInvoiceComponent, string strInvoiceComponentDate, string strCashBank, string strDueDate,
@@ -6246,7 +6389,8 @@ namespace ERP.OMS.Management.Activities
                                     string strSchemeID, string approveStatus, string ActionType, string PosForGst, ref int strIsComplete, ref int strInvoiceID
                                     , ref string strInvoiceNumber, DataTable QuotationPackingDetailsdt, DataTable MultiUOMDetails
                                     , string strTCScode, string strTCSappl, string strTCSpercentage, string strTCSamout, string TransacCategory, Boolean _ReverseCharge
-            , string Segment1, string Segment2, string Segment3, string Segment4, string Segment5, DataTable BillDespatch)
+            , string Segment1, string Segment2, string Segment3, string Segment4, string Segment5, DataTable BillDespatch
+            , string strRFQNumber, string strRFQDate, string strProjectSite)
         {
             try
             {             
@@ -6332,6 +6476,14 @@ namespace ERP.OMS.Management.Activities
                 cmd.Parameters.AddWithValue("@SegmentID4", Segment4);
                 cmd.Parameters.AddWithValue("@SegmentID5", Segment5);
                 cmd.Parameters.AddWithValue("@Draft_invoice", Session["Draft_Invoice"]);
+                // Rev 7.0
+                cmd.Parameters.AddWithValue("@RFQNumber", strRFQNumber);
+                if (strRFQDate != "1/1/0001 12:00:00 AM")
+                {
+                    cmd.Parameters.AddWithValue("@RFQDate", strRFQDate);
+                }
+                cmd.Parameters.AddWithValue("@ProjectSite", strProjectSite);
+                // End of Rev 7.0
 
 
                 cmd.Parameters.Add("@ReturnValue", SqlDbType.VarChar, 50);
@@ -6376,10 +6528,25 @@ namespace ERP.OMS.Management.Activities
                 if (strInvoiceID > 0)
                 {
                     //####### Coded By Sayan Dutta For Custom Control Data Process #########
-                    if (!string.IsNullOrEmpty(hfTermsConditionData.Value))
+                    // Rev 6.0
+                    DataTable DT_TCOth = oDBEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='Show_Other_Condition' AND IsActive=1");
+                    if (DT_TCOth != null && DT_TCOth.Rows.Count > 0 && Convert.ToString(DT_TCOth.Rows[0]["Variable_Value"]).Trim() == "Yes")
                     {
-                        TermsConditionsControl.SaveTC(hfTermsConditionData.Value, Convert.ToString(strInvoiceID), "SI");
+                        if (!string.IsNullOrEmpty(hfOtherConditionData.Value))
+                        {
+                            uctrlOtherCondition.SaveOC(hfOtherConditionData.Value, Convert.ToString(strInvoiceID), "SI");
+                        }
                     }
+                    else
+                    {
+                        // End of Rev 6.0
+                        if (!string.IsNullOrEmpty(hfTermsConditionData.Value))
+                        {
+                            TermsConditionsControl.SaveTC(hfTermsConditionData.Value, Convert.ToString(strInvoiceID), "SI");
+                        }
+                        // Rev 6.0
+                    }
+                    // End of Rev 6.0
 
                     if (!string.IsNullOrEmpty(hfOtherTermsConditionData.Value))
                     {
@@ -11214,6 +11381,7 @@ namespace ERP.OMS.Management.Activities
                     if (!string.IsNullOrEmpty(Date))
                     {
                         txt_InvoiceDate.Text = Convert.ToString(Date);
+                        
                     }
                 }
             }

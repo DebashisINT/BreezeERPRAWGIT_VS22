@@ -4,7 +4,10 @@
  * Rev 2.0      Sanchita      V2.0.38                    Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
  * Rev 3.0      Priti         V2.0.39                    The place of Supply should be intact in the Sales Order is being tagged with an Invoice. Mantis :0026820
  * Rev 4.0      Priti         V2.0.39     15-09-2023     Product wise  MultiUOM calculated Amount check.Mantis : 0026821
-
+ * Rev 5.0      Sanchita      V2.0.40     06-10-2023     New Fields required in Sales Quotation - RFQ Number, RFQ Date, Project/Site
+                                                         Mantis : 26871
+ * Rev 6.0      Sanchita      V2.0.40     19-10-2023     Coordinator data not showing in the following screen while linking Quotation/Inquiry Entries
+                                                         Mantis : 26924
   ******************************************************************************************************************************/
 
 $(document).ready(function () {
@@ -462,10 +465,10 @@ function SaveMultiUOM() {
             ccmbSecondUOM.SetValue("");
             cgrid_MultiUOM.cpAllDetails = "";
             cbtnMUltiUOM.SetText("Add");
-            // Rev Sanchita
+            // Rev sanchita
             $("#chkUpdateRow").prop('checked', false);
             $("#chkUpdateRow").removeAttr("checked");
-            // End of Rev Sanchita
+            // End of Rev sanchita
         }
         else {
             cgrid_MultiUOM.PerformCallback('SaveDisplay~' + srlNo + '~' + qnty + '~' + UomName + '~' + AltUomName + '~' + AltQnty + '~' + UomId + '~' + AltUomId + '~' + ProductID + '~' + DetailsId + '~' + BaseRate + '~' + AltRate + '~' + UpdateRow);
@@ -6291,6 +6294,41 @@ function QuotationNumberChanged() {
             else {
                 if (arr.length == 1) {
                     cComponentDatePanel.PerformCallback('BindComponentDate' + '~' + quote_Id + '~' + type);
+
+                    // Rev 5.0
+                    var Key = quote_Id.split(',')[0];
+                    $.ajax({
+                        type: "POST",
+                        url: "SalesInvoice.aspx/GetRFQHeaderReference",
+                        data: JSON.stringify({ KeyVal: Key, type: type }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        async: false,
+                        success: function (msg) {
+
+                            var currentString = msg.d;
+
+                            var RFQNumber = currentString.split('~')[0];
+                            var RFQDate = currentString.split('~')[1];
+                            var ProjectSite = currentString.split('~')[2];
+                            // Rev 6.0
+                            var Quote_SalesmanId = currentString.split('~')[3];
+                            var Quote_SalesmanName = currentString.split('~')[4];
+                           
+                            $("#hdnSalesManAgentId").val(Quote_SalesmanId);
+                            ctxtSalesManAgent.SetText(Quote_SalesmanName);
+                             // End of Rev 6.0
+
+                            ctxtRFQNumber.SetText(RFQNumber);
+                            if (RFQDate != "") {
+                                cdtRFQDate.SetDate(new Date(RFQDate));
+                            }
+                            ctxtProjectSite.SetText(ProjectSite);
+
+                        }
+
+                    });
+                    // End of Rev 5.0
                 }
                 else {
                     ctxt_InvoiceDate.SetText('');
