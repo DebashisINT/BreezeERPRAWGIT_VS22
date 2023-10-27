@@ -6,6 +6,11 @@
    Rev 3.0      Sanchita      V2.0.39   28/06/2023  Some of the issues are there in Sales Invoice regarding 
                                                     Multi UOM in EVAC - FOR ALL SALES ORDER. Refer: 26453
    Rev 4.0      Priti         V2.0.39   18/07/2023  Sales Ordedr product deletion issue solved
+   Rev 5.0      Sanchita      V2.0.40   04/10/2023  0026868 : Few Fields required in the Quotation Entry Module for the Purpose of Quotation Print from ERP
+                                                    New button "Other Condiion" to show instead of "Terms & Condition" Button 
+                                                    if the settings "Show Other Condition" is set as "Yes"
+   Rev 6.0      Sanchita      V2.0.40   06-10-2023  New Fields required in Sales Quotation - RFQ Number, RFQ Date, Project/Site
+                                                    Mantis : 26871
  **********************************************************************************************************/--%>
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SalesOrderAdd.aspx.cs" MasterPageFile="~/OMS/MasterPage/ERP.Master"
     Inherits="ERP.OMS.Management.Activities.SalesOrderAdd" EnableEventValidation="false" %>
@@ -17,6 +22,9 @@
 <%@ Register Src="~/OMS/Management/Activities/UserControls/Sales_BillingShipping.ascx" TagPrefix="ucBS" TagName="Sales_BillingShipping" %>
 <%@ Register Src="~/OMS/Management/Activities/UserControls/UOMConversion.ascx" TagPrefix="uc3" TagName="UOMConversionControl" %>
 <%@ Register Src="~/OMS/Management/Activities/UserControls/OtherTermsAndCondition.ascx" TagPrefix="ucOTC" TagName="OtherTermsAndCondition" %>
+<%--Rev 5.0--%>
+<%@ Register Src="~/OMS/Management/Activities/UserControls/uctrlOtherCondition.ascx" TagPrefix="uc4" TagName="uctrlOtherCondition" %>
+<%--End of Rev 5.0--%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -733,7 +741,9 @@ function PerformCallToGridBind() {
             //#### added by Samrat Roy for Transporter Control #############
             //#### added by Samrat Roy for Transporter Control #############
             var quote_Id = gridquotationLookup.gridView.GetSelectedKeysOnPage();
-            if ("<%=Convert.ToString(Session["TransporterVisibilty"])%>" == "Yes") {
+            // Rev 5.0
+            //if ("<%=Convert.ToString(Session["TransporterVisibilty"])%>" == "Yes") {
+                // End of Rev 5.0
                 var type = "";
 
                 if ($("#rdl_Salesquotation").find(":checked").val() == "QN") {
@@ -743,7 +753,9 @@ function PerformCallToGridBind() {
                     type = "SINQ";
                 }
                 callTransporterControl(quote_Id[0], type);
-            }
+            // Rev 5.0
+            //}
+            // End of Rev 5.0
             ///// #### End : Samrat Roy for Transporter Control : End #############
             //grid.Refresh();
             clookup_Project.SetEnabled(false);
@@ -753,9 +765,21 @@ function PerformCallToGridBind() {
 
 
             //#### added by Sayan Dutta for TC Control #############
-            if ($("#btn_TermsCondition").is(":visible")) {
-                callTCControl(quote_Id, 'QO');
+            // Rev 5.0
+            //if ($("#btn_TermsCondition").is(":visible")) {
+            //    callTCControl(quote_Id, 'QO');
+            //}
+
+            if ($("#btn_OtherCondition").is(":visible")) {
+                callOCControl(quote_Id, type);
             }
+            else {
+                if ($("#btn_TermsCondition").is(":visible")) {
+                    callTCControl(quote_Id, type);
+                }
+            }
+            // End of Rev 5.0
+            
             return false;
         }
         else {
@@ -1638,7 +1662,8 @@ function PerformCallToGridBind() {
                                             </dxe:ASPxComboBox>
 
                                         </div>
-                                        <div class="col-md-2 lblmTop8" id="divposGst">
+                                        <%--<div class="col-md-2 lblmTop8" id="divposGst">--%>
+                                        <div class="col-md-2" id="divposGst">
                                             <dxe:ASPxLabel ID="lbl_PosForGst" runat="server" Text="Place Of Supply [GST]">
                                             </dxe:ASPxLabel>
                                             <span style="color: red">*</span>
@@ -1705,6 +1730,37 @@ function PerformCallToGridBind() {
                                             <asp:TextBox ID="txtAppRejRemarks" runat="server" TabIndex="16" Width="100%" TextMode="MultiLine" Rows="2" Columns="8" Height="50px"></asp:TextBox>
 
                                         </div>
+
+                                        <%--Rev 6.0--%>
+                                        <div style="clear: both;"></div>
+                                        <div class="col-md-3" id="divRFQNumber" runat="server">
+                                            <dxe:ASPxLabel ID="lblRFQNumber" runat="server" Text="RFQ Number">
+                                            </dxe:ASPxLabel>
+                                            <dxe:ASPxTextBox ID="txtRFQNumber" runat="server" ClientInstanceName="ctxtRFQNumber" Width="100%" PropertiesTextEdit-MaxLength="500" >
+                                            </dxe:ASPxTextBox>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-3 lblmTop8" id="divRFQDate" runat="server" >
+                                                    <dxe:ASPxLabel ID="lblRFQDate" runat="server" Text="RFQ Date">
+                                                    </dxe:ASPxLabel>
+                                                    <dxe:ASPxDateEdit ID="dtRFQDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" DisplayFormatString="dd-MM-yyyy" UseMaskBehavior="True" ClientInstanceName="cdtRFQDate" Width="100%">
+                                                        <ButtonStyle Width="13px">
+                                                        </ButtonStyle>
+
+                                                        <ClientSideEvents GotFocus="function(s,e){cdtRFQDate.ShowDropDown();}" />
+                                                    </dxe:ASPxDateEdit>
+                                                </div>
+                                                <%--<div class="col-md-9 lblmTop8" id="divProjectSite" runat="server">--%>
+                                                <div class="col-md-9" id="divProjectSite" runat="server">
+                                                    <dxe:ASPxLabel ID="lblProjectSite" runat="server" Text="Project/Site">
+                                                    </dxe:ASPxLabel>
+                                                    <dxe:ASPxTextBox ID="txtProjectSite" runat="server" ClientInstanceName="ctxtProjectSite" Width="100%" PropertiesTextEdit-MaxLength="500">
+                                                    </dxe:ASPxTextBox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <%--End of Rev 6.0--%>
 
                                         <div class="clear"></div>
                                         <div class="col-md-2">
@@ -2393,17 +2449,28 @@ function PerformCallToGridBind() {
                                             <asp:HiddenField runat="server" ID="hfTermsConditionData" />
                                             <asp:HiddenField runat="server" ID="hfTermsConditionDocType" Value="SO" />
                                             <asp:HiddenField runat="server" ID="hdBasketId" />
-
+                                            <%--Rev 5.0--%>
+                                            <uc4:uctrlOtherCondition runat="server" ID="uctrlOtherCondition" />
+                                            <%--End of Rev 5.0--%>
                                             <uc3:UOMConversionControl runat="server" ID="UOMConversionControl" />
+
                                             
                                             <asp:HiddenField runat="server" ID="hfOtherTermsConditionData" />
                                             <asp:HiddenField runat="server" ID="hfOtherTermsConditionDocType" Value="SO" />
                                             
+                                            <%--Rev 5.0--%>
+                                            <asp:HiddenField runat="server" ID="hfOtherConditionData" />
+                                            <asp:HiddenField runat="server" ID="hfOtherConditionDocType" Value="SO" />
+                                            <%--End of Rev 5.0--%>
 
                                             <%-- onclick=""--%>
 
 
                                             <asp:HiddenField ID="hfControlData" runat="server" />
+                                            <%--Rev 6.0--%>
+                                            <asp:HiddenField runat="server" ID="hdnShowRFQ" />
+                                            <asp:HiddenField runat="server" ID="hdnShowProject" />
+                                            <%--End of Rev 6.0--%>
 
 
                                             <%--<dxe:ASPxButton ID="ASPxButton4" ClientInstanceName="cbtn_SaveRecords" runat="server" AccessKey="X" AutoPostBack="False" Text="[A]ttachment(s)" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1">

@@ -1,9 +1,15 @@
 ﻿<%--================================================== Revision History =============================================
 Rev Number         DATE              VERSION          DEVELOPER           CHANGES
 1.0                05-04-2023        2.0.37           Pallab              25848: Add Proforma Invoice/Quotation module design modification
-2.0                21-06-2023        2.0.38           Sanchita            Some of the issues are there in Sales Invoice regarding 
+2.0                21-06-2023        2.0.38           4.0            Some of the issues are there in Sales Invoice regarding 
                                                                           Multi UOM in EVAC - FOR ALL SALES MODULES. Refer : 26403
 3.0                16-06-2023        V2.0.38          Pallab              "Multi UOM Details" popup parameter alignment issue fix . Mantis : 26331
+4.0                28-09-2023        V2.0.40          Sanchita            Few Fields required in the Quotation Entry Module for the Purpose of Quotation Print from ERP   
+                                                                          New button "Other Condiion" to show instead of "Terms & Condition" Button 
+                                                                          if the settings "Show Other Condition" is set as "Yes"  
+                                                                          Mantis: 26868
+5.0                06-10-2023       V2.0.40            Sanchita           New Fields required in Sales Quotation - RFQ Number, RFQ Date, Project/Site
+                                                                          Mantis : 26871
 ====================================================== Revision History =============================================--%>
 
 <%@ Page Title="Sales Quotation" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" EnableEventValidation="false" CodeBehind="SalesQuotation.aspx.cs" Inherits="ERP.OMS.Management.Activities.SalesQuotation" %>
@@ -12,6 +18,9 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
 <%@ Register Src="~/OMS/Management/Activities/UserControls/VehicleDetailsControl.ascx" TagPrefix="uc1" TagName="VehicleDetailsControl" %>
 <%@ Register Src="~/OMS/Management/Activities/UserControls/TermsConditionsControl.ascx" TagPrefix="uc2" TagName="TermsConditionsControl" %>
 <%@ Register Src="~/OMS/Management/Activities/UserControls/UOMConversion.ascx" TagPrefix="uc3" TagName="UOMConversionControl" %>
+<%--Rev 4.0--%>
+<%@ Register Src="~/OMS/Management/Activities/UserControls/uctrlOtherCondition.ascx" TagPrefix="uc4" TagName="uctrlOtherCondition" %>
+<%--End of Rev 4.0--%>
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
     Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
@@ -26,7 +35,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
     <link href="CSS/PosSalesInvoice.css" rel="stylesheet" />
     <script src="JS/SearchPopupDatatable.js"></script>
     <link href="CSS/SalesQuotaion.css?1.0.1" rel="stylesheet" />
-    <script src="JS/SalesQuotation.js?v=3.0"></script>
+    <script src="JS/SalesQuotation.js?v=3.1"></script>
     <%--Use for set focus on UOM after press ok on UOM--%>
 
     <script>
@@ -142,9 +151,21 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                             if ("<%=Convert.ToString(Session["TransporterVisibilty"])%>" == "Yes") {
                                 callTransporterControl(quote_Id[0], $("#rdl_Salesquotation").find(":checked").val());
                             }
-                            if ($("#btn_TermsCondition").is(":visible")) {
-                                callTCControl(quote_Id, 'QO');
+                            // Rev 4.0
+                            //if ($("#btn_TermsCondition").is(":visible")) {
+                            //    callTCControl(quote_Id, 'QO');
+                            //}
+
+                            if ($("#btn_OtherCondition").is(":visible")) {
+                                callOCControl(quote_Id, 'SINQ');
                             }
+                            else {
+                                if ($("#btn_TermsCondition").is(":visible")) {
+                                    callTCControl(quote_Id, 'SINQ');
+                                }
+                            }
+                            // End of Rev 4.0
+                            
 
                             if (quote_Id.length > 0) {
                                 BindOrderProjectdata(quote_Id[0], $("#rdl_Salesquotation").find(":checked").val());
@@ -276,9 +297,9 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                     else {
                         // alert("hello");
                         $('#MandatoryEDate').attr('style', 'display:none');
-                        //if (startDate > endDate) 
-                        if (tstartdate.GetText() > tenddate.GetText()) {
-
+                        if (startDate > endDate) {                   
+                        //if (tstartdate.GetText() > tenddate.GetText()) {
+                       
                             //alert(startDate);
                             //alert(endDate);
                             flag = false;
@@ -1339,10 +1360,10 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                         </div>
                                          <div style="clear: both;"></div>
                                         <div class="col-md-2">
-                                            <asp:RadioButtonList ID="rdl_Salesquotation" runat="server" RepeatDirection="Horizontal" onchange="return selectValue();" Width="150px">
+                                            <asp:RadioButtonList ID="rdl_Salesquotation" runat="server" RepeatDirection="Horizontal" onchange="return selectValue();" Width="150px" TabIndex="14">
                                                 <asp:ListItem Text="Inquiry Number" Value="SINQ"></asp:ListItem>
                                             </asp:RadioButtonList>
-                                            <dxe:ASPxCallbackPanel runat="server" ID="ComponentQuotationPanel" ClientInstanceName="cQuotationComponentPanel" OnCallback="ComponentQuotation_Callback">
+                                            <dxe:ASPxCallbackPanel runat="server" ID="ComponentQuotationPanel" ClientInstanceName="cQuotationComponentPanel" OnCallback="ComponentQuotation_Callback" TabIndex="15">
                                                 <PanelCollection>
                                                     <dxe:PanelContent runat="server">
                                                         <dxe:ASPxGridLookup ID="lookup_quotation" SelectionMode="Multiple" runat="server" ClientInstanceName="gridquotationLookup"
@@ -1397,7 +1418,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
 
                                         </div>
 
-                                        <div class="col-md-2">
+                                       <div class="col-md-2">
                                             <label>
                                                 <dxe:ASPxLabel ID="lbl_Quotation_Date" runat="server" Text="Inquiry Date" Width="120px">
                                                 </dxe:ASPxLabel>
@@ -1429,7 +1450,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                           <div class="col-md-2">
                                             <label id="lblProject" runat="server">Project</label>
                                             <dxe:ASPxGridLookup ID="lookup_Project" runat="server" ClientInstanceName="clookup_Project" DataSourceID="EntityServerModeDataProjectQuotation"
-                                                KeyFieldName="Proj_Id" Width="100%" TextFormatString="{0}" AutoGenerateColumns="False">
+                                                KeyFieldName="Proj_Id" Width="100%" TextFormatString="{0}" AutoGenerateColumns="False" TabIndex="16">
                                                 <Columns>
                                                     <dxe:GridViewDataColumn FieldName="Proj_Code" Visible="true" VisibleIndex="1" Caption="Project Code" Settings-AutoFilterCondition="Contains" Width="200px">
                                                     </dxe:GridViewDataColumn>
@@ -1471,7 +1492,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                                 <dxe:ASPxLabel ID="lblHierarchy" runat="server" Text="Hierarchy">
                                                 </dxe:ASPxLabel>
                                             </label>
-                                            <asp:DropDownList ID="ddlHierarchy" runat="server" Width="100%">
+                                            <asp:DropDownList ID="ddlHierarchy" runat="server" Width="100%" TabIndex="17">
                                             </asp:DropDownList>
                                         </div>
 
@@ -1479,10 +1500,10 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
 
                                          <div class="col-md-2 lblmTop8">	
                                             <label>	
-                                                <dxe:ASPxLabel ID="lblprojectValidfrom" runat="server" Text="Valid From" Width="120px" CssClass="inline">	
+                                                <dxe:ASPxLabel ID="lblprojectValidfrom" runat="server" Text="Valid From" Width="120px" CssClass="inline" TabIndex="18">	
                                                 </dxe:ASPxLabel>	
                                             </label>	
-                                            <dxe:ASPxDateEdit ID="dtProjValidFrom" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" DisplayFormatString="dd-MM-yyyy" UseMaskBehavior="True" ClientInstanceName="cdtProjValidFrom" Width="100%">	
+                                            <dxe:ASPxDateEdit ID="dtProjValidFrom" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" DisplayFormatString="dd-MM-yyyy" UseMaskBehavior="True" ClientInstanceName="cdtProjValidFrom" Width="100%" TabIndex="19">	
                                                 <ButtonStyle Width="13px">	
                                                 </ButtonStyle>	
                                                <%-- <ClientSideEvents DateChanged="ValidfromCheck" />--%>	
@@ -1497,7 +1518,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                                 <dxe:ASPxLabel ID="lblprojectValidUpto" runat="server" Text="Valid Up To" Width="120px" CssClass="inline">	
                                                 </dxe:ASPxLabel>	
                                             </label>	
-                                            <dxe:ASPxDateEdit ID="dtProjValidUpto" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" DisplayFormatString="dd-MM-yyyy" UseMaskBehavior="True" ClientInstanceName="cdtProjValidUpto" Width="100%">	
+                                            <dxe:ASPxDateEdit ID="dtProjValidUpto" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" DisplayFormatString="dd-MM-yyyy" UseMaskBehavior="True" ClientInstanceName="cdtProjValidUpto" Width="100%" TabIndex="20">	
                                                 <ButtonStyle Width="13px">	
                                                 </ButtonStyle>	
                                                 <ClientSideEvents GotFocus="function(s,e){cdtProjValidUpto.ShowDropDown();}" />	
@@ -1511,7 +1532,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                             <dxe:ASPxLabel ID="lbl_PosForGst" runat="server" Text="Place Of Supply [GST]">
                                             </dxe:ASPxLabel>
                                             <span style="color: red">*</span>
-                                            <dxe:ASPxComboBox ID="ddl_PosGstSalesOrder" runat="server" ValueType="System.String" Width="100%" ClientInstanceName="cddl_PosGstSalesOrder">
+                                            <dxe:ASPxComboBox ID="ddl_PosGstSalesOrder" runat="server" ValueType="System.String" Width="100%" ClientInstanceName="cddl_PosGstSalesOrder" TabIndex="21">
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { PopulatePosGst(e)}" />                                                
                                             </dxe:ASPxComboBox>
                                         </div>
@@ -1521,7 +1542,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                                 <dxe:ASPxLabel ID="lblRevisionNo" runat="server" Text="Revision No." Width="120px" CssClass="inline">	
                                                 </dxe:ASPxLabel>	
                                             </label>	
-                                            <dxe:ASPxTextBox ID="txtRevisionNo" runat="server" Width="100%" MaxLength="50" ClientInstanceName="ctxtRevisionNo">	
+                                            <dxe:ASPxTextBox ID="txtRevisionNo" runat="server" Width="100%" MaxLength="50" ClientInstanceName="ctxtRevisionNo" TabIndex="22">	
                                                 <%-- <ClientSideEvents LostFocus="Revision_LostFocus" />--%>	
                                             </dxe:ASPxTextBox>	
                                         </div>	
@@ -1530,23 +1551,51 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                                 <dxe:ASPxLabel ID="lblRevisionDate" runat="server" Text="Revision Date" Width="120px" CssClass="inline">	
                                                 </dxe:ASPxLabel>	
                                             </label>	
-                                            <dxe:ASPxDateEdit ID="txtRevisionDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" DisplayFormatString="dd-MM-yyyy" UseMaskBehavior="True" ClientInstanceName="ctxtRevisionDate" Width="100%">	
+                                            <dxe:ASPxDateEdit ID="txtRevisionDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" DisplayFormatString="dd-MM-yyyy" UseMaskBehavior="True" ClientInstanceName="ctxtRevisionDate" Width="100%" TabIndex="23">	
                                                 <ButtonStyle Width="13px">	
                                                 </ButtonStyle>	
                                                 <ClientSideEvents GotFocus="function(s,e){ctxtRevisionDate.ShowDropDown();}" />	
                                             </dxe:ASPxDateEdit>	
                                         </div>	
-                                        	
+                                        <%--Rev 5.0--%>	
+                                        <div style="clear: both;"></div>
+                                        <div class="col-md-3" id="divRFQNumber" runat="server">
+                                            <dxe:ASPxLabel ID="lblRFQNumber" runat="server" Text="RFQ Number">
+                                            </dxe:ASPxLabel>
+                                            <dxe:ASPxTextBox ID="txtRFQNumber" runat="server" ClientInstanceName="ctxtRFQNumber" Width="100%" PropertiesTextEdit-MaxLength="500" TabIndex="24" >
+                                            </dxe:ASPxTextBox>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-3 lblmTop8" id="divRFQDate" runat="server" >
+                                                    <dxe:ASPxLabel ID="lblRFQDate" runat="server" Text="RFQ Date">
+                                                    </dxe:ASPxLabel>
+                                                    <dxe:ASPxDateEdit ID="dtRFQDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" DisplayFormatString="dd-MM-yyyy" UseMaskBehavior="True" ClientInstanceName="cdtRFQDate" Width="100%" TabIndex="25">
+                                                        <ButtonStyle Width="13px">
+                                                        </ButtonStyle>
+
+                                                        <ClientSideEvents GotFocus="function(s,e){cdtRFQDate.ShowDropDown();}" />
+                                                    </dxe:ASPxDateEdit>
+                                                </div>
+                                                <div class="col-md-9 lblmTop8" id="divProjectSite" runat="server">
+                                                    <dxe:ASPxLabel ID="lblProjectSite" runat="server" Text="Project/Site">
+                                                    </dxe:ASPxLabel>
+                                                    <dxe:ASPxTextBox ID="txtProjectSite" runat="server" ClientInstanceName="ctxtProjectSite" Width="100%" PropertiesTextEdit-MaxLength="500" TabIndex="26">
+                                                    </dxe:ASPxTextBox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <%--End of Rev 5.0--%>
                                         <div style="clear: both;"></div>	
                                         <div class="col-md-6">	
                                             <asp:Label ID="lblRearks" runat="server" Text="Remarks"></asp:Label>	
-                                            <asp:TextBox ID="txtProjRemarks" runat="server" TabIndex="16" Width="100%" TextMode="MultiLine" Rows="3" Columns="10" Height="50px">	
+                                            <asp:TextBox ID="txtProjRemarks" runat="server" TabIndex="27" Width="100%" TextMode="MultiLine" Rows="3" Columns="10" Height="50px" >	
                                                     	
                                             </asp:TextBox>	
                                         </div>	
                                         <div class="col-md-6" id="dvAppRejRemarks" style="display:none">	
                                             <asp:Label ID="lblAppRejRemarks" runat="server" Text="Approve/Reject Remarks"></asp:Label>	
-                                            <asp:TextBox ID="txtAppRejRemarks" runat="server" TabIndex="16" Width="100%" TextMode="MultiLine" Rows="2" Columns="8" Height="50px"></asp:TextBox>	
+                                            <asp:TextBox ID="txtAppRejRemarks" runat="server" TabIndex="28" Width="100%" TextMode="MultiLine" Rows="2" Columns="8" Height="50px"></asp:TextBox>	
                                         </div>	
                                           <div style="clear: both;"></div>	
 
@@ -2069,6 +2118,9 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                             <asp:HiddenField ID="hfControlData" runat="server" />
 
                                             <uc2:TermsConditionsControl runat="server" ID="TermsConditionsControl" />
+                                             <%--Rev 4.0--%>
+                                            <uc4:uctrlOtherCondition runat="server" ID="uctrlOtherCondition" />
+                                            <%--End of Rev 4.0--%>
                                             <uc3:UOMConversionControl runat="server" ID="UOMConversionControl" />
                                             <asp:HiddenField runat="server" ID="hfTermsConditionData" />
                                             <asp:HiddenField runat="server" ID="hfTermsConditionDocType" Value="QO" />
@@ -2076,6 +2128,14 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                                             <asp:HiddenField runat="server" ID="sessionBranch" />
                                             <asp:HiddenField ID="HiddenField1" runat="server" />
                                             <asp:HiddenField ID="hdnUomqnty" runat="server" />
+                                            <%--Rev 4.0--%>
+                                            <asp:HiddenField runat="server" ID="hfOtherConditionData" />
+                                            <asp:HiddenField runat="server" ID="hfOtherConditionDocType" Value="QO" />
+                                            <%--End of Rev 4.0--%>
+                                            <%--Rev 5.0--%>
+                                            <asp:HiddenField runat="server" ID="hdnShowRFQ" />
+                                            <asp:HiddenField runat="server" ID="hdnShowProject" />
+                                            <%--End of Rev 5.0--%>
                                             <%--<asp:HiddenField ID="hdnCustomerId" runat="server" />--%>
                                             <%-- onclick=""--%>
                                             <%--<a href="javascript:void(0);" id="btnAddNew" runat="server" class="btn btn-primary"><span>[A]ttachment(s)</span></a>--%>

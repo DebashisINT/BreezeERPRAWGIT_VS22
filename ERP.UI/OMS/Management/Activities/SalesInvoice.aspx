@@ -4,6 +4,12 @@
    3.0   Pallab     V2.0.38     27-04-2023     Add Sales Invoice module design modification. Refer: 25921
    4.0   Sanchita   V2.0.38     13-06-2023     Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
    5.0   Pallab     V2.0.38     16-06-2023     "Multi UOM Details" popup parameter alignment issue fix . Mantis : 26331
+   6.0   Sanchita   V2.0.40     28-09-2023     Few Fields required in the Quotation Entry Module for the Purpose of Quotation Print from ERP   
+                                               New button "Other Condiion" to show instead of "Terms & Condition" Button 
+                                               if the settings "Show Other Condition" is set as "Yes"  
+                                               Mantis: 26868
+   7.0   Sanchita   V2.0.40     06-10-2023     New Fields required in Sales Quotation - RFQ Number, RFQ Date, Project/Site
+                                               Mantis : 26871
 ========================================== End Revision History =======================================================================================================--%>
 
 <%@ Page Title="Sales Invoice" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" EnableEventValidation="false" CodeBehind="SalesInvoice.aspx.cs" Inherits="ERP.OMS.Management.Activities.SalesInvoice" %>
@@ -15,6 +21,9 @@
 <%@ Register Assembly="DevExpress.Web.v15.1, Version=15.1.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
 <%@ Register Src="~/OMS/Management/Activities/UserControls/UOMConversion.ascx" TagPrefix="uc3" TagName="UOMConversionControl" %>
 <%@ Register Src="~/OMS/Management/Activities/UserControls/OtherTermsAndCondition.ascx" TagPrefix="ucOTC" TagName="OtherTermsAndCondition" %>
+<%--Rev 6.0--%>
+<%@ Register Src="~/OMS/Management/Activities/UserControls/uctrlOtherCondition.ascx" TagPrefix="uc4" TagName="uctrlOtherCondition" %>
+<%--End of Rev 6.0--%>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -906,11 +915,25 @@ function PerformCallToGridBind() {
     //#### end : Samrat Roy for Transporter Control :end #############
 
     //#### added by Sayan Dutta for TC Control #############
-    if ($("#btn_TermsCondition").is(":visible")) {
+
+    // Rev 6.0
+    if ($("#btn_OtherCondition").is(":visible")) {
         if (quote_Id.length > 0) {
-            callTCControl(quote_Id[0], $("#rdl_SaleInvoice").find(":checked").val());
+            callOCControl(quote_Id[0], $("#rdl_SaleInvoice").find(":checked").val());
         }
     }
+    else {
+        // End of Rev 6.0
+        if ($("#btn_TermsCondition").is(":visible")) {
+            if (quote_Id.length > 0) {
+                callTCControl(quote_Id[0], $("#rdl_SaleInvoice").find(":checked").val());
+            }
+        }
+        // Rev 6.0
+    }
+    // End of Rev 6.0
+
+    
     if ($("#btn_OtherTermsCondition").is(":visible")) {
         if (quote_Id.length > 0) {
             callOTCControl(quote_Id[0], $("#rdl_SaleInvoice").find(":checked").val());
@@ -1563,17 +1586,46 @@ $(document).ready(function () {
                                                 <span id="Mandatorytaxcode" style="display: none" class="validclass">
                                                     <img id="1gridHistory_DXPEForm_efnew_DXEFL_DXEditor2_EI" class="dxEditors_edtError_PlasticBlue" src="/DXR.axd?r=1_36-tyKfc" title="Mandatory"></span>
                                             </div>
+                                            <%--Rev 7.0--%>	
+                                            <div style="clear: both;"></div>
+                                            <div class="col-md-3" id="divRFQNumber" runat="server">
+                                                <dxe:ASPxLabel ID="lblRFQNumber" runat="server" Text="RFQ Number">
+                                                </dxe:ASPxLabel>
+                                                <dxe:ASPxTextBox ID="txtRFQNumber" runat="server" ClientInstanceName="ctxtRFQNumber" Width="100%" PropertiesTextEdit-MaxLength="500" TabIndex="17" >
+                                                </dxe:ASPxTextBox>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-3 lblmTop8" id="divRFQDate" runat="server" >
+                                                        <dxe:ASPxLabel ID="lblRFQDate" runat="server" Text="RFQ Date">
+                                                        </dxe:ASPxLabel>
+                                                        <dxe:ASPxDateEdit ID="dtRFQDate" runat="server" EditFormat="Custom" EditFormatString="dd-MM-yyyy" DisplayFormatString="dd-MM-yyyy" UseMaskBehavior="True" ClientInstanceName="cdtRFQDate" Width="100%" TabIndex="18">
+                                                            <ButtonStyle Width="13px">
+                                                            </ButtonStyle>
+
+                                                            <ClientSideEvents GotFocus="function(s,e){cdtRFQDate.ShowDropDown();}" />
+                                                        </dxe:ASPxDateEdit>
+                                                    </div>
+                                                    <div class="col-md-9 lblmTop8" id="divProjectSite" runat="server">
+                                                        <dxe:ASPxLabel ID="lblProjectSite" runat="server" Text="Project/Site">
+                                                        </dxe:ASPxLabel>
+                                                        <dxe:ASPxTextBox ID="txtProjectSite" runat="server" ClientInstanceName="ctxtProjectSite" Width="100%" PropertiesTextEdit-MaxLength="500" TabIndex="19">
+                                                        </dxe:ASPxTextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <%--End of Rev 7.0--%>
                                             <div style="clear: both;"></div>
                                             <div class="col-md-4">
                                                 <dxe:ASPxLabel ID="ASPxLabel8" runat="server" Text="Remarks">
                                                 </dxe:ASPxLabel>
-                                                <asp:TextBox ID="txtRemarks" runat="server"></asp:TextBox>
+                                                <asp:TextBox ID="txtRemarks" runat="server" TabIndex="20"></asp:TextBox>
                                             </div>
                                             <div class="col-md-2" id="divposGst">
                                                 <dxe:ASPxLabel ID="lbl_PosForGst" runat="server" Text="Place Of Supply [GST]">
                                                 </dxe:ASPxLabel>
                                                 <span style="color: red">*</span>
-                                                <dxe:ASPxComboBox ID="ddl_PosGst" runat="server" ValueType="System.String" Width="100%" ClientInstanceName="cddl_PosGst" TabIndex="18">
+                                                <dxe:ASPxComboBox ID="ddl_PosGst" runat="server" ValueType="System.String" Width="100%" ClientInstanceName="cddl_PosGst" TabIndex="21">
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { PopulatePosGst(e)}" />
                                                 </dxe:ASPxComboBox>
                                             </div>
@@ -1581,7 +1633,7 @@ $(document).ready(function () {
                                             <div class="col-md-2">
                                                 <dxe:ASPxLabel ID="ASPxLabel13" runat="server" Text="Transaction Category">
                                                 </dxe:ASPxLabel>
-                                                <asp:DropDownList ID="drdTransCategory" runat="server" Width="100%" Enabled="false">
+                                                <asp:DropDownList ID="drdTransCategory" runat="server" Width="100%" Enabled="false" TabIndex="22">
                                                     <asp:ListItem Selected="True" Text="Select" Value="0"></asp:ListItem>
                                                     <asp:ListItem Text="B2B" Value="B2B" />
                                                     <asp:ListItem Text="B2C" Value="B2C" /><%--Rev 1.0--%>
@@ -1595,7 +1647,7 @@ $(document).ready(function () {
 
                                             <div id="divMail" class="col-md-2" style="padding-top: 19px; display: none">
                                                 <label class="checkbox-inline">
-                                                    <asp:CheckBox ID="chkSendMail" runat="server"></asp:CheckBox>
+                                                    <asp:CheckBox ID="chkSendMail" runat="server" TabIndex="23"></asp:CheckBox>
                                                     <span style="margin: 0px 0; display: block">
                                                         <dxe:ASPxLabel ID="ASPxLabel9" runat="server" Text="Send Email">
                                                         </dxe:ASPxLabel>
@@ -1607,7 +1659,7 @@ $(document).ready(function () {
                                                 </dxe:ASPxLabel>
                                                 <%-- <label id="lblProject" runat="server">Project</label>--%>
                                                 <dxe:ASPxGridLookup ID="lookup_Project" runat="server" ClientInstanceName="clookup_Project" DataSourceID="EntityServerModeDataSalesInvoice"
-                                                    KeyFieldName="Proj_Id" Width="100%" TextFormatString="{0}" AutoGenerateColumns="False">
+                                                    KeyFieldName="Proj_Id" Width="100%" TextFormatString="{0}" AutoGenerateColumns="False" TabIndex="24">
                                                     <Columns>
                                                         <dxe:GridViewDataColumn FieldName="Proj_Code" Visible="true" VisibleIndex="1" Caption="Project Code" Settings-AutoFilterCondition="Contains" Width="200px">
                                                             <Settings AutoFilterCondition="Contains" />
@@ -1645,7 +1697,7 @@ $(document).ready(function () {
                                             <div class="col-md-4">
                                                 <dxe:ASPxLabel ID="lblHierarchy" runat="server" Text="Hierarchy">
                                                 </dxe:ASPxLabel>
-                                                <asp:DropDownList ID="ddlHierarchy" runat="server" Width="100%" Enabled="false">
+                                                <asp:DropDownList ID="ddlHierarchy" runat="server" Width="100%" Enabled="false" TabIndex="25">
                                                 </asp:DropDownList>
                                             </div>
                                             <div style="clear: both;"></div>
@@ -1653,7 +1705,7 @@ $(document).ready(function () {
                                                 <%-- <dxe:ASPxLabel ID="lblReverseCharge" runat="server" Text="Reverse Charge">
                                                 </dxe:ASPxLabel>--%>
 
-                                                <asp:CheckBox ID="CB_ReverseCharge" runat="server" Text="Reverse Charge" TextAlign="Right" Checked="false"></asp:CheckBox>
+                                                <asp:CheckBox ID="CB_ReverseCharge" runat="server" Text="Reverse Charge" TextAlign="Right" Checked="false" TabIndex="26"></asp:CheckBox>
                                             </div>
 
                                         </div>
@@ -2159,8 +2211,11 @@ $(document).ready(function () {
 
 
                                             <uc2:TermsConditionsControl runat="server" ID="TermsConditionsControl" />
-
+                                            <%--Rev 6.0--%>
+                                            <uc4:uctrlOtherCondition runat="server" ID="uctrlOtherCondition" />
+                                            <%--End of Rev 6.0--%>
                                             <ucOTC:OtherTermsAndCondition runat="server" ID="OtherTermsAndCondition" />
+                                            
                                             <span id="spnBillDespatch" runat="server">
                                                 <dxe:ASPxButton ID="btn_BillDespatch" ClientInstanceName="cbtn_BillDespatch" runat="server" AutoPostBack="False" Text="Bill from/Despatch from" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
                                                     <ClientSideEvents Click="function(s, e) {Save_BillDespatch();}" />
@@ -2175,6 +2230,15 @@ $(document).ready(function () {
 
                                             <asp:HiddenField runat="server" ID="hfOtherTermsConditionData" />
                                             <asp:HiddenField runat="server" ID="hfOtherTermsConditionDocType" Value="SI" />
+
+                                            <%--Rev 6.0--%>
+                                            <asp:HiddenField runat="server" ID="hfOtherConditionData" />
+                                            <asp:HiddenField runat="server" ID="hfOtherConditionDocType" Value="SI" />
+                                            <%--End of Rev 6.0--%>
+                                            <%--Rev 7.0--%>
+                                            <asp:HiddenField runat="server" ID="hdnShowRFQ" />
+                                            <asp:HiddenField runat="server" ID="hdnShowProject" />
+                                            <%--End of Rev 7.0--%>
                                             <%-- onclick=""--%>
                                             <%--<a href="javascript:void(0);" id="btnAddNew" runat="server" class="btn btn-primary"><span>[A]ttachment(s)</span></a>--%>
                                             <%--<dxe:ASPxButton ID="ASPxButton4" ClientInstanceName="cbtn_SaveRecords" runat="server" AccessKey="X" AutoPostBack="False" Text="[A]ttachment(s)" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1">

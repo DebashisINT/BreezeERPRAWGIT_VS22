@@ -1,5 +1,10 @@
 ﻿/***************************************************************************************************************************************
- * Rev 1.0      Sanchita      V2.0.38       Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
+ * Rev 1.0      Sanchita      V2.0.38                  Base Rate is not recalculated when the Multi UOM is Changed. Mantis : 26320, 26357, 26361   
+ * Rev 2.0      Sanchita      V2.0.40    04-10-2023    0026868 : Few Fields required in the Quotation Entry Module for the Purpose of Quotation Print from ERP
+                                                       New button "Other Condiion" to show instead of "Terms & Condition" Button 
+                                                       if the settings "Show Other Condition" is set as "Yes"
+ * Rev 3.0      Sanchita      V2.0.40    06-10-2023    New Fields required in Sales Quotation - RFQ Number, RFQ Date, Project/Site
+                                                       Mantis : 26871
  ***************************************************************************************************************************************/
 using System;
 using System.Configuration;
@@ -220,6 +225,41 @@ namespace ERP.OMS.Management.Activities
 
                 }
             }
+
+            // Rev 3.0
+            string ShowRFQ = ComBL.GetSystemSettingsResult("ShowRFQ");
+            if (!String.IsNullOrEmpty(ShowRFQ))
+            {
+                if (ShowRFQ.ToUpper().Trim() == "YES")
+                {
+                    hdnShowRFQ.Value = "1";
+                    divRFQNumber.Style.Add("display", "block");
+                    divRFQDate.Style.Add("display", "block");
+                }
+                else if (ShowRFQ.ToUpper().Trim() == "NO")
+                {
+                    hdnShowRFQ.Value = "0";
+                    divRFQNumber.Style.Add("display", "none");
+                    divRFQDate.Style.Add("display", "none");
+
+                }
+            }
+
+            string ShowProject = ComBL.GetSystemSettingsResult("ShowProject");
+            if (!String.IsNullOrEmpty(ShowProject))
+            {
+                if (ShowProject.ToUpper().Trim() == "YES")
+                {
+                    hdnShowProject.Value = "1";
+                    divProjectSite.Style.Add("display", "block");
+                }
+                else if (ShowProject.ToUpper().Trim() == "NO")
+                {
+                    hdnShowProject.Value = "0";
+                    divProjectSite.Style.Add("display", "none");
+                }
+            }
+            // End of Rev 3.0
 
             if (!IsPostBack)
             {
@@ -910,6 +950,14 @@ namespace ERP.OMS.Management.Activities
                 hdnSalesManAgentId.Value = Quote_SalesmanId;
                 txtSalesManAgent.Text = Quote_SalesmanName;
                 ddl_Currency.SelectedValue = Currency_Id;
+                // Rev 3.0
+                txtRFQNumber.Text= Convert.ToString(QuotationEditdt.Rows[0]["Inquiry_RFQNumber"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(QuotationEditdt.Rows[0]["Inquiry_RFQDate"])))
+                {
+                    dtRFQDate.Date = Convert.ToDateTime(QuotationEditdt.Rows[0]["Inquiry_RFQDate"]);
+                }
+                txtProjectSite.Text = Convert.ToString(QuotationEditdt.Rows[0]["Inquiry_ProjectSite"]);
+                // End of Rev 3.0
 
                 txt_Rate.Value = Currency_Conversion_Rate;
                 txt_Rate.Text = Currency_Conversion_Rate;
@@ -1844,6 +1892,21 @@ namespace ERP.OMS.Management.Activities
                 //    strRate = Convert.ToString(dt.Rows[0]["SalesRate"]);
                 //}
 
+                // Rev 3.0
+                string strRFQNumber = "";
+                string strRFQDate = null; 
+                string strProjectSite = ""; 
+                if (hdnShowRFQ.Value == "1")
+                {
+                    strRFQNumber = Convert.ToString(txtRFQNumber.Text);
+                    strRFQDate = Convert.ToString(dtRFQDate.Date);
+                }
+                if (hdnShowProject.Value == "1")
+                {
+                    strProjectSite = Convert.ToString(txtProjectSite.Text);
+                }
+                // End of Rev 3.0
+
                 DataTable tempQuotation = Quotationdt.Copy();
 
                 foreach (DataRow dr in tempQuotation.Rows)
@@ -2228,27 +2291,39 @@ namespace ERP.OMS.Management.Activities
 
                 //################# Added By : Sayan Dutta -- 10/07/2017 -- To check TC Mandatory Control
                 //#region TC
-                DataTable DT_TC = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='TC_SINQMandatory' AND IsActive=1");
-                if (DT_TC != null && DT_TC.Rows.Count > 0)
+                // Rev 2.0
+                DataTable DT_TCOth = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='Show_Other_Condition' AND IsActive=1");
+                if (DT_TCOth != null && DT_TCOth.Rows.Count > 0 && Convert.ToString(DT_TCOth.Rows[0]["Variable_Value"]).Trim() == "Yes")
                 {
-                    string IsMandatory = Convert.ToString(DT_TC.Rows[0]["Variable_Value"]).Trim();
-
-                    //  objEngine = new BusinessLogicLayer.DBEngine(ConfigurationManager.AppSettings["DBConnectionDefault"]);
-
-                    objEngine = new BusinessLogicLayer.DBEngine();
-
-                    DataTable DTVisible = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='Show_TC_SINQ' AND IsActive=1");
-                    if (Convert.ToString(DTVisible.Rows[0]["Variable_Value"]).Trim() == "Yes")
+                    // Do nothing
+                }
+                else
+                {
+                    // End of Rev 2.0
+                    DataTable DT_TC = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='TC_SINQMandatory' AND IsActive=1");
+                    if (DT_TC != null && DT_TC.Rows.Count > 0)
                     {
-                        if (IsMandatory == "Yes")
+                        string IsMandatory = Convert.ToString(DT_TC.Rows[0]["Variable_Value"]).Trim();
+
+                        //  objEngine = new BusinessLogicLayer.DBEngine(ConfigurationManager.AppSettings["DBConnectionDefault"]);
+
+                        objEngine = new BusinessLogicLayer.DBEngine();
+
+                        DataTable DTVisible = objEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='Show_TC_SINQ' AND IsActive=1");
+                        if (Convert.ToString(DTVisible.Rows[0]["Variable_Value"]).Trim() == "Yes")
                         {
-                            if (TermsConditionsControl.GetControlValue("dtDeliveryDate") == "" || TermsConditionsControl.GetControlValue("dtDeliveryDate") == "@")
+                            if (IsMandatory == "Yes")
                             {
-                                validate = "TCMandatory";
+                                if (TermsConditionsControl.GetControlValue("dtDeliveryDate") == "" || TermsConditionsControl.GetControlValue("dtDeliveryDate") == "@")
+                                {
+                                    validate = "TCMandatory";
+                                }
                             }
                         }
                     }
+                    // Rev 2.0
                 }
+                // End of Rev 2.0
                 //#endregion
                 //################# Added By : Sayan Dutta -- 10/07/2017 -- To check TC Mandatory Control
 
@@ -2386,11 +2461,15 @@ namespace ERP.OMS.Management.Activities
                     DataTable addrDesc = new DataTable();
                     addrDesc = (DataTable)Session["InlineRemarks"];
                     string strInquiryNumber = "";
+                    // Rev 3.0 [,strRFQNumber, strRFQDate, strProjectSite added]
                     ModifyQuatation(type, MainQuotationID, strSchemeType, UniqueQuotation, strQuoteDate, strQuoteExpiry, strCustomer, strContactName,
                                     Reference, strBranch, strAgents, strCurrency, strRate, strTaxType, strTaxCode, tempQuotation, TaxDetailTable,
                                     tempWarehousedt, tempTaxDetailsdt, tempBillAddress, approveStatus, ActionType, ref strIsComplete, ref strQuoteID, strIsInventory
                                     , duplicatedt2, MultiUOMDetails, projectValidFrom, projectValidUpto, ProjRemarks, ApproveRejectstatus, AppRejRemarks, RevisionDate
-                                    , RevisionNo, ProjId, addrDesc, SchemeID, ref strInquiryNumber);
+                                    , RevisionNo, ProjId, addrDesc, SchemeID
+                                    , strRFQNumber, strRFQDate, strProjectSite
+                                    , ref strInquiryNumber
+                                    );
 
                     if (strIsComplete == 1)
                     {
@@ -2714,12 +2793,15 @@ namespace ERP.OMS.Management.Activities
             }
         }
 
+        // Rev 3.0 [,strRFQNumber, strRFQDate, strProjectSite added]
         public void ModifyQuatation(string type, string QuotationID, string strSchemeType, string strQuoteNo, string strQuoteDate, string strQuoteExpiry, string strCustomer, string strContactName,
                                     string Reference, string strBranch, string strAgents, string strCurrency, string strRate, string strTaxType, string strTaxCode, DataTable Quotationdt,
                                     DataTable TaxDetailTable, DataTable Warehousedt, DataTable QuotationTaxdt, DataTable BillAddressdt, string approveStatus, string ActionType,
                                     ref int strIsComplete, ref int strQuoteID, string strIsInventory, DataTable QuotationPackingDetailsdt, DataTable MultiUOMDetails
             , string projectValidFrom, string projectValidUpto, string ProjRemarks, int ApproveRejectstatus, string AppRejRemarks, string RevisionDate
-            , string RevisionNo, Int64 ProjId, DataTable addrDesc, string strSchemeID, ref string strInquiryNumber)
+            , string RevisionNo, Int64 ProjId, DataTable addrDesc, string strSchemeID
+            , string strRFQNumber, string strRFQDate, string strProjectSite
+            , ref string strInquiryNumber)
         {
             try
             {
@@ -2820,6 +2902,14 @@ namespace ERP.OMS.Management.Activities
                 cmd.Parameters.AddWithValue("@QuotationPackingDetails", QuotationPackingDetailsdt);
                 cmd.Parameters.AddWithValue("@Project_Id", ProjId);
                 cmd.Parameters.AddWithValue("@SchemeID", strSchemeID);
+                // Rev 3.0
+                cmd.Parameters.AddWithValue("@RFQNumber", strRFQNumber);
+                if (strRFQDate != "1/1/0001 12:00:00 AM")
+                {
+                    cmd.Parameters.AddWithValue("@RFQDate", strRFQDate);
+                }
+                cmd.Parameters.AddWithValue("@ProjectSite", strProjectSite);
+                // End of Rev 3.0
 
                 cmd.Parameters.Add("@ReturnValue", SqlDbType.VarChar, 50);
                 cmd.Parameters.Add("@ReturnQuoteID", SqlDbType.VarChar, 50);
@@ -2847,10 +2937,25 @@ namespace ERP.OMS.Management.Activities
                 if (strQuoteID > 0)
                 {
                     //####### Coded By Sayan Dutta  For Custom Control Data Process #########
-                    if (!string.IsNullOrEmpty(hfTermsConditionData.Value))
+                    // Rev 2.0
+                    DataTable DT_TCOth = oDBEngine.GetDataTable("Config_SystemSettings", " Variable_Value ", " Variable_Name='Show_Other_Condition' AND IsActive=1");
+                    if (DT_TCOth != null && DT_TCOth.Rows.Count > 0 && Convert.ToString(DT_TCOth.Rows[0]["Variable_Value"]).Trim() == "Yes")
                     {
-                        TermsConditionsControl.SaveTC(hfTermsConditionData.Value, Convert.ToString(strQuoteID), "SINQ");
+                        if (!string.IsNullOrEmpty(hfOtherConditionData.Value))
+                        {
+                            uctrlOtherCondition.SaveOC(hfOtherConditionData.Value, Convert.ToString(strQuoteID), "SINQ");
+                        }
                     }
+                    else
+                    {
+                        // End of Rev 2.0
+                        if (!string.IsNullOrEmpty(hfTermsConditionData.Value))
+                        {
+                            TermsConditionsControl.SaveTC(hfTermsConditionData.Value, Convert.ToString(strQuoteID), "SINQ");
+                        }
+                        // Rev 2.0
+                    }
+                    // End of Rev 2.0
                 }
 
 
