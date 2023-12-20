@@ -1,5 +1,7 @@
 ﻿#region//====================================================Revision History=========================================================================
 // 1.0   v2.0.40	Priti	10-10-2023	0026890:Error generating IRN
+// 2.0   v2.0.41	Priti	20-11-2023	0027000:EInvoice Changes to be done due to the change in the Flynn Version from Ver 1.0 to Ver 3.0 by Vayana
+
 #endregion//====================================================End Revision History=====================================================================
 
 using Newtonsoft.Json;
@@ -388,17 +390,40 @@ namespace ERP.Models
 
     }
 
-
-    public class IRN
+    //Rev 2.0
+    public class IRNV3
     {
+        public string status { get; set; }
+        public IRNDetails data { get; set; }
+
+        public string error { get; set; }
+        public List<infologV3> info { get; set; }
+
+        public string additionalInfo { get; set; }
+        public string alert { get; set; }
+
+       
+
+    }
+
+    public class infologV3
+    {
+        public string InfCd { get; set; }
+        public string Desc { get; set; }
+
+    }
+    //Rev 2.0 End
+    public class IRN
+    {        
         public string data { get; set; }
+        
     }
 
     public class IRNEnrich
     {
         public TaskModel data { get; set; }
     }
-
+    //Rev 2.0
     public class IRNDetails
     {
         public string AckNo { get; set; }
@@ -410,9 +435,12 @@ namespace ERP.Models
         public string EwbNo { get; set; }
         public string EwbDt { get; set; }
         public string EwbValidTill { get; set; }
+        public string Remarks { get; set; }
+        public string CancelDate { get; set; }
+        public string transporterId { get; set; }
 
     }
-
+    //Rev 2.0 End
 
     public class CancelIRNOutput
     {
@@ -658,6 +686,23 @@ namespace ERP.Models
         public errorDetails args { get; set; }
     }
 
+    public class EinvoiceErrorV3
+    {
+        public errorV3 error { get; set; }
+    }
+    public class errorV3
+    {
+        public string message { get; set; }
+        public string type { get; set; }
+        public irpErrorV3 args { get; set; }
+    }
+    public class irpErrorV3
+    {
+        public List<errorlog> details { get; set; }        
+        public List<infolog> info { get; set; }
+        public additionalDetailslog additionalDetails { get; set; }
+        public string alert { get; set; }
+    }
     public class errorDetails
     {
         [JsonProperty("irp-err")]
@@ -672,7 +717,7 @@ namespace ERP.Models
     public class Clienterror
     {
         public string message { get; set; }
-        public string type { get; set; }
+        public string type3 { get; set; }
         public ClientErrors args { get; set; }
     }
 
