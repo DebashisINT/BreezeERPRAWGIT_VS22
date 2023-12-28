@@ -82,7 +82,11 @@ namespace Manufacturing.Controllers
             string IsRateEditableinProductionIssue = cSOrder.GetSystemSettingsResult("IsRateEditableinProductionIssue");
             //Rev 5.0 End
 
-
+            //Rev 6.0
+            ViewBag.QC_No = "";
+            ViewBag.StockReceiptNo = "";
+            ViewBag.ProductionReceiptNo = "";
+            //Rev 6.0 End
             if (!String.IsNullOrEmpty(HierarchySelectInEntryModule))
             {
                 if (HierarchySelectInEntryModule.ToUpper().Trim() == "YES")
