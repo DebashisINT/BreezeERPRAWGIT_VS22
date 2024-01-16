@@ -14,6 +14,10 @@
                                                     Mantis : 26924
  * Rev 7.0      Priti         V2.0.41   06-12-2023  Please allow Duplicate Product in Proforma Invoice/Quotation Entry
                                                     Mantis: 0027046
+ * Rev 8.0      Priti         V2.0.42   29-12-2023  GST round off value showing different between Sales Entry and Sales Invoice Print Layout.
+                                                    Mantis: 0027122
+ * Rev 9.0      Priti         V2.0.42   02-01-2024  A settings is required for the Duplicates Items Allowed or not in the Transaction Module.
+                                                    Mantis : 0027050
  **********************************************************************************************************/
 using System;
 using System.Configuration;
@@ -383,6 +387,21 @@ namespace ERP.OMS.Management.Activities
                 hidIsLigherContactPage.Value = "0";
                 IsLighterCustomePage = "";
                 CommonBL cbl = new CommonBL();
+
+                //REV 9.0
+                string IsDuplicateItemAllowedOrNot = ComBL.GetSystemSettingsResult("IsDuplicateItemAllowedOrNot");
+                if (!String.IsNullOrEmpty(IsDuplicateItemAllowedOrNot))
+                {
+                    if (IsDuplicateItemAllowedOrNot == "Yes")
+                    {
+                        hdnIsDuplicateItemAllowedOrNot.Value = "1";
+                    }
+                    else if (IsDuplicateItemAllowedOrNot.ToUpper().Trim() == "NO")
+                    {
+                        hdnIsDuplicateItemAllowedOrNot.Value = "0";
+                    }
+                }
+                //REV 9.0 END
                 string ISLigherpage = cbl.GetSystemSettingsResult("LighterCustomerEntryPage");
                 if (!String.IsNullOrEmpty(ISLigherpage))
                 {
@@ -3747,8 +3766,8 @@ namespace ERP.OMS.Management.Activities
                     // End of Rev 5.0
 
                     // Mantis Issue 24913 
-                    if (!string.IsNullOrEmpty(Request.QueryString["SalId"]) && string.IsNullOrEmpty(Convert.ToString(hdnSalesManAgentId.Value)) )
-                    { 
+                    if (!string.IsNullOrEmpty(Request.QueryString["SalId"]) && string.IsNullOrEmpty(Convert.ToString(hdnSalesManAgentId.Value)))
+                    {
                         ProcedureExecute proc = new ProcedureExecute("prc_SalesOrder_Details");
                         proc.AddVarcharPara("@Action", 500, "GetSalesmanID");
                         proc.AddVarcharPara("@sla_id", 500, Request.QueryString["SalId"].ToString());
@@ -3790,7 +3809,7 @@ namespace ERP.OMS.Management.Activities
                     string[] eachQuo = QuoComponent.Split(',');
                     if (eachQuo.Length == 1)
                     {
-                        QuotationDate = Convert.ToString(dt_Quotation.Text);                       
+                        QuotationDate = Convert.ToString(dt_Quotation.Text);
                     }
                     else
                     {
@@ -3820,7 +3839,7 @@ namespace ERP.OMS.Management.Activities
                     // Add tempSalesOrderdt By Sudip
 
                     DataTable tempSalesOrderdt = SalesOrderdt.Copy();
-                   
+
                     //DataTable tempSalesOrderdt = (DataTable)Session["OrderDetails"];
                     int InitValR = 1;
                     foreach (DataRow dr in tempSalesOrderdt.Rows)
@@ -3916,7 +3935,7 @@ namespace ERP.OMS.Management.Activities
                         DataTable MultiUOM = (DataTable)Session["SalesOrderMultiUOMData"];
                         // Mantis Issue 24397
                         //MultiUOMDetails = MultiUOM.DefaultView.ToTable(false, "SrlNo", "Quantity", "UOM", "AltUOM", "AltQuantity", "UomId", "AltUomId", "ProductId");
-                        MultiUOMDetails = MultiUOM.DefaultView.ToTable(false, "SrlNo", "Quantity", "UOM", "AltUOM", "AltQuantity", "UomId", "AltUomId", "ProductId","DetailsId", "BaseRate","AltRate","UpdateRow");
+                        MultiUOMDetails = MultiUOM.DefaultView.ToTable(false, "SrlNo", "Quantity", "UOM", "AltUOM", "AltQuantity", "UomId", "AltUomId", "ProductId", "DetailsId", "BaseRate", "AltRate", "UpdateRow");
                         // End of Mantis Issue 24397
                     }
                     else
@@ -4087,15 +4106,19 @@ namespace ERP.OMS.Management.Activities
                     dvData.RowFilter = "Status <> 'D'";
                     duplicatedt = dvData.ToTable();
 
-                   // var duplicateRecords = duplicatedt.AsEnumerable()
-                   //.GroupBy(r => r["ProductID"]) //coloumn name which has the duplicate values
-                   //.Where(gr => gr.Count() > 1)
-                   //.Select(g => g.Key);
-                    //foreach (var d in duplicateRecords)
-                    //{
-                    //    validate = "duplicateProduct";
-                    //}
-
+                    //Rev 9.0
+                    if (hdnIsDuplicateItemAllowedOrNot.Value == "0")
+                    {
+                        var duplicateRecords = duplicatedt.AsEnumerable()
+                       .GroupBy(r => r["ProductID"]) //coloumn name which has the duplicate values
+                       .Where(gr => gr.Count() > 1)
+                       .Select(g => g.Key);
+                        foreach (var d in duplicateRecords)
+                        {
+                            validate = "duplicateProduct";
+                        }
+                    }
+                    //Rev 9.0 End
                     foreach (DataRow dr in duplicatedt.Rows)
                     {
                         decimal ProductQuantity = Convert.ToDecimal(dr["Quantity"]);
@@ -4498,7 +4521,10 @@ namespace ERP.OMS.Management.Activities
                                         {
                                             string SerialID = Convert.ToString(dr["SrlNo"]);
                                             string TaxID = Convert.ToString(dr["TaxCode"]);
-                                            decimal _TaxAmount = Math.Round(Convert.ToDecimal(dr["TaxAmount"]), 2);
+                                            //REV 8.0
+                                            //decimal _TaxAmount = Math.Round(Convert.ToDecimal(dr["TaxAmount"]), 2);
+                                            decimal _TaxAmount = Convert.ToDecimal(String.Format("{0:0.00}",(dr["TaxAmount"])));
+                                            //REV 8.0 END
                                             string ProductName = Convert.ToString(dr["ProductName"]);
                                             DataRow[] rows = TaxDetailTable.Select("SlNo = '" + SerialID + "' and TaxCode='" + TaxID + "'");
 
@@ -7189,8 +7215,11 @@ namespace ERP.OMS.Management.Activities
                             obj.Taxes_Name = Convert.ToString(dr["Taxes_Name"]) + "(-)";
                         }
 
-                        obj.Amount = Convert.ToDouble(obj.calCulatedOn * (Convert.ToDecimal(obj.TaxField) / 100));
+                        //REV 8.0
+                        //obj.Amount = Convert.ToDouble(obj.calCulatedOn * (Convert.ToDecimal(obj.TaxField) / 100));
 
+                        obj.Amount = Convert.ToDouble(String.Format("{0:0.00}", (obj.calCulatedOn * (Convert.ToDecimal(obj.TaxField) / 100))));
+                        //REV 8.0 END
 
 
 

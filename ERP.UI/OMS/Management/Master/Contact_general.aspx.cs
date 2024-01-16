@@ -1,3 +1,7 @@
+/***********************************************************************************************************
+ * 1.0    02-01-2024       V2.0.42     Sanchita     Settings required to Check Duplicate Customer Master Name. Mantis: 27125
+ * 2.0    11-01-2024       V2.0.42     Sanchita     Customer Transaction Category should not be changed after making any transaction with the customers. Mantis: 27169
+ **************************************************************************************************************/
 using System;
 using System.Configuration;
 using System.Data;
@@ -959,6 +963,21 @@ namespace ERP.OMS.Management.Master
 
 
                             }
+
+                            // Rev 2.0
+                            MasterDataCheckingBL objMasterDataCheckingBL = new MasterDataCheckingBL();
+
+                            int TransactionExist = objMasterDataCheckingBL.CheckTransactionExist_LeadOrContact(InternalId[0, 0]);
+                            if (TransactionExist < 0)
+                            {
+                                cmbTransCategory.ClientEnabled = false;
+
+                            }
+                            else
+                            {
+                                cmbTransCategory.ClientEnabled = true;
+                            }
+                            // End of Rev 2.0
                         }
 
                     }
@@ -2387,6 +2406,50 @@ namespace ERP.OMS.Management.Master
                 // msgBody = msgBody.Replace("@Date", LDcmbProfession.Text);
                 //msgBody = msgBody.Replace("@Profession", dt_EnteredOn.Value.ToString());
             }
+
+            // Rev 1.0
+            if (txtFirstNmae.Text != "")
+            {
+                if (Convert.ToString(Session["requesttype"]) == "Customer/Client")
+                {
+                    string AllowDuplicateCustomerName = ComBL.GetSystemSettingsResult("AllowDuplicateCustomerName");
+                    if (!String.IsNullOrEmpty(AllowDuplicateCustomerName))
+                    {
+                        if (AllowDuplicateCustomerName == "No")
+                        {
+                            bool flag = false;
+                            BusinessLogicLayer.MShortNameCheckingBL obj = new BusinessLogicLayer.MShortNameCheckingBL();
+                            flag = obj.CheckUniqueVendorName(txtFirstNmae.Text, Convert.ToString(HttpContext.Current.Session["KeyVal_InternalID"]), "CheckUniqueCustomerName");
+
+                            if (!flag)
+                            {
+                                ScriptManager.RegisterStartupScript(this, this.GetType(), "redirect", "jAlert('Duplicate Name.');", true);
+                                return;
+                            }
+                        }
+                    }
+                }
+                else if (Convert.ToString(Session["requesttype"]) == "Transporter")
+                {
+                    string AllowDuplicateTransporterName = ComBL.GetSystemSettingsResult("AllowDuplicateTransporterName");
+                    if (!String.IsNullOrEmpty(AllowDuplicateTransporterName))
+                    {
+                        if (AllowDuplicateTransporterName == "No")
+                        {
+                            bool flag = false;
+                            BusinessLogicLayer.MShortNameCheckingBL obj = new BusinessLogicLayer.MShortNameCheckingBL();
+                            flag = obj.CheckUniqueVendorName(txtFirstNmae.Text, Convert.ToString(HttpContext.Current.Session["KeyVal_InternalID"]), "CheckUniqueTransporterName");
+
+                            if (!flag)
+                            {
+                                ScriptManager.RegisterStartupScript(this, this.GetType(), "redirect", "jAlert('Duplicate Name.');", true);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            // End of Rev 1.0
 
             string ContType = "";
             string gstin = "";
@@ -4842,7 +4905,40 @@ namespace ERP.OMS.Management.Master
             return Convert.ToString(IsPresent) + "~" + entityName;
         }
 
+        // Rev 1.0
+        [WebMethod]
+        public static bool CheckUniqueCustomerName(string CategoriesFirstName, string Code)
+        {
+            bool flag = true;
 
+            if (Convert.ToString(System.Web.HttpContext.Current.Session["requesttype"]) == "Customer/Client" || 
+                    Convert.ToString(System.Web.HttpContext.Current.Session["requesttype"]) == "Transporter")
+            {
+                try
+                {
+                    BusinessLogicLayer.MShortNameCheckingBL obj = new BusinessLogicLayer.MShortNameCheckingBL();
+
+                    if (Convert.ToString(System.Web.HttpContext.Current.Session["requesttype"]) == "Customer/Client")
+                    {
+                        flag = obj.CheckUniqueVendorName(CategoriesFirstName.Trim(), Code, "CheckUniqueCustomerName");
+                    }
+                    else if(Convert.ToString(System.Web.HttpContext.Current.Session["requesttype"]) == "Transporter")
+                    {
+                        flag = obj.CheckUniqueVendorName(CategoriesFirstName.Trim(), Code, "CheckUniqueTransporterName");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+                finally
+                {
+                }
+            }
+            return flag;
+        }
+        // End of Rev 1.0
 
 
         #region Leads

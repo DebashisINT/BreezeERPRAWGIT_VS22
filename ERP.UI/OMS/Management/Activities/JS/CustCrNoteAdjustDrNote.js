@@ -1,4 +1,8 @@
-﻿/*****************
+﻿/**********************************************************************************************************
+ * Rev 1.0      Sanchita    V2.0.42     10/01/2024     Unable to Save - Add Adjustment of Documents - Credit Note With Debit Note. Mantis: 27166
+ * 
+ **************************************************************************************************************/
+/*****************
 Global variable*/
 
 var ReceiptList = [];
@@ -554,7 +558,10 @@ function ValidateEntry() {
         jAlert("Adjusted Amount must be greater than zero.", "Alert", function () { cAdjAmt.Focus(); });
         return false;
     }
-    if (parseFloat(cAdjAmt.GetValue()) != GetTotalAdjustedAmount()) {
+    // Rev 1.0 
+    //if (parseFloat(cAdjAmt.GetValue()) != GetTotalAdjustedAmount()) {
+    if (parseFloat(cAdjAmt.GetValue()) != GetTotalAdjustedAmount().toFixed(2)) {
+        // End of Rev 1.0
         jAlert("Mismatch detected in Adjusted Amount and Adjustment Amount.", "Alert", function () { cAdjAmt.Focus(); });
         return false;
     }
