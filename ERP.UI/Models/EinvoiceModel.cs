@@ -405,13 +405,55 @@ namespace ERP.Models
        
 
     }
+    public class IRNERRORV3
+    {
+        public string status { get; set; }
+        public string data { get; set; }
 
+        public errorV3 error { get; set; }
+        public List<infologV3> info { get; set; }
+
+        public detailsV3 additionalInfo { get; set; }
+        public string alert { get; set; }
+
+    }
+    public class detailsV3
+    {
+        public detailsInfoV3 details { get; set; }
+    }
+    public class detailsInfoV3
+    {
+
+        public string AckNo { get; set; }
+        public string AckDt { get; set; }
+        public string Irn { get; set; }
+        public string SignedInvoice { get; set; }
+        public string SignedQRCode { get; set; }
+        public string Status { get; set; }
+        public string EwbNo { get; set; }
+        public string EwbDt { get; set; }
+        public string EwbValidTill { get; set; }
+        public string Remarks { get; set; }
+    }
     public class infologV3
     {
         public string InfCd { get; set; }
-        public string Desc { get; set; }
+        public infologV3Desc Desc { get; set; }
 
     }
+    public class infologV3Desc
+    {
+        public string AckNo { get; set; }
+        public string AckDt { get; set; }
+        public string Irn { get; set; }
+
+    }
+    //public class infologV3
+    //{
+    //    public string InfCd { get; set; }
+    //    public string Desc { get; set; }
+
+    //}
     //Rev 2.0 End
     public class IRN
     {        
