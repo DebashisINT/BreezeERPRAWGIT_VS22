@@ -2974,9 +2974,14 @@ namespace ERP.OMS.Management
                 {
 
                     //Rev 5.0
-                    IRNV3 objIRN = new IRNV3();
+                    //Rev  7.0
+                    //IRNV3 objIRN = new IRNV3();
+                    EWAYBILLV3 objIRN = new EWAYBILLV3();
+                    //Rev  7.0 End
                     //IRN objIRN = new IRN();
                     //Rev 5.0 End
+
+
                     using (var client = new HttpClient())
                     {
                         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
@@ -3008,8 +3013,10 @@ namespace ERP.OMS.Management
                             var jsonString = response.Content.ReadAsStringAsync().Result;
                             //Rev 5.0
                             //Rev Generate EWB (v3.0)
-                            objIRN = JsonConvert.DeserializeObject<IRNV3>(jsonString);
-
+                            //Rev  7.0 
+                            //objIRN = JsonConvert.DeserializeObject<IRNV3>(jsonString);
+                            objIRN = JsonConvert.DeserializeObject<EWAYBILLV3>(jsonString);
+                            //Rev  7.0 End
                             if (Convert.ToString(objIRN.status) == "1")
                             {
                                 DBEngine objDb = new DBEngine();
