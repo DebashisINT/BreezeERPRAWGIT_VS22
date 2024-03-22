@@ -5775,10 +5775,17 @@ namespace ERP.OMS.Management
                 }
                 try
                 {
-                    //Rev 5.0
-                    //IRN objIRN = new IRN();
-                    IRNV3 objIRN = new IRNV3();
-                    //Rev 5.0 End
+                    ////Rev 5.0
+                    ////IRN objIRN = new IRN();
+                    //IRNV3 objIRN = new IRNV3();
+                    ////Rev 5.0 End
+
+                    //Rev  7.0
+                    //IRNV3 objIRN = new IRNV3();
+                    EWAYBILLV3 objIRN = new EWAYBILLV3();
+                    //Rev  7.0 End
+
+
                     using (var client = new HttpClient())
                     {
                         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
@@ -5810,7 +5817,9 @@ namespace ERP.OMS.Management
                             var jsonString = response.Content.ReadAsStringAsync().Result;
                             //Rev 5.0
                             //objIRN = response.Content.ReadAsAsync<IRN>().Result;
-                            objIRN = JsonConvert.DeserializeObject<IRNV3>(jsonString);
+                            //Rev 7.0
+                            objIRN = JsonConvert.DeserializeObject<EWAYBILLV3>(jsonString);
+                            //Rev 7.0 End
                             if (Convert.ToString(objIRN.status) == "1")
                             {
                                 
@@ -8006,9 +8015,14 @@ namespace ERP.OMS.Management
                 try
                 {
                     //REV 5.0
-                    IRNV3 objIRN = new IRNV3();
+                    //IRNV3 objIRN = new IRNV3();
                     //IRN objIRN = new IRN();
                     //REV 5.0 END
+
+                    //Rev  7.0
+                    //IRNV3 objIRN = new IRNV3();
+                    EWAYBILLV3 objIRN = new EWAYBILLV3();
+                    //Rev  7.0 End
                     using (var client = new HttpClient())
                     {
                         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
@@ -8035,7 +8049,7 @@ namespace ERP.OMS.Management
                         {
                             var jsonString = response.Content.ReadAsStringAsync().Result;
                             //REV 5.0
-                            objIRN = JsonConvert.DeserializeObject<IRNV3>(jsonString);
+                            objIRN = JsonConvert.DeserializeObject<EWAYBILLV3>(jsonString);
                             if (Convert.ToString(objIRN.status) == "1")
                             {
                                 DBEngine objDb = new DBEngine();
