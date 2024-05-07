@@ -1,8 +1,9 @@
 ﻿//==========================================================Revision History ============================================================================================
 // 1.0   Priti   V2.0.38   11-04-2023     0025797:Cannot enter duplicate batch in Same warehouse, for the same product with same batch number
-
 // 2.0   Priti   V2.0.39   22-09-2023     0026844:Stock In Happening in different Warehouse even if the Branch selection in different
-
+// 3.0   Priti   V2.0.43   26-03-2024     0027334: Mfg Date & Exp date should load automatically if the batch details exists for the product while making Purchase GRN.
+// 4.0   Priti   V2.0.43   03-04-2024     0027340: GST % able to change in GRN entry. Validation Required like PO and PI
+// 5.0   Priti   V2.0.43   23-04-2024     0027379: Alternate Qty is not calculating properly in the Purchase GRN.
 
 //========================================== End Revision History =======================================================================================================
 
@@ -383,6 +384,48 @@ function BatchNoUniqueCheck() {
     });
 }
 //REV 1.0 END
+
+//Rev 3.0
+function FetchBatchWiseMfgDateExpiryDate() {
+    var BatchNo = document.getElementById("txtBatch").value;
+    var WarehouseID = $("#ddlWarehouse").val();
+    var ProductID = $("#hdfProductID").val();
+    $.ajax({
+        type: "POST",
+        url: "PurchaseChallan.aspx/FetchBatchWiseMfgDateExpiryDate",
+        data: JSON.stringify({ BatchNo: BatchNo, WarehouseID: WarehouseID, ProductID: ProductID }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: false,
+        success: function (msg) {
+            var data = msg.d;
+
+            var Batch_MfgDate = (data.toString().split('~')[0] != null) ? data.toString().split('~')[0] : "";
+            var Batch_ExpiryDate = (data.toString().split('~')[1] != null) ? data.toString().split('~')[1] : "";
+            if (Batch_MfgDate != "") {
+                ctxtMfgDate.SetDate(new Date(Batch_MfgDate));
+            }
+            else {
+                ctxtMfgDate.SetDate(null);
+            }
+            if (Batch_ExpiryDate != "") {
+                ctxtExprieyDate.SetDate(new Date(Batch_ExpiryDate));
+            }
+            else {
+                ctxtExprieyDate.SetDate(null);
+            }
+
+        }
+    });
+}
+
+function ValidfromCheck(s, e) {
+    ctxtExprieyDate.SetMinDate(ctxtMfgDate.GetDate());
+    if (ctxtExprieyDate.GetDate() < ctxtMfgDate.GetDate()) {
+        ctxtExprieyDate.Clear();
+    }
+}
+//Rev 3.0 End
 function txtBillNo_TextChanged() {
     var VoucherNo = document.getElementById("txtVoucherNo").value;
 
@@ -1730,6 +1773,17 @@ function OnEndCallback(s, e) {
         grid.batchEditApi.StartEdit(0, 2);
         jAlert('Purchase Order is mandatory while save the data.');
     }
+    //Rev 4.0
+    else if (grid.cpSaveSuccessOrFail == "checkAcurateTaxAmount") {
+        LoadingPanel.Hide();
+        grid.batchEditApi.StartEdit(0, 2);
+        grid.cpSaveSuccessOrFail = null;
+        jAlert('Check GST Calculated for Item ' + grid.cpProductName + ' at line ' + grid.cpSerialNo);
+        grid.cpSaveSuccessOrFail = '';
+        grid.cpSerialNo = '';
+        grid.cpProductName = '';
+    }
+    //Rev 4.0 End
     else {
         var PurchaseOrder_Number = grid.cpPurchaseOrderNo;
         var Order_Msg = "Purchase Challan No. " + PurchaseOrder_Number + " saved.";
@@ -2112,7 +2166,14 @@ function OnCustomButtonClick(s, e) {
                     }
 
                     CreateStock();
-                    ctxtQty.SetValue(QuantityValue);
+                    //Rev 5.0
+                    var mode = $('#hdnADDEditMode').val();
+                    if (mode == 'ADD') {
+                        ctxtQty.SetValue(QuantityValue);
+                    }
+                    var packing = $("#hddnAltQty").val();
+                    ctxtAltQty.SetValue(packing);                 
+                    //Rev 5.0 End
                     ccmbAltUOM.SetValue(SpliteDetails[29]);
                     cPopupWarehouse.Show();
                 }
@@ -2498,6 +2559,9 @@ function SetDataToGrid(Quantity, packing, PackingUom, PackingSelectUom, producti
     if($("#hdnShowUOMConversionInEntry").val()=="1")
     {
         ctxtAltQty.SetValue(packing);
+        //Rev 5.0
+        $("#hddnAltQty").val(packing);
+        //Rev 5.0 End
         ccmbAltUOM.SetValue(PackingUom);
     }
     QuantityTextChange(globalRowIndex,7);

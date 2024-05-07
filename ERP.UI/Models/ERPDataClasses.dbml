@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="EVAC_05072023" Class="ERPDataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="PK02122020" Class="ERPDataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Table Name="dbo.v_FinanceReconciliationList" Member="v_FinanceReconciliationLists">
     <Type Name="v_FinanceReconciliationList">
       <Column Name="SrlNo" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
@@ -3588,48 +3588,6 @@
       <Column Name="Quote_Status_Remark" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.v_PBList" Member="v_PBLists">
-    <Type Name="v_PBList">
-      <Column Name="Invoice_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="InvoiceNumber" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="InvoiceDt" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Invoice_InventoryItem" Type="System.String" DbType="VarChar(13)" CanBeNull="true" />
-      <Column Name="InvoiceDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="PartyInvoiceNo" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="PartyInvoiceDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="ChallanNumber" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="ChallanDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="updatedOn" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="TotalAmount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
-      <Column Name="Product" Type="System.String" DbType="VarChar(7) NOT NULL" CanBeNull="false" />
-      <Column Name="VendorName" Type="System.String" DbType="VarChar(252) NOT NULL" CanBeNull="false" />
-      <Column Name="CompanyID" Type="System.String" DbType="Char(10)" CanBeNull="true" />
-      <Column Name="CreatedBY" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Column Name="user_id" Type="System.Decimal" DbType="Decimal(10,0)" CanBeNull="true" />
-      <Column Name="UpdatedBy" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="branch" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
-      <Column Name="invoicefor" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
-      <Column Name="branchid" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CreatedDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="EWayBillNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="EWayBillDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="EWayBillValue" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
-      <Column Name="PlaceOfSupply" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Proj_Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="REFERENCE_INVOICE" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="ISCLOSED" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
-      <Column Name="Editlock" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
-      <Column Name="Deletelock" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
-      <Column Name="OverheadCost" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="Registered" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
-      <Column Name="VendorType" Type="System.String" DbType="VarChar(11) NOT NULL" CanBeNull="false" />
-      <Column Name="CNT_GSTIN" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
-      <Column Name="Pan_NO" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="DeducteeStatus" Type="System.String" DbType="VarChar(18) NOT NULL" CanBeNull="false" />
-      <Column Name="TaxEntityType" Type="System.String" DbType="VarChar(14) NOT NULL" CanBeNull="false" />
-      <Column Name="Deductee_Type" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.v_EntityListBranchStockOut" Member="v_EntityListBranchStockOuts">
     <Type Name="v_EntityListBranchStockOut">
       <Column Name="SlNo" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
@@ -5456,6 +5414,340 @@
       <Column Name="AckNo" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
       <Column Name="AckDt" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
       <Column Name="CustomerCode" Type="System.String" DbType="VarChar(253)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.v_PBList" Member="v_PBLists">
+    <Type Name="v_PBList">
+      <Column Name="Invoice_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceNumber" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceDt" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Invoice_InventoryItem" Type="System.String" DbType="VarChar(13)" CanBeNull="true" />
+      <Column Name="InvoiceDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PartyInvoiceNo" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="PartyInvoiceDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="ChallanNumber" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ChallanDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="updatedOn" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="TotalAmount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Product" Type="System.String" DbType="VarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="VendorName" Type="System.String" DbType="VarChar(252) NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyID" Type="System.String" DbType="Char(10)" CanBeNull="true" />
+      <Column Name="CreatedBY" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="user_id" Type="System.Decimal" DbType="Decimal(10,0)" CanBeNull="true" />
+      <Column Name="UpdatedBy" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="branch" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="invoicefor" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="branchid" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreatedDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="EWayBillNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EWayBillDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="EWayBillValue" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="PlaceOfSupply" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Proj_Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="REFERENCE_INVOICE" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ISCLOSED" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
+      <Column Name="Editlock" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Deletelock" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="OverheadCost" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Registered" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="VendorType" Type="System.String" DbType="VarChar(11) NOT NULL" CanBeNull="false" />
+      <Column Name="CNT_GSTIN" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+      <Column Name="Pan_NO" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DeducteeStatus" Type="System.String" DbType="VarChar(18) NOT NULL" CanBeNull="false" />
+      <Column Name="TaxEntityType" Type="System.String" DbType="VarChar(14) NOT NULL" CanBeNull="false" />
+      <Column Name="Deductee_Type" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="IsAttachmentDoc" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TPurchaseInvoiceList" Member="TPurchaseInvoiceLists">
+    <Type Name="TPurchaseInvoiceList">
+      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SlNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Invoice_Id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="InvoiceNumber" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="InvoiceDt" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="InvoiceDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PartyInvoiceNo" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="PartyInvoiceDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="ChallanNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ChallanDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="updatedOn" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="TotalAmount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Product" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="VendorName" Type="System.String" DbType="VarChar(252)" CanBeNull="true" />
+      <Column Name="CompanyID" Type="System.String" DbType="Char(10)" CanBeNull="true" />
+      <Column Name="CreatedBY" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="user_id" Type="System.Decimal" DbType="Decimal(9,0)" CanBeNull="true" />
+      <Column Name="UpdatedBy" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="branch" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="branchid" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="CreatedDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="Shiptoparty" Type="System.String" DbType="VarChar(300)" CanBeNull="true" />
+      <Column Name="EWayBillNumber" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="EWayBillDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="EWayBillValue" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="PlaceOfSupply" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchaseReturnManualList" Member="PurchaseReturnManualLists">
+    <Type Name="PurchaseReturnManualList">
+      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SlNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SrlNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Return_Id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="SalesReturnNo" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Return_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Rn_Date" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CustomerName" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="Amount" Type="System.Decimal" DbType="Decimal(20,5)" CanBeNull="true" />
+      <Column Name="Quote_Expiry" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Status" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseInvoice" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Branch" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="BranchID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Return_FinYear" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Return_CompanyID" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="EWayBillNumber" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="EWayBillDate" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="EWayBillValue" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Proj_Name" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Editlock" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Deletelock" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RateDifferenceEntryList" Member="RateDifferenceEntryLists">
+    <Type Name="RateDifferenceEntryList">
+      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SlNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SrlNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Return_Id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="SalesReturnNo" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Return_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Rn_Date" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CustomerName" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="Amount" Type="System.Decimal" DbType="Decimal(20,5)" CanBeNull="true" />
+      <Column Name="Quote_Expiry" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Status" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseInvoice" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Branch" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="BranchID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Return_FinYear" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Return_CompanyID" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Proj_Name" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TransporterPurchaseInvoiceList" Member="TransporterPurchaseInvoiceLists">
+    <Type Name="TransporterPurchaseInvoiceList">
+      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SlNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Invoice_Id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="InvoiceNumber" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="InvoiceDt" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Invoice_InventoryItem" Type="System.String" DbType="VarChar(13)" CanBeNull="true" />
+      <Column Name="InvoiceDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PartyInvoiceNo" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="PartyInvoiceDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="ChallanNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ChallanDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="updatedOn" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="TotalAmount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Product" Type="System.String" DbType="VarChar(7)" CanBeNull="true" />
+      <Column Name="VendorName" Type="System.String" DbType="VarChar(252)" CanBeNull="true" />
+      <Column Name="CompanyID" Type="System.String" DbType="Char(10)" CanBeNull="true" />
+      <Column Name="CreatedBY" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="user_id" Type="System.Decimal" DbType="Decimal(9,0)" CanBeNull="true" />
+      <Column Name="UpdatedBy" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="branch" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="invoicefor" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="branchid" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="CreatedDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="EWayBillNumber" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="EWayBillDate" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="EWayBillValue" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="PlaceOfSupply" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Proj_Name" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="REFERENCE_INVOICE" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ISCLOSED" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
+      <Column Name="Editlock" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Deletelock" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="OverheadCost" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Registered" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="VendorType" Type="System.String" DbType="VarChar(11)" CanBeNull="true" />
+      <Column Name="CNT_GSTIN" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+      <Column Name="Pan_NO" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="DeducteeStatus" Type="System.String" DbType="VarChar(18)" CanBeNull="true" />
+      <Column Name="TaxEntityType" Type="System.String" DbType="VarChar(14)" CanBeNull="true" />
+      <Column Name="Deductee_Type" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="IsAttachmentDoc" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.VendorPaymentAdjustmentList" Member="VendorPaymentAdjustmentLists">
+    <Type Name="VendorPaymentAdjustmentList">
+      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SlNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Adj_id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Adjustment_No" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Adjustment_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CustName" Type="System.String" DbType="NVarChar(201)" CanBeNull="true" />
+      <Column Name="Adjusted_Doc_no" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Adjusted_Amount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LastUpdatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Branch" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Proj_Name" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.VendPaymentAdvanceAdstCrNoteList" Member="VendPaymentAdvanceAdstCrNoteLists">
+    <Type Name="VendPaymentAdvanceAdstCrNoteList">
+      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SlNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Adj_id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Adjustment_No" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Adjustment_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Adjusted_Doc_no" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Adjusted_Amount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LastUpdatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Branch" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="UpdatedOn" Type="System.String" DbType="VarChar(19)" CanBeNull="true" />
+      <Column Name="Vendor" Type="System.String" DbType="VarChar(8000)" CanBeNull="true" />
+      <Column Name="Proj_Name" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.JournalDetorsAdjustVenRecList" Member="JournalDetorsAdjustVenRecLists">
+    <Type Name="JournalDetorsAdjustVenRecList">
+      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SlNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Adj_id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Adjustment_No" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Adjustment_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CustName" Type="System.String" DbType="VarChar(300)" CanBeNull="true" />
+      <Column Name="Adjusted_Doc_no" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Adjusted_Amount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LastUpdatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Branch" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="LastUpdateOn" Type="System.String" DbType="VarChar(19)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.JournalCreditorsAdjustVenPayList" Member="JournalCreditorsAdjustVenPayLists">
+    <Type Name="JournalCreditorsAdjustVenPayList">
+      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SlNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Adj_id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Adjustment_No" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Adjustment_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CustName" Type="System.String" DbType="VarChar(300)" CanBeNull="true" />
+      <Column Name="Adjusted_Doc_no" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Adjusted_Amount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LastUpdatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Branch" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="LastUpdateOn" Type="System.String" DbType="VarChar(19)" CanBeNull="true" />
+      <Column Name="Proj_Name" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.VendorRateDiffAdjustmentInvoiceList" Member="VendorRateDiffAdjustmentInvoiceLists">
+    <Type Name="VendorRateDiffAdjustmentInvoiceList">
+      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SlNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AdjRateDiffer_id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Adjustment_No" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Adjustment_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CustName" Type="System.String" DbType="VarChar(300)" CanBeNull="true" />
+      <Column Name="Adjusted_Doc_no" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Adjusted_Amount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LastUpdatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Branch" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.JournalCreditorsAdjustPReturnList" Member="JournalCreditorsAdjustPReturnLists">
+    <Type Name="JournalCreditorsAdjustPReturnList">
+      <Column Name="USERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SlNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Adj_id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Adjustment_No" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Adjustment_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CustName" Type="System.String" DbType="VarChar(300)" CanBeNull="true" />
+      <Column Name="Adjusted_Doc_no" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Adjusted_Amount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LastUpdatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Branch" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="LastUpdateOn" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Proj_Name" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WarehouseWiseStocktransferList" Member="WarehouseWiseStocktransferLists">
+    <Type Name="WarehouseWiseStocktransferList">
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="USERID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="StockTransfer_ID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="StockTransfer_No" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Stock_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="branch_description" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Branch_ID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="SourceWarehouseName" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="DestWarehouseName" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="LastUpdatedBy" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="LastUpdateOn" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Technician_Name" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Proj_Name" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="branch_descriptionTo" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="BranchTo_ID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Editlock" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Deletelock" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="EntityName" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="EntityCode" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Employee_Name" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="WHStockTrans_EmployeeId" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="EWayBillNumber" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="EWayBillDate" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Issue_No" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ContraVoucherList" Member="ContraVoucherLists">
+    <Type Name="ContraVoucherList">
+      <Column Name="SEQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="USERID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="CashBank_ID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="CashBank_TransactionDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="CashBank_TransactionDateText" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CashBank_VoucherNumber" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CashBank_Narration" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CashBank_BranchID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CashBank_BranchIDTO" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CashBankDetail_PaymentAmount" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="TransactionDat" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CashBank_FinYear" Type="System.String" DbType="Char(10)" CanBeNull="true" />
+      <Column Name="CashBank_CompanyID" Type="System.String" DbType="Char(10)" CanBeNull="true" />
+      <Column Name="CashBank_CreateUser" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CashBank_ModifyUser" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CashBank_ModifyDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CashBankDetail_BankValueDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CashBank_IBRef" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Proj_Name" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Editlock" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Deletelock" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
     </Type>
   </Table>
 </Database>

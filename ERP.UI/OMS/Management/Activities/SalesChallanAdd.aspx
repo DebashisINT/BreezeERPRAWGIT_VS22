@@ -15,6 +15,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
 6.0                06-10-2023       V2.0.40            Sanchita           New Fields required in Sales Quotation - RFQ Number, RFQ Date, Project/Site
                                                                           Mantis : 26871
 7.0                02-01-2024       V2.0.42            Priti              Mantis : 0027050 A settings is required for the Duplicates Items Allowed or not in the Transaction Module.
+8.0                24-01-2024       V2.0.43            Priti              Mantis : 0027207 Batchwise stock has been issued from Challan before receiving date which caused negative stock.
 
 ====================================================== Revision History =============================================--%>
 
@@ -958,10 +959,14 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
         }
 
         function fn_Edit(keyValue) {
-
-            //cGrdWarehouse.PerformCallback('EditWarehouse~' + keyValue);
+            //REV 6.0
+            var ChallanDate = cPLSalesChallanDate.GetValueString();
+            //REV 6.0 End
             SelectedWarehouseID = keyValue;
-            cCallbackPanel.PerformCallback('EditWarehouse~' + keyValue);
+            //REV 6.0 
+            /*cCallbackPanel.PerformCallback('EditWarehouse~' + keyValue );*/
+            cCallbackPanel.PerformCallback('EditWarehouse~' + keyValue + '~' + ChallanDate);
+            //REV 6.0 End
         }
 
         function ProductButnClick(s, e) {
@@ -1921,9 +1926,15 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
             $("#<%=hddnWarehouseId.ClientID%>").val(WarehouseID);
             var type = document.getElementById('hdfProductType').value;
             ctxtMatchQty.SetValue(0);
+            //REV 6.0
+            var ChallanDate = cPLSalesChallanDate.GetValueString();
+            //REV 6.0 End
             if (WarehouseID != null) {
                 if (type == "WBS" || type == "WB") {
-                    cCmbBatch.PerformCallback('BindBatch~' + WarehouseID);
+                     //REV 6.0
+                    /* cCmbBatch.PerformCallback('BindBatch~' + WarehouseID );*/
+                    cCmbBatch.PerformCallback('BindBatch~' + WarehouseID + '~' + ChallanDate);
+                     //REV 6.0 End
                 }
                 else if (type == "WS" && FifoExists == "0") {
                     checkListBox.PerformCallback('BindSerial~' + WarehouseID + '~' + "0" + '~' + 'NoFIFO');
@@ -1931,18 +1942,27 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
             }
             //Rev Rajdip
             if (WarehouseID != null) {
-                getwirehousewiseaviablestock(sl, strProductID, branch, WarehouseID)
+                //REV 6.0
+                //getwirehousewiseaviablestock(sl, strProductID, branch, WarehouseID);
+                getwirehousewiseaviablestock(sl, strProductID, branch, WarehouseID, ChallanDate);
+                //REV 6.0 End
             }
 
             //End Rev Rajdip
         }
         //Rev Rajdip for wirehousewise aviable stock
-        function getwirehousewiseaviablestock(sl, strProductID, branch, WarehouseID) {
+        //REV 6.0
+        /* function getwirehousewiseaviablestock(sl, strProductID, branch, WarehouseID) {*/
+        function getwirehousewiseaviablestock(sl, strProductID, branch, WarehouseID, ChallanDate) {
+        //REV 6.0 END
             grid.batchEditApi.StartEdit(globalRowIndex);
             $.ajax({
                 type: "POST",
                 url: "SalesChallanAdd.aspx/getWarehousewisestock",
-                data: JSON.stringify({ sl: sl, strProductID: strProductID, branch: branch, WarehouseID: WarehouseID }),
+                //REV 6.0
+                //data: JSON.stringify({ sl: sl, strProductID: strProductID, branch: branch, WarehouseID: WarehouseID }),
+                data: JSON.stringify({ sl: sl, strProductID: strProductID, branch: branch, WarehouseID: WarehouseID, ChallanDate: ChallanDate }),
+                //REV 6.0 END
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 async: false,
@@ -1973,6 +1993,9 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
             ctxtMatchQty.SetValue(0);
             $("#<%=hddnBatchId.ClientID%>").val(BatchID);
             var type = document.getElementById('hdfProductType').value;
+            //REV 6.0
+            var ChallanDate = cPLSalesChallanDate.GetValueString();
+            //REV 6.0 End
 
             if (type == "WBS" && FifoExists == "0") {
                 checkListBox.PerformCallback('BindSerial~' + WarehouseID + '~' + BatchID + '~' + 'NoFIFO');
@@ -1985,16 +2008,22 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
             }
 
             if (BatchID != null) {
-                GetWirehouseBatchWiseAviableStock(sl, strProductID, branch, WarehouseID, BatchID);
+                 //REV 8.0
+                /*GetWirehouseBatchWiseAviableStock(sl, strProductID, branch, WarehouseID, BatchID);*/
+                GetWirehouseBatchWiseAviableStock(sl, strProductID, branch, WarehouseID, BatchID, ChallanDate);
+                 //REV 8.0 END
             }
         }
-        function GetWirehouseBatchWiseAviableStock(sl, strProductID, branch, WarehouseID, BatchID) {
+        function GetWirehouseBatchWiseAviableStock(sl, strProductID, branch, WarehouseID, BatchID, ChallanDate) {
             grid.batchEditApi.StartEdit(globalRowIndex);
 
             $.ajax({
                 type: "POST",
                 url: "SalesChallanAdd.aspx/getWarehouseBatchwisestock",
-                data: JSON.stringify({ sl: sl, strProductID: strProductID, branch: branch, WarehouseID: WarehouseID, BatchID: BatchID }),
+                //Rev 8.0
+                //data: JSON.stringify({ sl: sl, strProductID: strProductID, branch: branch, WarehouseID: WarehouseID, BatchID: BatchID }),
+                data: JSON.stringify({ sl: sl, strProductID: strProductID, branch: branch, WarehouseID: WarehouseID, BatchID: BatchID, ChallanDate: ChallanDate }),
+                //Rev 8.0 End
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 async: false,
@@ -5602,6 +5631,10 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                     $("#divuom").hide();
                 }
 
+                //REV 6.0
+                var ChallanDate = cPLSalesChallanDate.GetValueString();
+                //REV 6.0 End
+
                 //var StkQuantityValue = (grid.GetEditor('StockQuantity').GetValue() != null) ? grid.GetEditor('StockQuantity').GetValue() : "0";
                 var IsExits = true;
                 $("#spnCmbWarehouse").hide();
@@ -5764,7 +5797,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                         div_Serial.style.display = 'none';
                         div_Quantity.style.display = 'block';
 
-                        cCmbBatch.PerformCallback('BindBatch~' + "0");
+                      //  cCmbBatch.PerformCallback('BindBatch~' + "0");
                         //cGrdWarehouse.PerformCallback('Display~' + SrlNo);
 
                         cGrdWarehouse.PerformCallback('Display~' + SrlNo);
@@ -5844,7 +5877,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                         div_Serial.style.display = 'block';
                         div_Quantity.style.display = 'none';
 
-                        cCmbBatch.PerformCallback('BindBatch~' + "0");
+                       // cCmbBatch.PerformCallback('BindBatch~' + "0");
                         //cGrdWarehouse.PerformCallback('Display~' + SrlNo);
 
                         cGrdWarehouse.PerformCallback('Display~' + SrlNo);
@@ -6019,7 +6052,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                         div_AltQuantity.style.display = 'none';
                         _div_Uom.style.display = 'none';
                         //End Rev Rajdip
-                        cCmbBatch.PerformCallback('BindBatch~' + "0");
+                       // cCmbBatch.PerformCallback('BindBatch~' + "0");
                         //cGrdWarehouse.PerformCallback('Display~' + SrlNo);
 
                         cGrdWarehouse.PerformCallback('Display~' + SrlNo);
@@ -6114,7 +6147,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                         div_AltQuantity.style.display = 'none';
                         _div_Uom.style.display = 'none';
                         //End Rev Rajdip
-                        cCmbBatch.PerformCallback('BindBatch~' + "0");
+                      //  cCmbBatch.PerformCallback('BindBatch~' + "0");
                         //cGrdWarehouse.PerformCallback('Display~' + SrlNo);
 
                         cGrdWarehouse.PerformCallback('Display~' + SrlNo);
@@ -6284,7 +6317,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                         div_AltQuantity.style.display = 'none';
                         _div_Uom.style.display = 'none';
                         //End Rev Rajdip
-                        cCmbBatch.PerformCallback('BindBatch~' + "0");
+                       // cCmbBatch.PerformCallback('BindBatch~' + "0");
                         //cGrdWarehouse.PerformCallback('Display~' + SrlNo);
 
                         cGrdWarehouse.PerformCallback('Display~' + SrlNo);
@@ -6379,7 +6412,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                         div_AltQuantity.style.display = 'none';
                         _div_Uom.style.display = 'none';
                         //End Rev Rajdip
-                        cCmbBatch.PerformCallback('BindBatch~' + "0");
+                      //  cCmbBatch.PerformCallback('BindBatch~' + "0");
                         //cGrdWarehouse.PerformCallback('Display~' + SrlNo);
 
                         cGrdWarehouse.PerformCallback('Display~' + SrlNo);
@@ -6554,7 +6587,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                         //div_AltQuantity.style.display = 'none';
                         //_div_Uom.style.display = 'none';
                         //End Rev Rajdip
-                        cCmbBatch.PerformCallback('BindBatch~' + "0");
+                        //cCmbBatch.PerformCallback('BindBatch~' + "0");
                         //cGrdWarehouse.PerformCallback('Display~' + SrlNo);
 
                         cGrdWarehouse.PerformCallback('Display~' + SrlNo);
@@ -6649,7 +6682,7 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                         //div_AltQuantity.style.display = 'none';
                         //_div_Uom.style.display = 'none';
                         //End Rev Rajdip
-                        cCmbBatch.PerformCallback('BindBatch~' + "0");
+                       // cCmbBatch.PerformCallback('BindBatch~' + "0");
                         //cGrdWarehouse.PerformCallback('Display~' + SrlNo);
 
                         cGrdWarehouse.PerformCallback('Display~' + SrlNo);
@@ -7100,7 +7133,7 @@ function SaveWarehouse() {
         if (document.getElementById("myCheck").checked == true && SelectedWarehouseID == "0") {
             if (Ptype == "W" || Ptype == "WB" || Ptype == "B") {
                 cCmbWarehouse.PerformCallback('BindWarehouse');
-                cCmbBatch.PerformCallback('BindBatch~' + "");
+               // cCmbBatch.PerformCallback('BindBatch~' + "");
                 checkListBox.PerformCallback('BindSerial~' + "" + '~' + "" + '~' + "");
                 ctxtQuantity.SetValue("0");
             }
@@ -7112,7 +7145,7 @@ function SaveWarehouse() {
         }
         else {
             cCmbWarehouse.PerformCallback('BindWarehouse');
-            cCmbBatch.PerformCallback('BindBatch~' + "");
+           // cCmbBatch.PerformCallback('BindBatch~' + "");
             checkListBox.PerformCallback('BindSerial~' + "" + '~' + "" + '~' + "");
             ctxtQuantity.SetValue("0");
         }
@@ -8293,7 +8326,7 @@ function ProjectValueChange(s, e) {
                 SelectSerial = strSrlID;
 
                 cCmbWarehouse.PerformCallback('BindWarehouse');
-                cCmbBatch.PerformCallback('BindBatch~' + strWarehouse);
+               // cCmbBatch.PerformCallback('BindBatch~' + strWarehouse);
                 //Rev Rajdip
                 //checkListBox.PerformCallback('EditSerial~' + strWarehouse + '~' + strBatchID + '~' + strSrlID);
                 checkListBox.PerformCallback('EditSerial~' + strWarehouse + '~' + strBatchID + '~' + strSrlID + '~' + strAltQty + '~' + strAltUOM);
@@ -10906,8 +10939,8 @@ function ProjectValueChange(s, e) {
                                         </dxe:GridViewDataTextColumn>
                                         <dxe:GridViewDataTextColumn VisibleIndex="10" Width="80px">
                                             <DataItemTemplate>
-                                                &nbsp; <a href="javascript:void(0);" onclick="fn_Edit('<%# Container.KeyValue %>')" title="Delete">
-                                                    <img src="../../../assests/images/Edit.png" /></a>
+                                               <%-- &nbsp; <a href="javascript:void(0);" onclick="fn_Edit('<%# Container.KeyValue %>')" title="Delete">
+                                                    <img src="../../../assests/images/Edit.png" /></a>--%>
                                                 &nbsp;
                                                         <a href="javascript:void(0);" id="ADelete" onclick="fn_Deletecity('<%# Container.KeyValue %>')" title="Delete">
                                                             <img src="/assests/images/crs.png" /></a>

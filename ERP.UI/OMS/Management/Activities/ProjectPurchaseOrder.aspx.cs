@@ -1,5 +1,7 @@
 ﻿/*************************************************************************************************************************************************
  *  Rev 1.0     Priti    V2.0.40     05-10-2023      Data Freeze Required for Project Sale Invoice & Project Purchase Invoice. Mantis:26854
+ *  Rev 2.0     Priti    V2.0.42     11-01-2024      Mantis : 0027050 A settings is required for the Duplicates Items Allowed or not in the Transaction Module.
+ *  Rev 3.0     Sanchita V2.0.42     30-04-2024      0027118: Duplicate Product can't be deleted from the Project Modules.
  *************************************************************************************************************************************************/
 
 using System;
@@ -324,6 +326,20 @@ namespace ERP.OMS.Management.Activities
             // End of Rev 1.0
             if (!IsPostBack)
             {
+                //REV 2.0
+                string IsDuplicateItemAllowedOrNot = cbl.GetSystemSettingsResult("IsDuplicateItemAllowedOrNot");
+                if (!String.IsNullOrEmpty(IsDuplicateItemAllowedOrNot))
+                {
+                    if (IsDuplicateItemAllowedOrNot == "Yes")
+                    {
+                        hdnIsDuplicateItemAllowedOrNot.Value = "1";
+                    }
+                    else if (IsDuplicateItemAllowedOrNot.ToUpper().Trim() == "NO")
+                    {
+                        hdnIsDuplicateItemAllowedOrNot.Value = "0";
+                    }
+                }
+                //REV 2.0 END
 
                 #region NewTaxblock
                 string ItemLevelTaxDetails = string.Empty; string HSNCodewisetaxSchemid = string.Empty; string BranchWiseStateTax = string.Empty; string StateCodeWiseStateIDTax = string.Empty;
@@ -2749,16 +2765,22 @@ namespace ERP.OMS.Management.Activities
             {
                 string OrderDetails_Id = Convert.ToString(args.Keys["OrderDetails_Id"]);
 
-                for (int i = AdditionalDetails.Rows.Count - 1; i >= 0; i--)
+                // Rev 3.0
+                if (AdditionalDetails != null)
                 {
-                    DataRow dr = PurchaseOrderdt.Rows[i];
-                    string delOrderDetailsId = Convert.ToString(dr["OrderDetails_Id"]);
-                    DataRow daddr = AdditionalDetails.Rows[i];
-                    if (delOrderDetailsId == OrderDetails_Id)
-                        daddr.Delete();
+                    // End of Rev 3.0
+                    for (int i = AdditionalDetails.Rows.Count - 1; i >= 0; i--)
+                    {
+                        DataRow dr = PurchaseOrderdt.Rows[i];
+                        string delOrderDetailsId = Convert.ToString(dr["OrderDetails_Id"]);
+                        DataRow daddr = AdditionalDetails.Rows[i];
+                        if (delOrderDetailsId == OrderDetails_Id)
+                            daddr.Delete();
+                    }
+                    AdditionalDetails.AcceptChanges();
+                    // Rev 3.0
                 }
-
-                AdditionalDetails.AcceptChanges();
+                // End of Rev 3.0
 
                 for (int i = PurchaseOrderdt.Rows.Count - 1; i >= 0; i--)
                 {
@@ -2978,11 +3000,15 @@ namespace ERP.OMS.Management.Activities
                .GroupBy(r => r["ProductID"]) //coloumn name which has the duplicate values
                .Where(gr => gr.Count() > 1)
                 .Select(g => g.Key);
-
-                //foreach (var d in duplicateRecords)
-                //{
-                //    validate = "duplicateProduct";
-                //}
+                //Rev 2.0
+                if (hdnIsDuplicateItemAllowedOrNot.Value == "0")
+                {
+                    foreach (var d in duplicateRecords)
+                    {
+                        validate = "duplicateProduct";
+                    }
+                }
+                //Rev 2.0 End
                 if (ddlInventory.SelectedValue != "N")
                 {
                     foreach (DataRow dr in tempQuotation.Rows)

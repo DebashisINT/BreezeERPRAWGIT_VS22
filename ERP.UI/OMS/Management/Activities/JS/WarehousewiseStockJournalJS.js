@@ -1,5 +1,7 @@
 ﻿//==================================================== Revision History =========================================================================
-//1.0  Priti   V2.0.38    21-06-2023  0026405: Warehouse wise stock journal shows an "Internal Server error" while saving the document
+//1.0  Priti   V2.0.38    21-06-2023    0026405: Warehouse wise stock journal shows an "Internal Server error" while saving the document
+//2.0  Priti   V2.0.43    22-02-2024    Mantis: 0027218 Batchwise stock has been issued from any stock out module before receiving date which caused negative stock
+
 //====================================================End Revision History=====================================================================
 
 var globalRowIndex;
@@ -1179,7 +1181,12 @@ function gridCustomButtonClick(s, e) {
                 div_Batch.style.display = 'block';
                 div_Serial.style.display = 'none';
                 div_Quantity.style.display = 'block';
-                cCmbBatch.PerformCallback('BindBatch~' + "0");
+               
+                //Rev 2.0
+                var PostingDate = cdtTDate.GetValueString();
+                //cCmbBatch.PerformCallback('BindBatch~' + "0");
+                cCmbBatch.PerformCallback('BindBatch~' + "0" + '~' + PostingDate);
+                //Rev 2.0 End
                 cGrdWarehouse.PerformCallback('Display~' + SrlNo);
                 $("#ADelete").css("display", "block");
                 SelectedWarehouseID = "0";              
@@ -1234,8 +1241,12 @@ function gridCustomButtonClick(s, e) {
                 div_Warehouse.style.display = 'none';
                 div_Batch.style.display = 'block';
                 div_Serial.style.display = 'block';
-                div_Quantity.style.display = 'none';
-                cCmbBatch.PerformCallback('BindBatch~' + "0");
+                div_Quantity.style.display = 'none';                
+                //Rev 2.0
+                var PostingDate = cdtTDate.GetValueString();
+                //cCmbBatch.PerformCallback('BindBatch~' + "0");
+                cCmbBatch.PerformCallback('BindBatch~' + "0" + '~' + PostingDate);
+                //Rev 2.0 End
                 cGrdWarehouse.PerformCallback('Display~' + SrlNo);
                 $("#ADelete").css("display", "none");
                 SelectedWarehouseID = "0";
@@ -2532,7 +2543,12 @@ function CallbackPanelEndCall(s, e) {
         SelectSerial = strSrlID;
 
         cCmbWarehouse.PerformCallback('BindWarehouse~' + strWarehouse);
-        cCmbBatch.PerformCallback('BindBatch~' + strWarehouse);
+        
+        //Rev 2.0
+        var PostingDate = cdtTDate.GetValueString();
+        //cCmbBatch.PerformCallback('BindBatch~' + strWarehouse);
+        cCmbBatch.PerformCallback('BindBatch~' + strWarehouse + '~' + PostingDate);
+        //Rev 2.0 End
         checkListBox.PerformCallback('EditSerial~' + strWarehouse + '~' + strBatchID + '~' + strSrlID);
 
         cCmbWarehouse.SetValue(strWarehouse);
@@ -2570,7 +2586,12 @@ function CallbackPanelEnddestCall(s, e) {
         }
 
         cCmbWarehouse.PerformCallback('BindWarehouse~' + strWarehouse);
-        cCmbBatch.PerformCallback('BindBatch~' + strWarehouse);
+
+        //Rev 2.0
+        var PostingDate = cdtTDate.GetValueString();
+        /* cCmbBatch.PerformCallback('BindBatch~' + WarehouseID);*/
+        cCmbBatch.PerformCallback('BindBatch~' + WarehouseID + '~' + PostingDate);
+        //Rev 2.0 End
         checkListBox.PerformCallback('EditSerial~' + strWarehouse + '~' + strBatchID + '~' + strSrlID);
 
         cCmbWarehouse.SetValue(strWarehouse);
@@ -2606,8 +2627,12 @@ function CmbWarehouse_ValueChange() {
     var WarehouseID = cCmbWarehouse.GetValue();
     var type = document.getElementById('hdfProductType').value;
 
-    if (type == "WBS" || type == "WB") {
-        cCmbBatch.PerformCallback('BindBatch~' + WarehouseID);
+    if (type == "WBS" || type == "WB") {        
+        //Rev 2.0
+        var PostingDate = cdtTDate.GetValueString();
+        /* cCmbBatch.PerformCallback('BindBatch~' + WarehouseID);*/
+        cCmbBatch.PerformCallback('BindBatch~' + WarehouseID + '~' + PostingDate);
+        //Rev 2.0 End
     }
     else if (type == "WS") {
         checkListBox.PerformCallback('BindSerial~' + WarehouseID + '~' + "0");
@@ -2983,7 +3008,12 @@ function SaveWarehouse() {
         if (document.getElementById("myCheck").checked == true && SelectedWarehouseID == "0") {
             if (Ptype == "W" || Ptype == "WB" || Ptype == "B") {
                 cCmbWarehouse.PerformCallback('BindWarehouse~' + WarehouseID);
-                cCmbBatch.PerformCallback('BindBatch~' + "");
+               
+                //Rev 2.0
+                var PostingDate = cdtTDate.GetValueString();
+                //cCmbBatch.PerformCallback('BindBatch~' + "");
+                cCmbBatch.PerformCallback('BindBatch~' + WarehouseID + '~' + PostingDate);
+                //Rev 2.0 End
                 checkListBox.PerformCallback('BindSerial~' + "" + '~' + "");
                 ctxtQuantity.SetValue("0");
             }
@@ -2995,7 +3025,12 @@ function SaveWarehouse() {
         }
         else {
             cCmbWarehouse.PerformCallback('BindWarehouse~' + WarehouseID);
-            cCmbBatch.PerformCallback('BindBatch~' + "");
+            
+            //Rev 2.0
+            var PostingDate = cdtTDate.GetValueString();
+            //cCmbBatch.PerformCallback('BindBatch~' + "");
+            cCmbBatch.PerformCallback('BindBatch~' + WarehouseID + '~' + PostingDate);
+            //Rev 2.0 End
             checkListBox.PerformCallback('BindSerial~' + "" + '~' + "");
             ctxtQuantity.SetValue("0");
         }
