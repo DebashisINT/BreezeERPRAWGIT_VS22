@@ -3,6 +3,11 @@
 //Rev 2.0      Sanchita   V2.0.39   22-09-2023     GST is showing Zero in the TAX Window whereas GST in the Grid calculated. 
 //                                                 Session["MultiUOMData"] has been renamed to Session["MultiUOMDataPO"]
 //                                                 Mantis: 26843
+//Rev 3.0      Priti      V2.0.42   02-01-2024     Mantis : 0027050 A settings is required for the Duplicates Items Allowed or not in the Transaction Module.
+//Rev 4.0      Priti      V2.0.43   16-01-2024     Mantis : 0027183 After saving purchase order by availing the "Copy" features document number saving as "Auto"
+//Rev 5.0      Priti      V2.0.43   22-01-2024     Mantis : 0027198 Stop editing while purchase order partially used in another modules.
+//Rev 6.0      Priti      V2.0.43   01-03-2024     Mantis : 0027287 While adding new product in edit mode getting an error in Purchase Order "Value was either too large or too small for an Int16.".
+
 //====================================================End Revision History=====================================================================
 using System;
 using System.Configuration;
@@ -221,15 +226,10 @@ namespace ERP.OMS.Management.Activities
                 if (ProjectMandatoryInEntry == "Yes")
                 {
                     hdnProjectMandatory.Value = "1";
-
-
-
                 }
                 else if (ProjectMandatoryInEntry.ToUpper().Trim() == "NO")
                 {
                     hdnProjectMandatory.Value = "0";
-
-
                 }
             }
 
@@ -329,6 +329,21 @@ namespace ERP.OMS.Management.Activities
 
             if (!IsPostBack)
             {
+                //REV 3.0
+                string IsDuplicateItemAllowedOrNot = cbl.GetSystemSettingsResult("IsDuplicateItemAllowedOrNot");
+                if (!String.IsNullOrEmpty(IsDuplicateItemAllowedOrNot))
+                {
+                    if (IsDuplicateItemAllowedOrNot == "Yes")
+                    {
+                        hdnIsDuplicateItemAllowedOrNot.Value = "1";
+                    }
+                    else if (IsDuplicateItemAllowedOrNot.ToUpper().Trim() == "NO")
+                    {
+                        hdnIsDuplicateItemAllowedOrNot.Value = "0";
+                    }
+                }
+                //REV 3.0 END
+
                 string ForBranchTaggingPurchase = cbl.GetSystemSettingsResult("ForBranchTaggingPurchase");
 
                 if (!String.IsNullOrEmpty(ForBranchTaggingPurchase))
@@ -630,44 +645,7 @@ namespace ERP.OMS.Management.Activities
                     grid.DataSource = GetPurchaseOrderBatch();
                     grid.DataBind();
 
-                    //Add fro Approval By Tanmoy	
-                    //if (Request.QueryString["AppStat"] != null && Request.QueryString["AppStat"] == "ProjApprove")
-                    //{
-                    //    lblHeading.Text = "Approve Purchase Order";
-                    //    hdnProjectApproval.Value = "ProjApprove";
-                    //    btn_SaveRecords.Visible = false;
-                    //    btnSaveExit.Visible = false;
-                    //}
-                    //Add fro Approval By Tanmoy
-
-                    //if (IsPITransactionExist(Request.QueryString["key"]))
-                    //{
-                    //    if (hdnApprovalsetting.Value == "0")
-                    //    {
-                    //        grid.JSProperties["cpBtnVisible"] = "false";
-                    //        btn_SaveRecords.Visible = false;
-                    //        btnSaveExit.Visible = false;
-                    //        tagged.Style.Add("display", "block");
-                    //    }
-                    //}
-                   
-                    //if (Request.QueryString["req"] != null && Request.QueryString["req"] == "V")
-                    //{
-                    //    lblHeading.Text = "View Purchase Order";
-                    //    lbl_quotestatusmsg.Text = "*** View Mode Only";
-                    //    btn_SaveRecords.Visible = false;
-                    //    btnSaveExit.Visible = false;
-                    //    lbl_quotestatusmsg.Visible = true;
-                    //}
-                    //#endregion
-                    //if (Convert.ToString(hddnDocumentIdTagged.Value) == "1")
-                    //{
-                    //    lblHeading.Text = "View Purchase Order";
-                    //    lbl_quotestatusmsg.Text = "*** Used in other module.";
-                    //    btn_SaveRecords.Visible = false;
-                    //    btnSaveExit.Visible = false;
-                    //    lbl_quotestatusmsg.Visible = true;
-                    //}
+                    
 
                     dt_Quotation.Text = "";
                     taggingList.Text = "";
@@ -675,6 +653,9 @@ namespace ERP.OMS.Management.Activities
                     rdl_Salesquotation.SelectedValue = "";
 
                     ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "GridCallBack()", true);
+                    //Rev 4.0
+                    hdnApproveStatus.Value = "0";
+                    //REV 4.0 END
                 }
                 //End of Mantis Issue 24920
                 else
@@ -784,6 +765,16 @@ namespace ERP.OMS.Management.Activities
                         btnSaveExit.Visible = false;
                         lbl_quotestatusmsg.Visible = true;
                     }
+                    //REV 5.0
+                    int IsOrderUsed = CheckOrder(Convert.ToString(Request.QueryString["key"]));
+                    if (IsOrderUsed == -99)
+                    {
+                        lbl_quotestatusmsg.Text = "*** Used in other module.";
+                        btn_SaveRecords.Visible = false;
+                        btnSaveExit.Visible = false;
+                        lbl_quotestatusmsg.Visible = true;
+                    }
+                    //REV 5.0 END
                     ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "GridCallBack()", true);
                 }
 
@@ -803,6 +794,19 @@ namespace ERP.OMS.Management.Activities
                 //    }
                 //}
             }
+        }
+        public int CheckOrder(string Orderid)
+        {
+            int i;
+            int rtrnvalue = 0;
+            ProcedureExecute proc = new ProcedureExecute("prc_PurchaseOrderDetailsList");
+            proc.AddVarcharPara("@Action", 100, "CHECKORDER");
+            proc.AddVarcharPara("@PurchaseOrder_Id", 20, Orderid);
+            proc.AddVarcharPara("@ReturnValue", 50, "0", QueryParameterDirection.Output);
+            i = proc.RunActionQuery();
+            rtrnvalue = Convert.ToInt32(proc.GetParaValue("@ReturnValue"));
+            return rtrnvalue;
+
         }
         public DataTable GetPurchaseOrderWarehouseData()
         {
@@ -1313,8 +1317,12 @@ namespace ERP.OMS.Management.Activities
 
                         thisRow = (DataRow)MultiUOMSaveData.Rows[MultiUOMSaveData.Rows.Count - 1];
                         //MultiUOMSaveData.Rows.Add(SrlNo, Quantity, UOM, AltUOM, AltQuantity, UomId, AltUomId, ProductId);
-                        MultiUOMSaveData.Rows.Add(SrlNo, Quantity, UOM, AltUOM, AltQuantity, UomId, AltUomId, ProductId, DetailsId, BaseRate, AltRate, UpdateRow, (Convert.ToInt16(thisRow["MultiUOMSR"]) + 1));
+                        //REV 6.0
+                        //MultiUOMSaveData.Rows.Add(SrlNo, Quantity, UOM, AltUOM, AltQuantity, UomId, AltUomId, ProductId, DetailsId, BaseRate, AltRate, UpdateRow, (Convert.ToInt16(thisRow["MultiUOMSR"]) + 1));
                         // End of Mantis Issue 24428
+
+                        MultiUOMSaveData.Rows.Add(SrlNo, Quantity, UOM, AltUOM, AltQuantity, UomId, AltUomId, ProductId, DetailsId, BaseRate, AltRate, UpdateRow, (Convert.ToInt32(thisRow["MultiUOMSR"]) + 1));
+                        //REV 6.0 End
                     }
                     else
                     {
@@ -4030,10 +4038,15 @@ namespace ERP.OMS.Management.Activities
                .Where(gr => gr.Count() > 1)
                 .Select(g => g.Key);
 
-                foreach (var d in duplicateRecords)
+                //Rev 3.0
+                if (hdnIsDuplicateItemAllowedOrNot.Value == "0")
                 {
-                    validate = "duplicateProduct";
+                    foreach (var d in duplicateRecords)
+                    {
+                        validate = "duplicateProduct";
+                    }
                 }
+                //Rev 3.0 End
                 if (ddlInventory.SelectedValue != "N")
                 {
                     foreach (DataRow dr in tempQuotation.Rows)
