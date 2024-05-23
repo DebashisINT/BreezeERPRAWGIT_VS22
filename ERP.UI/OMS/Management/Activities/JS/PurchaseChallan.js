@@ -1892,7 +1892,11 @@ function OnEndCallback(s, e) {
         cInvValue.SetValue(SUM_TotalAmount);
         cTotalAmt.SetValue(SUM_TotalAmount);
         cTotalQty.SetValue(SUM_ProductQuantity);
-
+        //Rev 6.0
+        if (Tax_Option == "4") {
+            cddl_AmountAre.AddItem("Import", "4");
+        }
+        //Rev 6.0 End
         if(Tax_Option!="") cddl_AmountAre.SetValue(Tax_Option);
         if(Currency!="") document.getElementById('ddl_Currency').value = Currency;
         ctxtRate.SetValue(Rate);
