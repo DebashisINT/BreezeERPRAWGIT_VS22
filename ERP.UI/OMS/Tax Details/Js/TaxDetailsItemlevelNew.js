@@ -1,5 +1,6 @@
 ﻿/****************************************************************************************************************************
  * Rev 1.0      Priti      V2.0.43       13-02-2024      GST round off value showing different between Sales Entry and Sales Invoice Print Layout.Refer: 0027122
+ * Rev 2.0      Priti      V2.0.43       04-06-2024      Sales Order is showing GST calculation error while the calculation correct.Refer: 0027488
  *******************************************************************************************************************************/
 
 var ItemLevelTaxDetails = [];
@@ -396,6 +397,8 @@ caluculateAndSetGST = function (AmountEditor, chargesEditor, TotalAmountEditor, 
                                 TaxChargesAmount = TaxChargesAmount + RoundUp((GrosstotalAmount * taxes[taxCount].Rate / 100), 2);
                                 //Rev 1.0 End
                             }
+                            
+                            
                         }
                         else if (taxes[taxCount].Taxes_ApplicableOn == "N") {
                             TaxApplicableOn = "N";
@@ -404,13 +407,14 @@ caluculateAndSetGST = function (AmountEditor, chargesEditor, TotalAmountEditor, 
                             arrayTaxchargesRate.push(taxes[taxCount].Rate);
                             if (inclsOrExclsv == "E") {
                                 //Mantis Issue 24884
-                               /// TaxChargesAmount = DecimalRoundoff(parseFloat(TaxChargesAmount + (NettotalAmount * (taxes[taxCount].Rate / 100))).toFixed(2), 2);
-                               //Rev 1.0
-                               ///TaxChargesAmount = TaxChargesAmount + RoundUp((NettotalAmount * (taxes[taxCount].Rate / 100)), 2);
+                                /// TaxChargesAmount = DecimalRoundoff(parseFloat(TaxChargesAmount + (NettotalAmount * (taxes[taxCount].Rate / 100))).toFixed(2), 2);
+                                //Rev 1.0
+                                ///TaxChargesAmount = TaxChargesAmount + RoundUp((NettotalAmount * (taxes[taxCount].Rate / 100)), 2);
                                 //End of Mantis Issue 24884                               
                                 TaxChargesAmount = TaxChargesAmount + RoundUp((NettotalAmount * taxes[taxCount].Rate / 100), 2);
                                 //Rev 1.0 End
                             }
+                           
                         }
                         else
                         {
@@ -426,25 +430,52 @@ caluculateAndSetGST = function (AmountEditor, chargesEditor, TotalAmountEditor, 
                                 TaxChargesAmount = TaxChargesAmount + RoundUp((GrosstotalAmount * taxes[taxCount].Rate / 100), 2);
                                //Rev 1.0 End
                             }
+                            
                         }
                     }
                 }
 
             }
+
+            //Rev 2.0
+            if (inclsOrExclsv == "I") {
+                for (var taxCount = 0; taxCount < taxes.length; taxCount++) {
+                    if (TaxTypeMode == "SGST") {
+                        if (taxes[taxCount].TaxTypeCode == "SGST" || taxes[taxCount].TaxTypeCode == "CGST") {
+                            if (taxes[taxCount].Taxes_ApplicableOn == "G") {                             
+                               // TaxChargesAmount = Math.trunc((TaxChargesAmount + (GrosstotalAmount / (100 + totalTaxchargesRate)) * taxes[taxCount].Rate)*100)/100;
+                                TaxChargesAmount = RoundUp(TaxChargesAmount + ((GrosstotalAmount / (100 + totalTaxchargesRate)) * taxes[taxCount].Rate), 2);
+                            }
+                            else if (taxes[taxCount].Taxes_ApplicableOn == "N") {                               
+                                TaxChargesAmount = TaxChargesAmount + RoundUp(((NettotalAmount / (100 + totalTaxchargesRate)) * taxes[taxCount].Rate), 2);
+                            }
+                        }
+                    }
+                }
+            }
+            //Rev 2.0 End
         }
     }
 
     if (inclsOrExclsv == "I") {
 
-        var backProcessRate = (1 + (totalTaxchargesRate / 100));
-        if (TaxApplicableOn == "G") {
-            TaxChargesAmount = (GrosstotalAmount - (GrosstotalAmount / backProcessRate));
-        } else if (TaxApplicableOn == "N") {
-            TaxChargesAmount = (NettotalAmount - (NettotalAmount / backProcessRate));
+        //Rev 2.0 
+        if (TaxTypeMode == "IGST") {
+        //Rev 2.0 End
+            var backProcessRate = (1 + (totalTaxchargesRate / 100));
+            if (TaxApplicableOn == "G") {
+                TaxChargesAmount = (GrosstotalAmount - (GrosstotalAmount / backProcessRate));
+            } else if (TaxApplicableOn == "N") {
+                TaxChargesAmount = (NettotalAmount - (NettotalAmount / backProcessRate));
+            }
+            else {
+                TaxChargesAmount = (NettotalAmount - (NettotalAmount / backProcessRate));
+            }
+        //Rev 2.0 
         }
-        else {
-            TaxChargesAmount = (NettotalAmount - (NettotalAmount / backProcessRate));
-        }
+        //Rev 2.0 End
+
+
 
         // TaxChargesAmount = parseFloat(Math.round(Math.abs(Math.round(TaxChargesAmount)) * 100) / 100).toFixed(2);
         TaxChargesAmount = parseFloat((Math.abs(TaxChargesAmount) * 100) / 100).toFixed(2);

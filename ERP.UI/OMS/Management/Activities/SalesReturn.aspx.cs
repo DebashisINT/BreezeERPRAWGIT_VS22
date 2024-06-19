@@ -6,6 +6,7 @@
 // 4.0   Sanchita  V2.0.40    19-10-2023      Mantis: 26924 Coordinator data not showing in the following screen while linking Quotation/Inquiry Entries
 // 5.0   Priti     V2.0.41    20-11-2023	  0027000:EInvoice Changes to be done due to the change in the Flynn Version from Ver 1.0 to Ver 3.0 by Vayana
 // 6.0   Priti     V2.0.43    22-11-2024	  0027470:Instead of IGST - SGST -CGST auto selected . REF – SALE RETURN CN NO PA/SR/00031/2425 DATED 21-05-2024 #1454
+
 #endregion//====================================================End Revision History=====================================================================
 
 
@@ -5891,30 +5892,22 @@ namespace ERP.OMS.Management.Activities
                     BranchStateCode = Convert.ToString(BranchTable.Rows[0][0]);
                     BranchGSTIN = Convert.ToString(BranchTable.Rows[0][1]);
                 }
-
-
-
                 string ShippingState = "";
-
                 //ShippingState = lblShippingStateText.Value;
                 ShippingState = Purchase_BillingShipping.GeteShippingStateCode();
-                //if (hdnPlaceOfSupply.Value != null && hdnPlaceOfSupply.Value != "")
-                //{
-                //    ShippingState = hdnPlaceOfSupply.Value.Split('~')[2].ToString();
-
-                //}
                 //REV 6.0
                 if (hdnPlaceOfSupply.Value != null && hdnPlaceOfSupply.Value != "")
                 {
-                    ShippingState = hdnPlaceOfSupply.Value.Split('~')[1].ToString();
-                }
+                    ShippingState = hdnPlaceOfSupply.Value.Split('~')[2].ToString();
+                }                
+                //if (hdnPlaceOfSupply.Value != null && hdnPlaceOfSupply.Value != "")
+                //{
+                //    ShippingState = hdnPlaceOfSupply.Value.Split('~')[1].ToString();
+                //}
                 //REV 6.0 End
-
-
 
                 if (ShippingState.Trim() != "" && BranchStateCode != "")
                 {
-
                     if (BranchStateCode != "")
                     {
                         if (BranchStateCode == ShippingState)
@@ -5930,7 +5923,6 @@ namespace ERP.OMS.Management.Activities
                                         dr.Delete();
                                     }
                                 }
-
                             }
                             else
                             {
@@ -5954,9 +5946,7 @@ namespace ERP.OMS.Management.Activities
                                 }
                             }
                             taxDetail.AcceptChanges();
-
                         }
-
                     }
                 }
 
