@@ -11,7 +11,9 @@
    7.0   Sanchita   V2.0.40     06-10-2023     New Fields required in Sales Quotation - RFQ Number, RFQ Date, Project/Site
                                                Mantis : 26871
    8.0   Priti      V2.0.42     02-01-2024     Mantis : 0027050 A settings is required for the Duplicates Items Allowed or not in the Transaction Module.
-                                                   
+   9.0   Sanchita   V2.0.43     22-05-2024     Send mail option should be enabled if the setting "Is Mail Send Option Require In Sales Invoice?" is true in Sales Invoice. Mantis: 27462                                                
+   10.0  Priti      V2.0.43     27-04-2024     TCS Calculation & posting is not working in the Sales Invoice. Mantis : 0027484
+
 ========================================== End Revision History =======================================================================================================--%>
 
 <%@ Page Title="Sales Invoice" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" EnableEventValidation="false" CodeBehind="SalesInvoice.aspx.cs" Inherits="ERP.OMS.Management.Activities.SalesInvoice" %>
@@ -35,7 +37,7 @@
     <link href="CSS/SearchPopup.css" rel="stylesheet" />
     <%-- <script src="JS/SearchPopup.js?v=2.0"></script>--%>
     <link href="CSS/SalesInvoice.css" rel="stylesheet" />
-    <script src="JS/SalesInvoice.js?v=3.4"></script>
+    <script src="JS/SalesInvoice.js?v=3.6"></script>
     <script src="../../Tax%20Details/Js/TaxDetailsItemlevelNew.js?v=3.7" type="text/javascript"></script>
     <style>
         .wrapHolder#pageheaderContent {
@@ -432,7 +434,7 @@
             else if (grid.cpSaveSuccessOrFail == "TCSMandatory") {
                 grid.cpSaveSuccessOrFail = null;
                 // Mantis Issue 24789
-                //ShowTCS();
+                ShowTCS();
                 // End of Mantis Issue 24789
                 grid.cpSaveSuccessOrFail = '';
             }
@@ -2208,7 +2210,7 @@ $(document).ready(function () {
                                             </dxe:ASPxButton>
                                             <span id="divTCS" runat="server">
                                                 <%--Mantis Issue 24789  [ ClientVisible="false"  added]--%>
-                                                <dxe:ASPxButton ID="ASPxButton6" ClientInstanceName="cbtn_TCS" ClientVisible="false" runat="server" AutoPostBack="False" Text="Add TC&#818;S" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
+                                                <dxe:ASPxButton ID="ASPxButton6" ClientInstanceName="cbtn_TCS"  runat="server" AutoPostBack="False" Text="Add TC&#818;S" CssClass="btn btn-primary" meta:resourcekey="btnSaveRecordsResource1" UseSubmitBehavior="False">
                                                     <ClientSideEvents Click="function(s, e) {ShowTCS();}" />
                                                 </dxe:ASPxButton>
                                             </span>
@@ -3231,6 +3233,9 @@ $(document).ready(function () {
                 <%-- Rev work start 28.06.2022 Mantise no:24949--%>
                 <asp:HiddenField ID="hdnSettings" runat="server"></asp:HiddenField>
                 <%-- Rev work close 28.06.2022 Mantise no:24949--%>
+                <%--Rev 9.0 --%>
+                <asp:HiddenField ID="hdnSendMailEnabled" runat="server"></asp:HiddenField>
+                <%--End of Rev 9.0 --%>
             </div>
 
             <dxe:ASPxCallbackPanel runat="server" ID="CallbackPanel" ClientInstanceName="cCallbackPanel" OnCallback="CallbackPanel_Callback">
@@ -4655,6 +4660,12 @@ $(document).ready(function () {
      <%-- Rev 8.0--%>
    <asp:HiddenField runat="server" ID="hdnIsDuplicateItemAllowedOrNot" />
   <%-- Rev 8.0 End--%>
+
+    
+    <%-- Rev 10.0--%>
+    <asp:HiddenField runat="server" ID="hdnbranchwiseTCS" />
+    <%-- Rev 10.0 End--%>
+
      <!--Schedule Modal -->
     <div class="modal fade" id="ScheduleModel" role="dialog">
         <div class="modal-dialog">

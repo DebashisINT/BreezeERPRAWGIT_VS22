@@ -2,7 +2,6 @@
 // 1.0   v2.0.40	Priti	10-10-2023	0026890:Error generating IRN
 // 2.0   v2.0.41	Priti	20-11-2023	0027000:EInvoice Changes to be done due to the change in the Flynn Version from Ver 1.0 to Ver 3.0 by Vayana
 // 3.0   v2.0.43	Priti	18-03-2024	0027317: An error is showing while generating IRN
-// 4.0   v2.0.43	Priti	12-06-2024		0027537: Error is showing while trying to cancel E-way bill for a new IRN setup on Amiamo Foods
 #endregion//====================================================End Revision History=====================================================================
 
 using Newtonsoft.Json;
@@ -315,10 +314,7 @@ namespace ERP.Models
         public string timezone { get; set; }
         public string locale { get; set; }
         public Int64 createdOn { get; set; }
-        //Rev 4.0
-        // public DateTime? lastUpdated { get; set; }
-        public Int64 lastUpdated { get; set; }
-        //Rev 4.0 End
+        public DateTime? lastUpdated { get; set; }
 
 
 
