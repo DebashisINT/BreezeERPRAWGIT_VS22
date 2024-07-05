@@ -2870,8 +2870,8 @@ namespace ERP.OMS.Management.Activities
 
 
                 //REV 13.0
-                if (hdnbranchwiseTCS.Value == "1")
-                {
+                //if (hdnbranchwiseTCS.Value == "1")
+                //{
                     sumObject = Quotationdt.AsEnumerable()
                     .Sum(x => Convert.ToDecimal(x["Amount"]));
 
@@ -2895,16 +2895,20 @@ namespace ERP.OMS.Management.Activities
                         {
                             validate = "TCSMandatory";
                         }
-                        //REV 13.0
-                        else
+                        else if (Convert.ToDecimal(dt_TCS.Rows[0]["Amount"]) != Convert.ToDecimal(txtTCSAmount.Text))
                         {
-                            txtTCSSection.Text = "0";
-                            txtTCSapplAmount.Text = "0";
-                            txtTCSpercentage.Text = "0";
-                            txtTCSAmount.Text = "0";
+                            validate = "TCSMandatory";
                         }
-                        //REV 13.0 End
-                    }
+                    //REV 13.0
+                    //else
+                    //{
+                    //    txtTCSSection.Text = "0";
+                    //    txtTCSapplAmount.Text = "0";
+                    //    txtTCSpercentage.Text = "0";
+                    //    txtTCSAmount.Text = "0";
+                    //}
+                    //REV 13.0 End
+                }
                     //REV 13.0
                     else
                     {
@@ -2914,7 +2918,7 @@ namespace ERP.OMS.Management.Activities
                         txtTCSAmount.Text = "0";
                     }
                     //REV 13.0 End
-                }
+                //}
 
                 //REV 13.0 End
 
