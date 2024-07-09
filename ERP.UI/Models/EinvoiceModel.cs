@@ -316,7 +316,7 @@ namespace ERP.Models
         public Int64 createdOn { get; set; }
         //public DateTime? lastUpdated { get; set; }
 
-        public Int64 lastUpdated { get; set; }
+        public Int64? lastUpdated { get; set; }
 
     }
 
