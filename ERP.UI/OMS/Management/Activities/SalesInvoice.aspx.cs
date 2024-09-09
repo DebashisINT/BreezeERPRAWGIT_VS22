@@ -19,6 +19,11 @@
 * Mantis: 27462      
 * Rev 13.0     Priti         V2.0.43     27-04-2024  TCS Calculation & posting is not working in the Sales Invoice. Mantis : 0027484
 
+* Rev 14.0     Priti         V2.0.44     04-07-2024  TCS is not recalculating at the time of modifying the Invoice. Mantis : 0027605
+* Rev 15.0     Priti         V2.0.44     05-07-2024  TCS on Sales module should activate based on the settings. 0027624:  : 	0027607
+* Rev 16.0     Priti         V2.0.44     24-07-2024  Send mail check box is not showing in the modify mode or in view mode of Sales Invoice.0027624
+* Rev 17.0     Priti         V2.0.44     29-07-2024  0027616:The invoice copy (PDF file) should attached in the auto mail sending from Sales Invoice
+* Rev 18.0     Priti         V2.0.44     29-07-2024  0027615:Auto email of the Sales Invoice should consider CC email recipients too from the Customer.
 * 
  ****************************************************************************************************************************************************************************/
 using System;
@@ -59,6 +64,7 @@ using System.Runtime.Serialization.Json;
 using System.Web.Hosting;
 using Newtonsoft.Json.Linq;
 using EO.Web.Internal;
+using EO.Web;
 
 namespace ERP.OMS.Management.Activities
 {
@@ -382,6 +388,24 @@ namespace ERP.OMS.Management.Activities
                     }
                 }
                 //REV 13.0 End
+
+                //REV 15.0
+                string IsTCSActivatedforSITSI = ComBL.GetSystemSettingsResult("IsTCSActivatedforSITSI");
+                if (!String.IsNullOrEmpty(IsTCSActivatedforSITSI))
+                {
+                    if (IsTCSActivatedforSITSI == "Yes")
+                    {
+                        hdnIsTCSActivatedforSITSI.Value = "1";
+                    }
+                    else if (IsTCSActivatedforSITSI.ToUpper().Trim() == "NO")
+                    {
+                        hdnIsTCSActivatedforSITSI.Value = "0";
+                    }
+                }
+                //REV 15.0 End
+
+
+
                 //REV 10.0
                 string IsDuplicateItemAllowedOrNot = ComBL.GetSystemSettingsResult("IsDuplicateItemAllowedOrNot");
                 if (!String.IsNullOrEmpty(IsDuplicateItemAllowedOrNot))
@@ -568,8 +592,11 @@ namespace ERP.OMS.Management.Activities
                     //End Rev Rajdip
                     if (Convert.ToString(Request.QueryString["key"]) != "ADD")
                     {
-                        chkSendMail.Visible = false;
-                        chkSendMail.Checked = false;
+                        //Rev 16.0
+                        //chkSendMail.Visible = false;
+                        //chkSendMail.Checked = false;
+                        chkSendMail.Enabled = false;
+                        //Rev 16.0 End
                         lblHeadTitle.Text = "Modify Sales Invoice";
                         hdnPageStatus.Value = "update";
                         divScheme.Style.Add("display", "none");
@@ -815,13 +842,19 @@ namespace ERP.OMS.Management.Activities
 
                         if (Request.QueryString["InvType"] == "I")
                         {
+                            //REV 15.0
                             //REV 13.0
-                            if (hdnbranchwiseTCS.Value == "1")
+                            if (hdnIsTCSActivatedforSITSI.Value == "1")
                             {
                                 divTCS.Style.Add("display", "inline-block;");
                             }
+                            else
+                            {
+                                divTCS.Style.Add("display", "none;");
+                            }
                             //divTCS.Style.Add("display", "inline-block;");
                             //REV 13.0 END
+                            //REV 15.0 End
                         }
                         else
                         {
@@ -990,7 +1023,7 @@ namespace ERP.OMS.Management.Activities
                     }
                 }
 
-                ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "GridCallBack()", true);
+                System.Web.UI.ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "GridCallBack()", true);
                 // MasterSettings objmaster = new MasterSettings();
                 hdnConvertionOverideVisible.Value = objmaster.GetSettings("ConvertionOverideVisible");
                 hdnShowUOMConversionInEntry.Value = objmaster.GetSettings("ShowUOMConversionInEntry");
@@ -1581,6 +1614,18 @@ namespace ERP.OMS.Management.Activities
                 hdnSegment3.Value = Segment3;
                 hdnSegment4.Value = Segment4;
                 hdnSegment5.Value = Segment5;
+
+                //REV 15.0
+                bool IsMailSend= Convert.ToBoolean(QuotationEditdt.Rows[0]["IsMailSend"]);
+                if(IsMailSend==true)
+                {
+                    chkSendMail.Checked=true;
+                }
+                else
+                {
+                    chkSendMail.Checked = false;
+                }
+                //REV 15.0 End
 
                 //ASPxTextBox txtDriverName = (ASPxTextBox)VehicleDetailsControl.FindControl("txtDriverName");
                 //ASPxTextBox txtPhoneNo = (ASPxTextBox)VehicleDetailsControl.FindControl("txtPhoneNo");
@@ -2868,10 +2913,12 @@ namespace ERP.OMS.Management.Activities
 
 
 
-
+                //REV 14.0
                 //REV 13.0
+
                 //if (hdnbranchwiseTCS.Value == "1")
                 //{
+                //REV 14.0 END
                     sumObject = Quotationdt.AsEnumerable()
                     .Sum(x => Convert.ToDecimal(x["Amount"]));
 
@@ -2893,23 +2940,14 @@ namespace ERP.OMS.Management.Activities
                     {
                         if (Convert.ToDecimal(dt_TCS.Rows[0]["Amount"]) > 0 && Convert.ToDecimal(txtTCSAmount.Text) == 0)
                         {
+                            
                             validate = "TCSMandatory";
                         }
                         else if (Convert.ToDecimal(dt_TCS.Rows[0]["Amount"]) != Convert.ToDecimal(txtTCSAmount.Text))
                         {
-                            validate = "TCSMandatory";
-                        }
-                    //REV 13.0
-                    //else
-                    //{
-                    //    txtTCSSection.Text = "0";
-                    //    txtTCSapplAmount.Text = "0";
-                    //    txtTCSpercentage.Text = "0";
-                    //    txtTCSAmount.Text = "0";
-                    //}
-                    //REV 13.0 End
+                        validate = "TCSMandatory";
+                        }                     
                     }
-                    //REV 13.0
                     else
                     {
                         txtTCSSection.Text = "0";
@@ -2917,9 +2955,6 @@ namespace ERP.OMS.Management.Activities
                         txtTCSpercentage.Text = "0";
                         txtTCSAmount.Text = "0";
                     }
-                    //REV 13.0 End
-                //}
-
                 //REV 13.0 End
 
 
@@ -6559,7 +6594,17 @@ namespace ERP.OMS.Management.Activities
         {
             try
             {
-
+                //Rev 15.0
+                int SendMailChecked = 0;
+                if (chkSendMail.Checked)
+                {
+                    SendMailChecked = 1;
+                }
+                else
+                {
+                    SendMailChecked = 0;
+                }
+                //Rev 15.0 End
                 // Mantis Issue 24425, 24428
                 if (MultiUOMDetails.Columns.Contains("MultiUOMSR"))
                 {
@@ -6650,6 +6695,9 @@ namespace ERP.OMS.Management.Activities
                 cmd.Parameters.AddWithValue("@ProjectSite", strProjectSite);
                 // End of Rev 7.0
 
+                //Rev 15.0
+                cmd.Parameters.AddWithValue("@IsMailSend", SendMailChecked);
+                //Rev 15.0 End
 
                 cmd.Parameters.Add("@ReturnValue", SqlDbType.VarChar, 50);
                 cmd.Parameters.Add("@ReturnInvoiceID", SqlDbType.VarChar, 50);
@@ -6727,12 +6775,14 @@ namespace ERP.OMS.Management.Activities
                     {
                         if (Convert.ToString(Request.QueryString["key"]) == "ADD")
                         {
-                            string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority +
-                                                                Request.ApplicationPath.TrimEnd('/') + "/";
+                            //Rev 17.0
+                            //string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
+                            //string msgBody = " <a href='" + baseUrl + "OMS/Management/Activities/ViewSIPDF.aspx?key=" + strInvoiceID + "&dbname=" + con.Database + "'>Click here </a> to get your bill";
 
-                            string msgBody = " <a href='" + baseUrl + "OMS/Management/Activities/ViewSIPDF.aspx?key=" + strInvoiceID + "&dbname=" + con.Database + "'>Click here </a> to get your bill";
-
-                            SendMail(Convert.ToString(strInvoiceID), msgBody);
+                            // SendMail(Convert.ToString(strInvoiceID), msgBody);
+                           
+                            SendMail(Convert.ToString(strInvoiceID));
+                            //Rev 17.0 End
                         }
                     }
                 }
@@ -11647,10 +11697,12 @@ namespace ERP.OMS.Management.Activities
         #endregion
 
         #region Invoice Mail
-        public int SendMail(string Output, string url)
+        //Rev 17.0
+        public int SendMail(string Output)
+       // public int SendMail(string Output, string url)
         {
             int stat = 0;
-
+            string Physical_Path = "";
             Employee_BL objemployeebal = new Employee_BL();
             DataTable dt2 = new DataTable();
             dt2 = objemployeebal.GetSystemsettingmail("Show Email in SI");
@@ -11681,19 +11733,57 @@ namespace ERP.OMS.Management.Activities
                 string path1 = string.Empty;
                 string DesignPath = "";
 
+                //Rev 17.0
+                string CCMail = "";
+                string FilePath = string.Empty;
+                string fullpath = Server.MapPath("~");                
+                string FileName = FilePath;
+                // string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority +Request.ApplicationPath.TrimEnd('/') + "/";
 
+                
+                if (ConfigurationManager.AppSettings["IsDevelopedZone"] != null)
+                {
+                    Physical_Path = Server.MapPath("~/Reports/Reports/RepxReportDesign/SalesInvoice/DocDesign/PDFFiles/" + "SalesInvoice-Original-" + Output + ".pdf");
+                }
+                else
+                {
+                    Physical_Path = Server.MapPath("~/Reports/RepxReportDesign/SalesInvoice/DocDesign/PDFFiles/" + "SalesInvoice-Original-" + Output + ".pdf");
 
+                }
+                Physical_Path = Physical_Path.Replace("ERP.UI\\", "");
+
+                if (!File.Exists(Physical_Path))
+                {
+                    Export.ExportToPDF exportToPDF = new Export.ExportToPDF();
+                    exportToPDF.ExportToPdfforEmail("SalesInvoice~D", "Invoice", Server.MapPath("~"), "1", Convert.ToString(Output));
+                }
+                //Rev 17.0 End
 
                 if (dt_EmailConfig.Rows.Count > 0)
                 {
-                    emailTo = Convert.ToString(dt_EmailConfig.Rows[0]["eml_email"]);
+                    //Rev 18.0 
+                    foreach (DataRow item in dt_EmailConfig.Rows)
+                    {
+                        emailTo = emailTo + "," + Convert.ToString(item["eml_email"]);
+                    }
+                    //emailTo = Convert.ToString(dt_EmailConfig.Rows[0]["eml_email"]);
+                    //Rev 18.0 End
                     dt_Emailbodysubject = objemployeebal.Getemailtemplates("17");
 
                     if (dt_Emailbodysubject.Rows.Count > 0)
                     {
-                        Body = Convert.ToString(dt_Emailbodysubject.Rows[0]["body"]) + url;
+                        //Rev 17.0
+                        //Body = Convert.ToString(dt_Emailbodysubject.Rows[0]["body"]) + url;
+                        Body = Convert.ToString(dt_Emailbodysubject.Rows[0]["body"]) ;
+                        //Rev 17.0 End
                         Subject = Convert.ToString(dt_Emailbodysubject.Rows[0]["subjct"]);
-
+                        //Rev 17.0 
+                        foreach (DataRow item in dt_EmailConfig.Rows)
+                        {
+                            CCMail = CCMail + "," + Convert.ToString(item["eml_ccEmail"]);
+                        }
+                        //CCMail = Convert.ToString(dt_Emailbodysubject.Rows[0]["CCEMAIL"]);
+                        //Rev 17.0 End
                         dt_EmailConfigpurchase = objemployeebal.Getemailtagsforpurchase(Output, "SalesInvoiceEmailTags");
 
                         if (dt_EmailConfigpurchase.Rows.Count > 0)
@@ -11702,9 +11792,10 @@ namespace ERP.OMS.Management.Activities
                             Body = Employee_BL.GetFormattedString<SalesOrderEmailTags>(fetchModel, Body);
                             Subject = Employee_BL.GetFormattedString<SalesOrderEmailTags>(fetchModel, Subject);
                         }
-
-                        emailSenderSettings = mailobj.GetEmailSettingsforAllreport(emailTo, "", "", null, Body, Subject);
-
+                        //Rev 17.0
+                        //emailSenderSettings = mailobj.GetEmailSettingsforAllreport(emailTo, "", "", null, Body, Subject);
+                        emailSenderSettings = mailobj.GetEmailSettingsforAllreport(emailTo, "", CCMail, Physical_Path, Body, Subject);
+                        //Rev 17.0 End
                         if (emailSenderSettings.IsSuccess)
                         {
                             string Message = "";
@@ -11714,6 +11805,15 @@ namespace ERP.OMS.Management.Activities
                     }
                 }
             }
+            //Rev 17.0
+            if (File.Exists(Physical_Path))
+            {
+                if(stat==1)
+                {
+                    System.IO.File.Delete(Physical_Path);
+                }                
+            }
+            //Rev 17.0 End
             return stat;
         }
         #endregion

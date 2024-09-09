@@ -9,7 +9,8 @@
                                                        New button "Other Condiion" to show instead of "Terms & Condition" Button 
                                                        if the settings "Show Other Condition" is set as "Yes"
    8.0	 Priti     V2.0.43    01-02-2024	 0027207:Batchwise stock has been issued from Challan before receiving date which caused negative stock
-   ========================================= End Revision History =======================================================================================================--%>
+   9.0   Priti     V2.0.44    22-07-2024     0027625:Batch showing negative due to exceed stock entry allowed from Sales Challan.
+========================================= End Revision History =======================================================================================================--%>
 
 
 <%@ Page Title="" Language="C#" MasterPageFile="~/OMS/MasterPage/ERP.Master" AutoEventWireup="true" CodeBehind="InvoiceDeliveryChallan.aspx.cs" Inherits="ERP.OMS.Management.Activities.InvoiceDeliveryChallan" EnableEventValidation="false" %>
@@ -29,7 +30,7 @@
     <link href="CSS/SearchPopup.css" rel="stylesheet" />
     <script src="JS/SearchPopup.js?v=2.0"></script>
     <link href="CSS/SalesInvoice.css" rel="stylesheet" />
-    <script src="JS/InvoiceDeliveryChallan.js?v=19.0"></script>
+    <script src="JS/InvoiceDeliveryChallan.js?v=19.2"></script>
     <script src="../../Tax%20Details/Js/TaxDetailsItemlevelNew.js?v=2.3" type="text/javascript"></script>
      <style>
       .wrapHolder#pageheaderContent {
@@ -312,7 +313,7 @@
 
                         $('#hdfIsDelete').val('D');
                         grid.UpdateEdit();
-                        grid.PerformCallback('Display');
+                        grid.PerformCallback('Display' + '~' +'fromComponent');
 
                         $('#hdnPageStatus').val('delete');
                         //grid.batchEditApi.StartEdit(-1, 2);
@@ -956,6 +957,28 @@
                 jAlert(msg);
                 grid.cpSaveSuccessOrFail = '';
             }
+            //Rev 9.0
+            else if (grid.cpSaveSuccessOrFail == "checkWarehouseBatchQty") {
+
+                grid.AddNewRow();
+                var noofvisiblerows = grid.GetVisibleRowsOnPage(); // all newly created rows have -ve index -1 , -2 etc
+                var i;
+                var cnt = 1;
+                for (i = -1; cnt <= noofvisiblerows; i--) {
+                    var tbQuotation = grid.GetEditor("SrlNo");
+                    tbQuotation.SetValue(cnt);
+                    cnt++;
+                }
+                grid.cpSaveSuccessOrFail = null;
+                var strMessage = grid.cpcheckWarehouseBatchQty;
+                var SrlNo = strMessage.split("~")[0].toString();
+                var ProductName = strMessage.split("~")[1].toString();
+                var msg = "Product entered quantity more than stock quantity.Can not proceed  for SL No. " + SrlNo + " & Product Name " + ProductName;
+                jAlert(msg);
+                grid.cpSaveSuccessOrFail = null;
+                grid.cpcheckWarehouseBatchQty = null;
+            }
+            //Rev 9.0 End
             else {
                 var Quote_Number = grid.cpQuotationNo;
                 var Quote_ID = grid.cpQuotationID;

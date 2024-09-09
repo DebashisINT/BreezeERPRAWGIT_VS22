@@ -18,6 +18,8 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
 8.0                24-01-2024       V2.0.43            Priti              Mantis : 0027207 Batchwise stock has been issued from Challan before receiving date which caused negative stock.
 9.0                16-05-2024       V2.0.43            Sanchita           While making transaction Base rate showing less value of 1paise for this item code - 41B0150HE0181
                                                                           Mantis: 27459
+10.0               22-07-2024       V2.0.44            Priti              Batch showing negative due to exceed stock entry allowed from Sales Challan.
+                                                                          Mantis: 0027625
 ====================================================== Revision History =============================================--%>
 
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SalesChallanAdd.aspx.cs"
@@ -4255,6 +4257,29 @@ Rev Number         DATE              VERSION          DEVELOPER           CHANGE
                 grid.cpSaveSuccessOrFail = null;
                 grid.cpProductSrlIDCheck1 = null;
             }
+            //Rev 10.0
+            else if (grid.cpSaveSuccessOrFail == "checkWarehouseBatchQty") {
+               
+                grid.AddNewRow();
+                var noofvisiblerows = grid.GetVisibleRowsOnPage(); // all newly created rows have -ve index -1 , -2 etc
+                var i;
+                var cnt = 1;
+                for (i = -1; cnt <= noofvisiblerows; i--) {
+                    var tbQuotation = grid.GetEditor("SrlNo");
+                    tbQuotation.SetValue(cnt);
+                    cnt++;
+                }               
+                grid.cpSaveSuccessOrFail = null;
+                var strMessage = grid.cpcheckWarehouseBatchQty;
+
+                var SrlNo = strMessage.split("~")[0].toString();
+                var ProductName = strMessage.split("~")[1].toString();
+                var msg = "Product entered quantity more than stock quantity.Can not proceed  for SL No. " + SrlNo + " & Product Name " + ProductName;
+                jAlert(msg);
+                grid.cpSaveSuccessOrFail = null;
+                grid.cpcheckWarehouseBatchQty = null;
+            }
+            //Rev 10.0 End
             else if (grid.cpSaveSuccessOrFail == "MoreThanStock") {
                 grid.AddNewRow();
 
@@ -10672,7 +10697,7 @@ function ProjectValueChange(s, e) {
                 Modal="True" ContentStyle-VerticalAlign="Top" EnableHierarchyRecreation="True"
                 ContentStyle-CssClass="pad">
                 <ClientSideEvents Closing="function(s, e) {
-	closeWarehouse(s, e);}" />
+	             closeWarehouse(s, e);}" />
                 <ContentStyle VerticalAlign="Top" CssClass="pad">
                 </ContentStyle>
                 <ContentCollection>
