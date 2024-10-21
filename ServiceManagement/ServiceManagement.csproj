@@ -807,6 +807,7 @@
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\DummyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ShortController.cs" />
     <Compile Include="Controllers\SRVFileuploadDeliveryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
