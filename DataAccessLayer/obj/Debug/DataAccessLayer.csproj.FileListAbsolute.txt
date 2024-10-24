@@ -40,3 +40,9 @@ C:\Projects\BreezeERPGIT_VS22\DataAccessLayer\obj\Debug\DataAccessLayer.csproj.A
 C:\Projects\BreezeERPGIT_VS22\DataAccessLayer\obj\Debug\DataAccessLayer.csproj.CoreCompileInputs.cache
 C:\Projects\BreezeERPGIT_VS22\DataAccessLayer\obj\Debug\DataAccessLayer.dll
 C:\Projects\BreezeERPGIT_VS22\DataAccessLayer\obj\Debug\DataAccessLayer.pdb
+D:\GIT\GitHub\BreezeERPRAWGIT_VS22\DataAccessLayer\bin\Debug\DataAccessLayer.dll
+D:\GIT\GitHub\BreezeERPRAWGIT_VS22\DataAccessLayer\bin\Debug\DataAccessLayer.pdb
+D:\GIT\GitHub\BreezeERPRAWGIT_VS22\DataAccessLayer\obj\Debug\DataAccessLayer.csproj.AssemblyReference.cache
+D:\GIT\GitHub\BreezeERPRAWGIT_VS22\DataAccessLayer\obj\Debug\DataAccessLayer.csproj.CoreCompileInputs.cache
+D:\GIT\GitHub\BreezeERPRAWGIT_VS22\DataAccessLayer\obj\Debug\DataAccessLayer.dll
+D:\GIT\GitHub\BreezeERPRAWGIT_VS22\DataAccessLayer\obj\Debug\DataAccessLayer.pdb
